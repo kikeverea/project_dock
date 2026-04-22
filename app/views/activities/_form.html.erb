@@ -1,0 +1,25 @@
+<!-- lib/templates/erb/scaffold/_form.html.erb.tt -->
+<div class="card">
+  <div class="card-body">
+
+    <%= render "components/error_banner", item: activity %>
+
+    <%= form_with model: activity do |form| %>
+
+      
+      <div class="mt-8">
+         <%= form.button activity.persisted? ? "Guardar" : "Crear TODO", class: "btn btn-success" %>
+         <%= link_to "Cancelar",
+             request.referer == request.url ? activities_path : :back,
+             class: "btn btn-link btn-color-muted btn-active-color-success mx-4"
+         %>
+      </div>
+
+    <% end %>
+  </div>
+</div>
+<div class="mx-1 mt-3 mb-8">
+  <% if request.referer != activities_url %>
+    <%= link_to "← Ir a TODO", activities_path %>
+  <% end -%>
+</div>

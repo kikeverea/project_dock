@@ -1,0 +1,41 @@
+<div id="logs-index">
+  <div class="card card-body my-4">
+    <div class="table-responsive">
+      <table class="table table-hover table-striped gs-7">
+        <thead>
+          <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+            <th class="min-w-[125px]"><%= sort_link(@query, attribute: :description, items: @logs) %></th>
+            <th class="min-w-[125px]"><%= sort_link(@query, attribute: :user_id, items: @logs) %></th>
+            <th class="min-w-[125px]"><%= sort_link(@query, attribute: :loggable_type, items: @logs) %></th>
+            <th class="min-w-[125px]"><%= sort_link(@query, attribute: :loggable_id, items: @logs) %></th>
+            <th class="min-w-[125px]"><%= sort_link(@query, attribute: :action, items: @logs) %></th>
+            <th class="min-w-[125px]"><%= sort_link(@query, attribute: :created_at, items: @logs) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @logs.each do |log| %>
+
+            <% loggable =  log.loggable %>
+            <% name, name_attr, _gender = log.loggable_class.display_name %>
+
+            <tr class="h-[60px]">
+              <td><%= render "components/limited_length_text", text: log.description, max_length: 70 %></td>
+              <td><%= log.user.full_name %></td>
+              <td><%= name %></td>
+              <td><%= loggable ? link_to(loggable.send(name_attr), loggable) : "-" %></td>
+              <td>
+                <%= render "components/badge",
+                  color: log_action_color(log.action),
+                  text: log.action_es
+                %>
+              </td>
+              <td><%= log.created_at.strftime("%d-%m-%Y %H:%M") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <%= render "components/paginator", items: @logs %>
+  </div>
+</div>
+

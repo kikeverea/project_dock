@@ -1,0 +1,35 @@
+<% color ||= nil %>
+<% text_color ||= "white" %>
+<% use_style_for_color ||= false %>
+<% size ||= "sm" %>
+<% classes ||= "" %>
+<% tooltip ||= "" %>
+<% id ||= "badge" %>
+<% delete_path ||= nil %>
+<% font_size =
+     case size
+     when "sm"
+       "fs-9"
+     when "lg"
+       "fs-7"
+     when "xl"
+       "fs-5"
+     else
+       "fs-7"
+     end
+%>
+
+<div
+  id="<%= id %>"
+  class="badge badge-<%= size %> <%= font_size %> <%= classes %> <%= use_style_for_color ? "" : "text-#{text_color} bg-#{color}"%> <%= "ps-4" if delete_path %>"
+  style="<%= use_style_for_color ? "color: #{text_color}; background-color: #{color}" : "" %>"
+  title="<%= tooltip %>"
+  data-controller="<%= tooltip.present? ? "tooltip" : "" %>"
+>
+  <%= text %>
+  <% if delete_path %>
+    <%= button_to delete_path, method: :delete, title: "Eliminar", class: "btn btn-flush", data: { controller: "tooltip" } do %>
+      <i class="fa-solid fa-xmark text-white ms-3"></i>
+    <% end %>
+  <% end %>
+</div>

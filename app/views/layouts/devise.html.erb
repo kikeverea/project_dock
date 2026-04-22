@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		<base href="../../../" />
+		<title>Iniciar Sesión</title>
+		<meta charset="utf-8" />
+		<meta name="description" content="<%= @meta_description %>" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:type" content="article" />
+		<meta property="og:title" content="" />
+		<meta property="og:url" content="" />
+		<meta property="og:site_name" content="" />
+		<link rel="canonical" href="" />
+		<%= favicon_link_tag asset_path('favicon.ico') %>
+
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+		<!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
+		<link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+		<link href="/css/style.bundle.css" rel="stylesheet" type="text/css" />
+
+		<style>
+			a {
+				color: #121212;
+			}
+
+			.btn-brand {
+				color: #fff;
+				background-color: #39A088;
+				border-color: #4b5659;
+			}
+
+			.btn-brand:hover {
+				color: #fff;
+				background-color: #236e5b;
+				border-color: #383f42;
+			}
+
+			.btn-brand:focus,
+			.btn-brand.focus {
+				box-shadow: 0 0 0 0.25rem rgba(85, 96, 100, 0.5);
+			}
+		</style>
+	</head>
+
+	<body id="kt_body" class="app-blank app-blank">
+		<script>
+			const defaultThemeMode = "light"
+			let themeMode
+
+			if (document.documentElement) {
+
+				if (document.documentElement.hasAttribute("data-bs-theme-mode"))
+					themeMode = document.documentElement.getAttribute("data-bs-theme-mode")
+
+				else {
+					themeMode = localStorage.getItem("data-bs-theme") !== null
+						? localStorage.getItem("data-bs-theme")
+						: defaultThemeMode
+				}
+
+				if (themeMode === "system")
+					themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+
+				document.documentElement.setAttribute("data-bs-theme", themeMode)
+			}
+		</script>
+
+		<div class="d-flex flex-column flex-root" id="kt_app_root">
+			<div class="d-flex flex-column flex-lg-row flex-column-fluid">
+				<div
+					class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center"
+					style="background-image: url(assets/media/misc/auth-bg.png); background: #e1e1e1 !important;"
+				>
+					<div class="d-flex flex-column flex-center p-6 p-lg-10 w-100">
+						<%= image_tag asset_path("logo-lg.png"), style: "width: 90%" %>
+					</div>
+				</div>
+				<div class="d-flex flex-column flex-lg-row-fluid w-lg-50 p-10">
+					<div class="d-flex flex-center flex-column flex-lg-row-fluid">
+						<div class="w-lg-500px p-10">
+
+							<div class="text-center mb-11">
+								<h1 class="text-gray-900 fw-bolder mb-3">Iniciar Sesión</h1>
+								<div class="text-gray-500 fw-semibold fs-6">Bienvenido</div>
+							</div>
+
+							<%= yield %>
+
+              <div class="position-relative w-100">
+                <% if notice.present? %>
+                  <div
+                    class="toast px-4 bg-danger text-white border-0 mt-8 position-absolute w-100 top-100"
+                    id="toast-message"
+                    role="alert"
+                    aria-live="assertive"
+                    aria-atomic="true"
+                  >
+                    <div class="d-flex">
+                      <div class="toast-body">
+                        <%= notice %>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			let hostUrl = "assets/"
+		</script>
+
+		<!-- Global Javascript Bundle(mandatory for all pages) -->
+		<script src="assets/plugins/global/plugins.bundle.js"></script>
+		<script src="assets/js/scripts.bundle.js"></script>
+
+		<!-- Custom Javascript(used for this page only) -->
+		<script src="assets/js/custom/authentication/sign-in/general.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const toastElement = document.querySelector("#toast-message")
+
+        console.log('toast element', toastElement)
+
+        if (toastElement) {
+          const toast = new bootstrap.Toast(toastElement, { animation: true, delay: 2500 })
+          toast.show()
+        }
+      })
+    </script>
+	</body>
+</html>

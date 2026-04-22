@@ -1,0 +1,15 @@
+<% action ||= "show" %>
+<% object ||= {} %>
+<% model ||= nil %>
+<% modal_id ||= "#{model}-modal" if model.present? %>
+<% raise "modal_id can't be blank" if modal_id.blank? %>
+
+<div id="turbo-consumer">
+  <div
+    data-controller="modal"
+    data-modal-modal-id-value="<%= modal_id %>"
+    data-modal-action-value="<%= action %>"
+    data-modal-object-value="<%= object.to_json %>"
+    data-modal-select2-outlet="#<%= modal_id %>-select-outlet"
+  ></div>
+</div>

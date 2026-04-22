@@ -1,0 +1,26 @@
+<% id ||= "file-drop" %>
+
+<div id="<%= id %>">
+  <div
+    class="filezone mb-4 flex-grow-1"
+    id="file-dropzone"
+    data-controller="dropzone"
+    data-dropzone-url-value="<%= upload_path %>"
+    data-dropzone-max-files-value="15"
+  >
+    <div class="text-end">
+      <button id="remove-button" class="btn btn-flush btn-active-color-danger d-none">
+        <i class="fa-solid fa-xmark fs-3"></i>
+      </button>
+    </div>
+    <div class="dz-error-mark">
+      <i class="fa-solid fa-circle-xmark fs-3x text-danger opacity-75"></i>
+    </div>
+    <div class="dz-message needsclick">
+      <i class="fa-solid fa-file fs-2x"></i>
+      <div class="text-muted">
+        <em><%= no_file_message %></em>
+      </div>
+    </div>
+  </div>
+</div>

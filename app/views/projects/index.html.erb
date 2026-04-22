@@ -1,0 +1,67 @@
+<!-- lib/templates/erb/scaffold/index.html.erb.tt -->
+<% content_for :title, "Lista de proyectos" %>
+
+<% if can? :create, Project %>
+  <%= link_to new_project_path, class: "btn btn-success w-[200px] mb-4" do %>
+    <i class="fa fa-plus"></i> Nuevo proyecto
+  <% end %>
+<% end %>
+
+<div class="card card-body my-2">
+  <div class="table-responsive">
+    <table class="table table-hover table-striped gs-7">
+      <thead>
+        <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+          <th class="min-w-[125px]">Nombre</th>
+          <th class="min-w-[125px]">Cliente</th>
+          <th class="min-w-100px">Inicio</th>
+          <th class="min-w-100px">Fin</th>
+          <th class="text-end w-[125px]" aria-label="Acciones"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @projects.any? %>
+          <% @projects.each do |project| %>
+            <tr class="h-[60px]">
+              <td><%= project.name %></td>
+              <td><%= project.client&.name %></td>
+              <td><%= project.start_date&.strftime("%d-%m-%Y") %></td>
+              <td><%= project.due_date&.strftime("%d-%m-%Y") %></td>
+              <td class="text-end pe-4">
+                <button
+                  type="button"
+                  class="btn btn-light btn-active-light-primary dropdown-toggle dropdown-toggle-split ms-4"
+                  data-controller="dropdown"
+                  data-action="click->dropdown#toggle blur->dropdown#handleBlur"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Acciones
+                </button>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "Ver", project, class: 'dropdown-item' %></li>
+                  <li><%= link_to "Editar", edit_project_path(project), class: 'dropdown-item' %></li>
+                  <li>
+                    <%= link_to "Eliminar",
+                      project,
+                      class:'dropdown-item',
+                      data: { controller: 'delete-button', delete_button_item_name_value: project.name }
+                    %>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr class="h-px">
+          </tr>
+          <tr>
+            <td colspan="5" class="text-center text-muted">
+              <em>No hay datos</em>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

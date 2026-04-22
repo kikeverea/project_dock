@@ -1,0 +1,16 @@
+<% action ||= "show" %>
+<% model ||= controller_name.classify.underscore.dasherize %>
+<% message ||= nil %>
+<% object ||= {} %>
+
+<%= turbo_stream.replace "turbo-consumer" do %>
+  <%= render "components/turbo_modal_action", modal_id: "#{model}-modal", object: object, action: action %>
+<% end %>
+
+<% if message %>
+  <% type ||= "success" %>
+
+  <div id="turbo-message-consumer">
+    <%= render "components/toast_message", message: message, type: type %>
+  </div>
+<% end %>

@@ -1,0 +1,242 @@
+<% item ||= {} %>
+<% id ||= item ? "#{item.model_name.singular}-#{attribute.to_s.dasherize}" : "" %>
+<% control_id ||= "#{id}-control" %>
+<% name ||= nil %>
+<% data ||= {} %>
+<% container_data ||= {} %>
+<% action ||= "" %>
+<% value ||= nil %>
+<% embedded ||= nil %>
+<% hide_label ||= false %>
+<% hide_search ||= nil %>
+<% required ||= false %>
+<% partial_args ||= {} %>
+<% icon ||= nil %>
+<% icon_size ||= "" %>
+<% value_icon ||= nil %>
+<% type ||= "text_field" %>
+<% label ||= "" %>
+<% id_attr ||= :id %>
+<% name_attr ||= :name %>
+<% collection ||= nil %>
+<% placeholder ||= "" %>
+<% disabled ||= false %>
+<% multiple ||= false %>
+<% options ||= nil %>
+<% classes ||= "align-items-center" %>
+<% field_classes ||= "" %>
+<% label_classes ||= "" %>
+<% label_style ||= "" %>
+<% label_container_class ||= embedded ? "flex-3 form-label" : "flex-2 form-label" %>
+<% field_container_class ||= embedded ? "flex-9" : "flex-10" %>
+<% add_new ||= nil %>
+<% prepend_value ||= nil %>
+
+<div
+  id="<%= control_id %>"
+  class="flex flex-wrap gap-4 items-center <%= classes %> mb-3"
+  <%= container_data&.entries&.reduce("") { |data, (name, value)| "#{data} data-#{name.to_s.dasherize}=#{value}" } %>
+>
+  <div class="<%= label_container_class %> d-flex <%= "pe-0" if value_icon %>">
+    <% unless hide_label %>
+      <% if icon %>
+        <i class="<%= icon %> me-2 text-blue-500 opacity-75 <%= icon_size %>"></i>
+      <% end %>
+      <%= form.label attribute, label, class: "#{label_classes} #{"required" if required} flex-1", style: label_style %>
+      <% if value_icon %>
+        <%= value_icon %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="<%= field_container_class %>">
+    <div class="<%= "d-flex align-items-center gap-4" if add_new || prepend_value %>">
+      <%= prepend_value %>
+      <% case type %>
+      <% when :text_field %>
+        <%= form.text_field attribute,
+          { class: "form-control #{field_classes}",
+            value: value || item[attribute],
+            disabled: disabled,
+            data: data,
+            placeholder: placeholder
+          }
+            .merge(name.present? ? { name: name } : {})
+        %>
+      <% when :text_area %>
+        <% rows ||= 4 %>
+        <%= form.text_area attribute,
+          { id: id,
+            class: "form-control #{field_classes}",
+            value: value || item[attribute],
+            rows: rows,
+            disabled: disabled,
+            data: data,
+            placeholder: placeholder
+          }
+            .merge(name.present? ? { name: name } : {})
+        %>
+      <% when :number_field %>
+        <% step ||= nil %>
+        <%= form.number_field attribute,
+          { id: id,
+            class: "form-control #{field_classes}",
+            step: step,
+            value: value || item[attribute],
+            data: data
+          }
+            .merge(name.present? ? { name: name } : {})
+        %>
+      <% when :date_field %>
+        <%= form.date_field attribute,
+          { id: id,
+            class: "form-control #{field_classes}",
+            value: value || item[attribute],
+            data: data
+          }
+            .merge(name.present? ? { name: name } : {})
+        %>
+      <% when :datetime_field %>
+        <%= form.datetime_field attribute,
+          { id: id,
+            class: "form-control #{field_classes}",
+            value: value || item[attribute],
+            data: data
+          }
+            .merge(name.present? ? { name: name } : {})
+        %>
+      <% when :password_field %>
+        <%= form.password_field attribute,
+          { id: id,
+            class: "form-control #{field_classes}",
+            value: value || item[attribute],
+            data: data
+          }
+            .merge(name.present? ? { name: name } : {})
+        %>
+      <% when :checkbox %>
+        <span class="form-check form-check-sm form-check-custom form-check-solid">
+          <%= form.check_box attribute,
+            "1",
+            false,
+            class: "form-check-input w-20px h-20px",
+            data: data
+          %>
+        </span>
+      <% when :color_picker %>
+        <%= form.text_field attribute,
+          { id: id,
+            autocomplete: "off",
+            class: "w-70px h-40px color-input form-control",
+            value: value || item[attribute],
+            data: { controller: "huebee" }
+          }
+            .merge(name.present? ? { name: name } : {})
+        %>
+      <% when :rich_text_area %>
+        <%= content_tag :div, data: { controller: "quill", quill_content_value: item[attribute] } do %>
+          <%= content_tag :div, nil, class: "h-125px", data: { quill_target: "quill" } %>
+          <%= form.hidden_field attribute, value: item[attribute], data: { quill_target: "value"} %>
+        <% end %>
+      <% when :collection_select %>
+
+        <% container_css_selector ||= "" %>
+
+        <div class="flex-grow-1">
+          <%= form.collection_select attribute,
+            collection, id_attr, name_attr,
+            { include_blank: !multiple, selected: item[attribute] },
+            { id: id,
+              class: "#{field_classes}",
+              disabled: disabled,
+              multiple: multiple,
+              data: {
+                controller: "select2",
+                select_placeholder: placeholder.present? ? placeholder : "Selecciona una opción",
+                hide_search: hide_search,
+                value: value || item[attribute],
+                action: action
+              }
+              .merge(container_css_selector.present? ? { container_css_selector: container_css_selector } : {})
+              .merge(data)
+            }
+            .merge(name.present? ? { name: name } : {})
+          %>
+        </div>
+      <% when :select %>
+
+        <% container_css_selector ||= "" %>
+
+        <div class="flex-grow-1">
+          <%= form.select attribute,
+            options,
+            { include_blank: !multiple, selected: item[attribute]},
+            { id: id,
+              class: "#{field_classes}",
+              multiple: multiple,
+              disabled: disabled,
+              data: {
+                controller: "select2",
+                select_placeholder: placeholder.present? ? placeholder : "Selecciona una opción",
+                hide_search: hide_search,
+                value: value || item[attribute],
+                action: action
+              }
+              .merge(container_css_selector.present? ? { container_css_selector: container_css_selector } : {})
+              .merge(data)
+            }
+              .merge(name.present? ? { name: name } : {})
+          %>
+        </div>
+      <% when :image %>
+        <%= render "components/image_input",
+          id: id,
+          form: form,
+          attribute: attribute,
+          value: item[attribute],
+          action: data[:action]
+        %>
+      <% when :counter %>
+        <% min ||= nil %>
+        <% max ||= nil %>
+        <%= render "components/counter",
+          id: id,
+          form: form,
+          attribute: attribute,
+          min: min,
+          max: max,
+          value: item[attribute],
+          action: data[:action]
+        %>
+      <% when :file_upload %>
+
+        <% file ||= item.send(attribute) %>
+        <% accepted_files ||= "image/*" %>
+
+        <%= render "components/single_file_drop",
+           id: id,
+           no_file_message: "Arrastra archivos o haz click",
+           form: form,
+           attribute: attribute,
+           accepted_files: accepted_files,
+           uploaded_file: { name: file.identifier, url: file.url } if file
+        %>
+      <% when :partial %>
+        <%= render(partial, { form: form, item: item, items: items }.merge(partial_args)) %>
+      <% else type %>
+        <% raise "Form Field (components/form_field) type '#{type}' not valid"%>
+      <% end %>
+
+      <% if add_new %>
+        <%= render "components/add_button", link: add_new %>
+      <% end %>
+    </div>
+
+    <% if disabled %>
+      <div class="mt-2">
+        <i class="fa-solid fa-ban text-info opacity-75"></i> <em class="text-info opacity-75">Edición deshabilitada</em>
+      </div>
+    <% elsif type != :partial %>
+      <%= render "components/error_message", item: item, name: attribute %>
+    <% end %>
+  </div>
+</div>

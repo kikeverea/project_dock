@@ -1,0 +1,39 @@
+<% id ||= "file-drop" %>
+<% file_type ||= "" %>
+<% source ||= "" %>
+<% accepted_files ||= nil %>
+<% public ||= false %>
+<% tiny ||= false %>
+<% icon ||= nil %>
+<% document_icon, _color = get_document_icon_by_type(file_type) %>
+<% disable_auto_upload ||= false %>
+<% max_files ||= 15 %>
+
+<div id="<%= id %>">
+  <div
+    class="filezone <%= tiny ? "w-70px" : "#{full_width ? "w-100" : "w-150px"} mb-4" %> flex-grow-1 p-2"
+    id="file-dropzone"
+    data-controller="simple-file-upload"
+    data-simple-file-upload-url-value="<%= upload_path %>"
+    data-simple-file-upload-is-public-value="<%= public %>"
+    data-simple-file-upload-source-value="<%= source %>"
+    data-simple-file-upload-disable-auto-upload-value="<%= disable_auto_upload %>"
+    data-simple-file-upload-max-files-value="<%= max_files %>"
+    data-simple-file-upload-accepted-files-value="<%= accepted_files %>"
+  >
+    <div class="text-end">
+      <button id="remove-button" class="btn btn-flush btn-active-color-danger d-none">
+        <i class="fa-solid fa-xmark fs-3"></i>
+      </button>
+    </div>
+    <div class="dz-error-mark">
+      <i class="fa-solid fa-circle-xmark fs-3x text-danger opacity-75"></i>
+    </div>
+    <div class="dz-message needsclick">
+      <i class="fa-solid fa-<%= icon || document_icon %> <%= tiny ? "fs-3x" : "fs-2x" %>"></i>
+      <div class="text-muted fs-8 pt-1">
+        <em><%= no_file_message %></em>
+      </div>
+    </div>
+  </div>
+</div>

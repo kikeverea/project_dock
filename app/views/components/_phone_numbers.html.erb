@@ -1,0 +1,46 @@
+<div class="mw-250px" data-controller="phone-numbers">
+
+  <template data-phone-numbers-target="template">
+    <%= form.fields_for :phone_numbers, PhoneNumber.new, child_index: "__INDEX__" do |phone_form| %>
+      <div class="d-flex gap-3 mb-2 align-items-center">
+        <%= phone_form.hidden_field :_destroy %>
+        <%= phone_form.hidden_field :id %>
+        <%= phone_form.select :phone_type, %w[Móvil Fijo], {}, class: "form-select w-150px" %>
+        <%= phone_form.text_field :number, class: "form-control w-300px", placeholder: "Número" %>
+        <button
+          type="button"
+          class="btn btn-flush btn-color-danger"
+          data-action="click->phone-numbers#removePhoneNumber"
+        >
+          <i class="fa-solid fa-trash fs-8"></i>
+        </button>
+      </div>
+    <% end %>
+  </template>
+
+  <div data-phone-numbers-target="numbersContainer">
+    <%= form.fields_for :phone_numbers do |phone_form| %>
+      <div class="d-flex gap-3 mb-2 align-items-center">
+        <%= phone_form.hidden_field :_destroy %>
+        <%= phone_form.hidden_field :id %>
+        <%= phone_form.select :phone_type, %w[Móvil Fijo], {}, class: "form-select w-150px" %>
+        <%= phone_form.text_field :number, class: "form-control w-300px", placeholder: "Número" %>
+        <button
+          type="button"
+          class="btn btn-flush btn-color-danger"
+          data-action="click->phone-numbers#removePhoneNumber"
+        >
+          <i class="fa-solid fa-trash fs-8"></i>
+        </button>
+      </div>
+    <% end %>
+  </div>
+
+  <button
+    type="button"
+    class="btn btn-link btn-color-primary py-0"
+    data-action="phone-numbers#addPhoneNumberRow"
+  >
+    + Añadir teléfono
+  </button>
+</div>

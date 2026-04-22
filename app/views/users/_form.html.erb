@@ -1,0 +1,84 @@
+<% url, method = user.persisted? ? [user_path(user), :put] : [users_path, :post] %>
+
+<div class="card mb-8">
+  <div class="card-body">
+    <%= render "components/error_banner", item: user %>
+
+    <%= form_with scope: "user", url: url, method: method do |form| %>
+
+      <%= render "components/form_field",
+          label: "Rol",
+          attribute: :role,
+          type: :select,
+          options: options_for_select(User.roles.map { |name_key, _v| [role_text(name_key), name_key] }),
+          required: true,
+          item: user,
+          form: form
+      %>
+
+      <%= render "components/form_field",
+          label: "Correo electrónico",
+          attribute: :email,
+          type: :text_field,
+          required: true,
+          item: user,
+          form: form
+      %>
+
+      <%= render "components/form_field",
+          label: "Nombre",
+          attribute: :name,
+          type: :text_field,
+          required: true,
+          item: user,
+          form: form
+      %>
+
+      <%= render "components/form_field",
+          label: "Apellidos",
+          attribute: :lastname,
+          type: :text_field,
+          required: true,
+          item: user,
+          form: form
+      %>
+
+      <div class="separator my-8"></div>
+
+      <%= render "components/form_field",
+          label: "Contraseña",
+          attribute: :password,
+          type: :password_field,
+          required: true,
+          item: user,
+          form: form
+      %>
+
+      <%= render "components/form_field",
+          label: "Confirmar Contraseña",
+          attribute: :password_confirmation,
+          type: :password_field,
+          required: true,
+          item: user,
+          form: form
+      %>
+
+      <div class="mb-2 mt-8">
+        <%= form.submit "Guardar",
+          class: "btn btn-success waves-effect waves-light",
+          data: { user_form_target: "submitButton" }
+        %>
+        <%= link_to "Cancelar",
+            request.referer == request.url ? users_path : :back,
+            class: "btn btn-link btn-color-muted btn-active-color-success mx-4"
+        %>
+      </div>
+
+    <% end %>
+  </div>
+</div>
+<div class="mx-1 mt-3 mb-8">
+  <% if request.referer != users_url %>
+    <%= link_to "← Ir a usuarios", users_path %>
+  <% end %>
+</div>

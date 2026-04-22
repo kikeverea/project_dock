@@ -1,0 +1,23 @@
+<% type ||= "" %>
+<% link ||= nil %>
+
+<% icon = capture do %>
+  <i
+    class="fa-solid fa-plus position-absolute top-50 start-50 translate-middle"
+    style="margin-left: 2px"
+  ></i>
+<% end %>
+
+<% if link %>
+  <%= link_to link,
+    class: "btn btn-success h-40px w-40px position-relative",
+    data: { turbo_stream: true } do
+  %>
+    <%= icon %>
+  <% end %>
+<% else %>
+  <button class="btn btn-success h-40px w-40px position-relative" type="<%= type %>">
+    <%= icon %>
+  </button>
+<% end %>
+

@@ -1,0 +1,9 @@
+<% id ||= "turbo-consumer" %>
+<% type ||= "success" %>
+
+<div id="<%= id %>">
+  <%= render "components/toast_message",
+    message: message,
+    type: type
+  %>
+</div>

@@ -1,0 +1,30 @@
+<% regex = /\b#{Regexp.escape(attribute.to_s)}\s+(asc|desc)\b/ %>
+<% model ||= controller_name.classify.constantize %>
+<% query = @query || model.ransack %>
+<% label ||= attribute %>
+<% type ||= nil %>
+<% width_classes ||= "min-w-100px" %>
+<% classes ||= "" %>
+<% is_sorting, direction = params[:q] && params[:q][:s]&.include?(attribute.to_s) ?
+  [true, params[:q][:s].match(regex)&.captures&.first] :
+  [false, "asc"]
+%>
+
+<%= link_to sort_url(
+  query,
+  attribute,
+  controller: model.model_name.collection,
+  action: "ransack",
+  only_path: true,
+  type: type
+),
+  class: "#{width_classes} d-inline-block text-start text-muted fw-bold fs-7 text-uppercase gs-0 #{classes}",
+  data: { turbo_stream: true } do
+%>
+  <%= label %>
+  <% if is_sorting %>
+    <i class="fa-solid fa-chevron-<%= direction == "asc" ? "down" : "up" %> ms-1 fs-9"></i>
+  <% else %>
+    <i class="fa-solid fa-up-down ms-1 fs-9"></i>
+  <% end %>
+<% end %>

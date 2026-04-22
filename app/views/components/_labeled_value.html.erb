@@ -1,0 +1,130 @@
+<% label ||= nil %>
+<% link ||= nil %>
+<% table ||= false %>
+<% rows ||= nil %>
+<% value ||= rows ? rows : (link if link && link[:path].present?) %>
+<% copyable ||= false %>
+<% copy_column ||= 0 %>
+<% copy_value ||= nil %>
+<% size ||= 100 %>
+<% col_1 ||= (2 * 100 / size).round %>
+<% col_2 ||= 12 - col_1 %>
+<% icon ||= nil %>
+<% icon_size ||= "fs-7" %>
+<% values = (value.is_a?(Array) ? value : [value])&.compact_blank %>
+<% values_count = values.count %>
+<% classes ||= "py-3" %>
+<% data ||= {} %>
+<% label_container_class ||= size < 100 ? "col-md-3" : "col-md-2" %>
+<% value_container_class ||= size < 100 ? "col-md-9" : "col-md-10" %>
+<% value_classes ||= "" %>
+<% values_classes ||= [] %>
+<% label_classes ||= "" %>
+<% add_new ||= nil %>
+<% partial ||= nil %>
+<% partial_locals ||= {} %>
+<% empty_message ||= nil %>
+
+<div class="row <%= classes %> <%= values.count > 1 || table ? "align-items-start" : "align-items-center" %>">
+
+  <!-- Label -->
+  <div class="<%= label_container_class %> <%= "d-flex align-items-center" if icon %>">
+    <% if icon %>
+      <i class="<%= icon %> me-2 text-primary opacity-75 <%= icon_size %>"></i>
+    <% end %>
+    <div class="fw-bold pe-4 <%= label_classes %>">
+      <%= label %>
+    </div>
+  </div>
+
+  <!-- Values -->
+  <div class="<%= value_container_class %> <%= "cursor-pointer" if copyable && values.any? %>">
+    <% if values.any? %>
+      <% if partial %>
+        <% values.each do |display_value| %>
+          <%= render partial, item: display_value, **partial_locals %>
+        <% end %>
+      <% elsif table %>
+        <table>
+          <tbody>
+            <% values.each do |row| %>
+              <tr
+                data-controller="<%= "copyable-value" if copyable %>"
+                data-copyable-value-content-value="<%= row[copy_column] if copyable && copy_column %>"
+                data-action="mouseenter->copyable-value#hoverIn mouseleave->copyable-value#hoverOut click->copyable-value#copyValue"
+              >
+                <% row.each_with_index do |cell, index| %>
+                  <% padding =  if index == 0
+                                  "pe-2"
+                                elsif index == row.count - 1
+                                  "ps-2"
+                                else
+                                  "px-2"
+                                end
+                  %>
+                  <td class="<%= padding %> <%= values_classes[index] %>">
+                    <%= cell %>
+                  </td>
+                <% end %>
+                <td>
+                  <% if copyable && copy_column %>
+                    <i class="fa-solid fa-copy ms-2 copy-icon fs-6"></i>
+                    <span class="d-none ps-2 text-muted" data-copyable-value-target="copiedMessage">Copiado!</span>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <% values.each_with_index do |display_value, index| %>
+
+          <div
+            class="<%= "pb-2" unless index == values_count - 1 %> <%= value_classes %> <%= values_classes[index] %>"
+            data-controller="<%= "copyable-value" if copyable %>"
+            data-copyable-value-content-value="<%= (copy_value || display_value) if copyable %>"
+            data-action="mouseenter->copyable-value#hoverIn mouseleave->copyable-value#hoverOut click->copyable-value#copyValue"
+          >
+            <% is_link = display_value.is_a?(Hash) && display_value[:path].present? %>
+
+            <% if is_link %>
+              <%= display_value[:external] ?
+                  link_to(display_value[:text], display_value[:path], target: "_blank", rel: "noopener noreferrer", data: data) :
+                  link_to(display_value[:text], display_value[:path], data: data)
+              %>
+            <% else %>
+              <span <%= data.entries.map { |key, val| "data-#{key.to_s.parameterize.dasherize}=#{val}" }.join(" ") %>>
+                <%= display_value.to_s.html_safe %>
+              </span>
+              <% if copyable %>
+                <i class="fa-solid fa-copy ms-2 copy-icon fs-6"></i>
+                <span class="d-none ps-2 text-muted" data-copyable-value-target="copiedMessage">Copiado!</span>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+      <% if add_new %>
+        <div class="mt-1">
+          <%= render "components/new_item_form",
+            label: add_new[:label],
+            model: add_new[:model],
+            url: add_new[:url]
+          %>
+        </div>
+      <% end %>
+    <% else %>
+      <% if add_new %>
+        <%= render "components/new_item_form",
+          label: add_new[:label],
+          model: add_new[:model],
+          url: add_new[:url]
+        %>
+      <% elsif empty_message %>
+        <span class="text-muted fst-italic"><%= empty_message %></span>
+      <% else %>
+        -
+      <% end %>
+    <% end %>
+  </div>
+</div>

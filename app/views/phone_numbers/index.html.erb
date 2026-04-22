@@ -1,0 +1,61 @@
+<!-- lib/templates/erb/scaffold/index.html.erb.tt -->
+<% content_for :title, "Lista de teléfonos" %>
+
+<% if can? :create, PhoneNumber %>
+  <%= link_to new_phone_number_path, class: "btn btn-success w-[200px] mb-4" do %>
+    <i class="fa fa-plus"></i> Nuevo teléfono
+  <% end %>
+<% end %>
+
+<div class="card card-body my-4">
+  <div class="table-responsive">
+    <table class="table table-hover table-striped gs-7">
+      <thead>
+        <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+          <th class="min-w-[200px]">Número</th>
+          <th class="text-end w-[125px]" aria-label="Acciones"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @phone_numbers.any? %>
+          <% @phone_numbers.each do |phone_number| %>
+            <tr class="h-[60px]">
+              <td><%= phone_number.number %></td>
+              <td class="text-end pe-4">
+                <button
+                  type="button"
+                  class="btn btn-light btn-active-light-primary dropdown-toggle dropdown-toggle-split ms-4"
+                  data-controller="dropdown"
+                  data-action="click->dropdown#toggle blur->dropdown#handleBlur"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Acciones
+                </button>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "Ver", phone_number, class: 'dropdown-item' %></li>
+                  <li><%= link_to "Editar", edit_phone_number_path(phone_number), class: 'dropdown-item' %></li>
+                  <li>
+                    <%= link_to "Eliminar",
+                      phone_number,
+                      class:'dropdown-item',
+                      data: { controller: 'delete-button', delete_button_item_name_value: phone_number.number }
+                    %>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr class="h-px">
+          </tr>
+          <tr>
+            <td colspan="2" class="text-center text-muted">
+              <em>No hay datos</em>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

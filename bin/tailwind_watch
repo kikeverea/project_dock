@@ -1,0 +1,5 @@
+#!/bin/bash
+declare asdf_bin_path=/home/kike/.asdf/bin
+export PATH=$PATH:$asdf_bin_path
+export ASDF_RUBY_VERSION=4.0.2
+/home/kike/.asdf/bin/asdf exec ruby -x /home/kike/RubymineProjects/project_dock/bin/bundle exec ruby /home/kike/RubymineProjects/project_dock/bin/rails tailwindcss:watch

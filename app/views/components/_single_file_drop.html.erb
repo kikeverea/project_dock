@@ -1,0 +1,53 @@
+<% id ||= "single=file-drop" %>
+<% no_file_message ||= "Arrastra archivos o haz click aquí" %>
+<% file_type ||= nil %>
+<% form ||= nil %>
+<% attribute ||= nil %>
+<% value ||= nil %>
+<% accepted_files ||= nil %>
+<% uploaded_file ||= {} %>
+<% upload_path ||= nil %>
+<% tiny ||= false %>
+<% icon, _color = file_type ? get_document_icon_by_type(file_type) : "file" %>
+<% full_width ||= false %>
+<% width_class ||= tiny ? "w-70px" : "#{full_width ? "w-100" : "w-150px"} mb-4" %>
+
+<div id="<%= id %>">
+  <div
+    class="filezone <%= width_class %> flex-grow-1 p-2 position-relative"
+    id="<%= id ? "#{id}-file-dropzone" : "file-dropzone" %>"
+    data-controller="single-file-upload"
+    data-single-file-upload-url-value="<%= upload_path %>"
+    data-single-file-upload-disable-auto-upload-value="true"
+    data-single-file-upload-accepted-files-value="<%= accepted_files %>"
+    data-single-file-upload-uploaded-file-value="<%= uploaded_file.is_a?(String) ? uploaded_file : uploaded_file&.to_json %>"
+  >
+
+    <% if form && attribute %>
+      <%= form.file_field attribute,
+        value: value,
+        class: "d-none",
+        data: { single_file_upload_target: "fileInput" }
+      %>
+    <% end %>
+
+    <button
+      id="remove-button"
+      type="button"
+      class="btn btn-flush btn-active-color-danger position-absolute end-0 me-2 <%= "d-none" unless uploaded_file && uploaded_file[:url] %>"
+      data-single-file-upload-target="removeButton"
+      data-action="single-file-upload#removeFile"
+    >
+      <i class="fa-solid fa-xmark fs-3"></i>
+    </button>
+    <div class="dz-error-mark">
+      <i class="fa-solid fa-circle-xmark fs-3x text-danger opacity-75"></i>
+    </div>
+    <div class="dz-message needsclick">
+      <i class="fa-solid fa-<%= icon %> fs-2x"></i>
+      <div class="text-muted fs-8 pt-1">
+        <em><%= no_file_message %></em>
+      </div>
+    </div>
+  </div>
+</div>

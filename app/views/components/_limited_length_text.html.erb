@@ -1,0 +1,10 @@
+<% max_length ||= 50 %>
+
+<% if text.length >= max_length %>
+  <span title="<%= text %>" data-controller="tooltip">
+    <%= text[0..max_length-3] %>...
+  </span>
+<% else %>
+  <%= text %>
+<% end %>
+

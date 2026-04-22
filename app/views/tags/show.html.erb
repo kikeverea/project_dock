@@ -1,0 +1,13 @@
+<% content_for :title, @tag.name %>
+
+<!-- lib/templates/erb/scaffold/show.html.erb.tt -->
+
+<div class="card">
+  <div class="card-body">
+      </div>
+</div>
+
+<div class="mx-1 mt-3 mb-8">
+  <%= link_to "← Ir a TODO", tags_path %> |
+  <%= link_to "Editar", edit_tag_path(@tag) %>
+</div>

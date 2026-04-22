@@ -1,0 +1,99 @@
+<% id ||= "ransack-form" %>
+<% filter ||= nil %>
+<% export_to_excel ||= nil %>
+<% type ||= nil %>
+<% new_item ||= nil %>
+<% header ||= nil %>
+<% search_bar_width_classes ||= "w-300px" %>
+<% index_locals ||= {} %>
+<% query_args ||= {} %>
+<% target ||= nil %>
+<% model ||= controller_path.classify.safe_constantize %>
+<% index_path ||= polymorphic_path(model, type: type) %>
+<% ransack_path ||= polymorphic_path([:ransack, model], type: type) %>
+
+<% if new_item %>
+  <div class="d-flex align-items-center justify-content-between">
+    <% label, path = new_item %>
+
+    <%= link_to path, class: "btn btn-success w-[200px] mb-4" do %>
+      <i class="fa fa-plus"></i> <%= label %>
+    <% end %>
+
+    <% if header %>
+      <%= header %>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="card card-body py-6 mb-4">
+
+  <%= search_form_for @query,
+    id: id,
+    url: ransack_path,
+    data: {
+      controller: "ransack",
+      ransack_ransack_query_value: @query.present?,
+      turbo_stream: true,
+      turbo_frame: "ransack-index",
+    } do |form|
+  %>
+    <%= hidden_field_tag :model, model.name %>
+    <%= hidden_field_tag :type, type %>
+    <%= hidden_field_tag :page, params[:page] || 1 %>
+    <%= hidden_field_tag :per_page, params[:per_page] || 15, data: { ransack_target: "perPage" }%>
+
+    <% query_args.each do |(key, value)| %>
+      <%= form.hidden_field key, value: value %>
+    <% end %>
+
+    <div class="row align-items-center">
+      <div class="col col-md-6">
+        <div class="position-relative <%= search_bar_width_classes %>">
+          <div class="d-flex align-items-center position-absolute top-0 bottom-0 ms-5">
+            <i class="fa-solid fa-magnifying-glass fs-5"></i>
+          </div>
+          <%= form.text_field search_params,
+            class: "form-control h-40px ps-12",
+            placeholder: search,
+            data: { action: "input->ransack#search", ransack_target: "searchInput" }
+          %>
+          <div class="position-absolute d-flex align-items-center z-index-2 top-0 end-0 h-40px me-4">
+						<span
+              class="spinner-border spinner-border-sm text-primary d-none"
+              data-ransack-target="indicator"
+            ></span>
+          </div>
+        </div>
+      </div>
+      <% if filter %>
+        <div class="col col-md-6 mt-4 mt-sm-0">
+          <div class="d-flex justify-content-md-end align-items-center">
+            <%= render "components/table_filter",
+              index_path: index_path,
+              ransack_path: ransack_path,
+              checkbox_filters: filter[:checkboxes],
+              date_filters: filter[:dates],
+              target: target
+            %>
+            <% if export_to_excel %>
+
+              <%= button_tag type: :button,
+                class: "btn btn-icon btn-success",
+                title: "Exportar a Excel",
+                data: {
+                  controller: "tooltip",
+                  action: "click->ransack#exportExcel",
+                } do
+              %>
+                <i class="fa-solid fa-table fs-3"></i>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<%= render partial: index, locals: index_locals.merge({ has_ransack: true }) %>

@@ -1,0 +1,152 @@
+<% id ||= "index" %>
+<% checkbox_filters ||= [] %>
+<% date_filters ||= [] %>
+<% has_both_filters = date_filters.any? && checkbox_filters.any? %>
+
+<div id="<%= id %>-table-filter" class="d-flex gap-4 align-items-center" data-controller="table-filter">
+
+  <%= link_to "#{index_path}#{"?target=#{target}" if target.present?}",
+    class: "btn btn-color-primary btn-active-primary py-2 px-4 d-none",
+    data: {
+      turbo: false,
+      table_filter_target: "removeFilters",
+      action: "click->table-filter#showRemoveFilterIndicator"
+    } do
+  %>
+    <span>Eliminar filtros</span>
+    <span class="ps-2 close-icon">
+      <i class="fa-solid fa-xmark"></i>
+    </span>
+    <span class="indicator spinner-border spinner-border-sm ms-2 d-none"></span>
+  <% end %>
+
+  <button
+    type="button"
+    class="btn btn-light-primary me-3 dropdown-toggle dropdown-toggle-split"
+    data-controller="dropdown"
+    data-action="click->dropdown#toggle blur->dropdown#handleBlur"
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    <i class="fa-solid fa-filter fs-6"></i>
+    Filtro
+  </button>
+
+  <div id="<%= id %>-table-filter" class="dropdown-menu min-w-300px min-w-md-325px">
+
+    <!-- Header-->
+    <div class="px-7 py-5">
+      <div class="fs-4 text-gray-900 fw-bold">Filtro</div>
+    </div>
+
+    <!-- Separator-->
+    <div class="separator border-gray-200"></div>
+
+    <% if checkbox_filters.empty? && date_filters.empty? %>
+      <div class="p-4 w-100 text-center">
+        <em class="text-gray-600">
+          No hay datos para filtrar
+        </em>
+      </div>
+    <% else %>
+      <div class="px-7 <%= "py-5" if has_both_filters %> d-flex gap-16">
+        <% checkbox_filters.each do |name, filter| %>
+
+          <% ransack_filter = filter[:target] || name.parameterize.underscore %>
+          <% ransack_query = filter[:query] || "in" %>
+
+          <div class="my-4">
+            <label class="form-label fs-5 fw-semibold mb-3">
+              <%= name %>
+            </label>
+
+            <!-- Options -->
+            <% if filter[:values].length > 7 %>
+              <div class="w-400px">
+                <%= collection_select nil, "q[#{ransack_filter}_#{ransack_query}]",
+                  filter[:values], :to_s, :to_s,
+                  { include_blank: true },
+                  id: "#{id}-options-select",
+                  class: "filter-select form-select",
+                  multiple: true,
+                  data: {
+                    controller: "select2",
+                    select_placeholder: "Selecciona #{name.to_s.humanize}",
+                    filter_name: name,
+                    filter_target: filter[:target] || name,
+                    container_css_selector: "##{id}-table-filter",
+                  }
+                %>
+              </div>
+            <% else %>
+              <div class="d-flex flex-column flex-wrap fw-semibold">
+
+                <% filter[:values].each do |value| %>
+
+                  <% label, value = value.is_a?(Array) ? value : [value, value] %>
+
+                  <label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
+                    <%= check_box_tag "q[#{ransack_filter}_#{ransack_query}][]",
+                      value,
+                      false,
+                      class: "form-check-input"
+                    %>
+
+                    <span class="ms-3 text-gray-600">
+                      <%= label %>
+                    </span>
+                  </label>
+                <% end %>
+              </div>
+            <% end %>
+            <!-- End Options-->
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Date options -->
+      <% if has_both_filters %>
+        <hr class="my-0 mx-4">
+      <% end %>
+
+      <% date_filters.each do |name, target| %>
+        <div class="px-7 py-5 d-flex justify-content-between align-items-center gap-4 min-w-475px">
+          <label class="form-label fs-5 fw-semibold mb-0 flex-grow-1">
+            <%= name %>
+          </label>
+
+          <% target ||= "created_at" %>
+
+          <div class="w-150px">
+            <%= date_field_tag "start-date", {},
+              class: 'form-control h-40px',
+              placeholder: "Inicio",
+              data: { action: "change->table-filter#startDateChange" }
+            %>
+            <%= hidden_field_tag "q[#{target}_gteq]", nil, data: { table_filter_target: "startDateISO" }  %>
+          </div>
+
+          <div class="w-150px">
+            <%= date_field_tag "end-date", {},
+              class: 'form-control h-40px',
+              placeholder: "Fin",
+              data: { action: "change->table-filter#endDateChange" }
+            %>
+            <%= hidden_field_tag "q[#{target}_lteq]", nil, data: { table_filter_target: "endDateISO" }  %>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="w-100 py-4 text-center">
+        <button
+          type="submit"
+          class="btn btn-primary w-75 mw-300px"
+          data-dismiss="menu"
+          data-action="click->table-filter#showRemoveFilters"
+        >
+          Aplicar Filtro
+        </button>
+      </div>
+    <% end %>
+  </div>
+</div>

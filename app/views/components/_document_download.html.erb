@@ -1,0 +1,82 @@
+<style>
+  .document-download {
+    width: fit-content;
+  }
+
+  .document-download > a.primary:hover {
+    background-color: rgba(0, 0, 255, 0.1);
+  }
+
+  .document-download > a.success:hover {
+    background-color: rgba(0, 255, 0, 0.1);
+  }
+
+  .document-download > a.info:hover {
+    background-color: rgba(114, 57, 234, 0.1);
+  }
+
+  .document-download > a.orange:hover {
+    background-color: rgba(228, 145, 135, 0.1);
+  }
+
+  .document-download > a.danger:hover {
+    background-color: rgba(255, 0, 0, 0.1);
+  }
+</style>
+
+<% use_original_file_name ||= false %>
+<% tiny ||= false %>
+<% icon ||= nil %>
+<% interactive ||= false %>
+<% delete_path ||= false %>
+<% label ||= "Descargar" %>
+<% no_file_message ||= label %>
+<% name_classes ||= "" %>
+
+<div class="<%= "tiny" if tiny %> document-download position-relative <%= "min-w-85px" if delete_path %>">
+  <% if document&.file %>
+
+    <% if interactive %>
+      <div class="position-absolute top-0 end-0 ms-2 mt-2 z-index-2">
+        <!-- Select file-->
+        <label class="form-check form-check-sm form-check-custom form-check">
+          <%= check_box_tag "select-file-#{document.id}",
+            false,
+            false,
+            class: "form-check-input",
+            data: { action: "change->documents#checkDocument", document_id: document.id }
+          %>
+        </label>
+      </div>
+    <% elsif delete_path %>
+      <div class="position-absolute top-0 end-0 ms-2 mt-2 z-index-2">
+        <%= render "components/delete_button",
+          delete_path: delete_path,
+          model_name: "Justificante de pago",
+          icon: "fa-solid fa-xmark-circle",
+          icon_size: "fs-7"
+        %>
+      </div>
+    <% end %>
+
+    <% document_icon, icon_color = get_document_icon(document) %>
+    <% color ||= icon_color %>
+
+    <%= link_to document.file.url,
+      download: use_original_file_name ? document.file.identifier : document.name,
+      class: "btn btn-flush #{tiny ? "p-4" : "py-4 px-8"} d-inline-block rounded-1 #{color} position-relative" do
+    %>
+      <i class="fa-solid fa-<%= icon || document_icon %> fs-<%= tiny ? "3x" : "4x" %> text-<%= color %> p-0"></i>
+      <div class="w-[125px] truncate-2-lines text-<%= color %> <%= tiny ? "pt-2" : "pt-4" %> <%= name_classes %>">
+        <%= use_original_file_name ? extract_filename(document) : label %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="btn btn-flush cursor-move <%= tiny ? "p-4" : "py-4 px-8" %> rounded-1" style="cursor: default;">
+      <i class="fa-solid fa-file fs-<%= tiny ? "2x" : "4x" %>"></i>
+      <div class="text-muted <%= tiny ? "pt-2" : "pt-4" %>">
+        <em><%= no_file_message %></em>
+      </div>
+    </div>
+  <% end %>
+</div>

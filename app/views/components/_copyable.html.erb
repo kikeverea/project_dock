@@ -1,0 +1,42 @@
+<% index ||= false %>
+<% short_feedback ||= index %>
+<% value ||= nil %>
+<% copy ||= value %>
+<% classes ||= "" %>
+
+<% if value.present? %>
+  <div
+    class="cursor-pointer relative <%= classes %> w-fit"
+    data-controller="copyable-value"
+    data-copyable-value-content-value="<%= copy %>"
+    data-copyable-value-short-feedback-value="<%= short_feedback %>"
+    data-action="mouseenter->copyable-value#hoverIn mouseleave->copyable-value#hoverOut click->copyable-value#copyValue"
+  >
+    <% is_link = value.is_a?(Hash) && value[:path].present? %>
+
+    <% if is_link %>
+      <%= link_to value[:name], value[:path] %>
+    <% else %>
+      <%= value.to_s.html_safe %>
+
+      <div class="absolute left-full top-0">
+        <i class="fa-solid fa-copy ms-2 copy-icon"></i>
+      </div>
+
+      <% if short_feedback %>
+        <div class="absolute left-full top-0">
+          <i class="fa-solid fa-check ms-2 copy-icon" data-copyable-value-target="copiedMessage">
+          </i>
+        </div>
+      <% else %>
+        <div class="absolute left-full top-0 ms-6">
+        <span class="hidden ps-2 text-gray-500" data-copyable-value-target="copiedMessage">
+          Copiado!
+        </span>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  -
+<% end %>

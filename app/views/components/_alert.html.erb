@@ -1,0 +1,39 @@
+<% type ||= :primary %>
+<% type = :danger if type.to_sym == :error %>
+<% show_icon ||= false %>
+
+<% icon_class = !show_icon ? nil :
+   case type.to_sym
+   when :primary
+     nil
+   when :success
+     "fa-solid fa-circle-check"
+   when :danger, :error
+     "fa-solid fa-circle-exclamation"
+   when :warning
+     "fa-solid fa-triangle-exclamation"
+   when :info
+     "fa-solid fa-circle-info"
+   else
+     nil
+   end
+%>
+
+<div class="alert alert-<%= type %>" data-controller="alert">
+  <% if show_icon %>
+    <i class="<%= icon_class %> text-lg"></i>
+  <% end %>
+  <% if true %>
+    <span class="mb-0 flex-1">
+      <%= content %>
+    </span>
+  <% end %>
+  <button
+    type="button"
+    class="btn btn-flush btn-muted"
+    aria-label="Close"
+    data-action="click->alert#dismiss"
+  >
+    <i class="fas fa-xmark fs-5"></i>
+  </button>
+</div>

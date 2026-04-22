@@ -1,0 +1,5 @@
+<div id="turbo-consumer">
+  <div data-controller="<%= controller %>"
+    <%= data.reduce("") { |str, (key, val)| "#{str} data-#{key.to_s.parameterize.dasherize}=#{val}".strip} %>
+  ></div>
+</div>

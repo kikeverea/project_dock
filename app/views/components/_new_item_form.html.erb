@@ -1,0 +1,17 @@
+<% model_name ||= model.model_name %>
+<% label ||= "+ Añadir nuevo" %>
+
+<div data-controller="new-item">
+
+  <button class="btn btn-flush btn-color-primary btn-active-color-success" data-action="new-item#showForm">
+    <%= label %>
+  </button>
+
+  <%= form_with url: url do |form| %>
+    <div class="d-none align-items-center gap-4" data-new-item-target="item">
+      <%= form.text_field model_name.singular, class: "form-control h-35px" %>
+      <%= form.submit "Añadir", class: "btn btn-success h-35px" %>
+    </div>
+  <% end %>
+
+</div>

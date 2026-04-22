@@ -1,0 +1,32 @@
+<div class="card">
+  <div class="card-body">
+
+    <%= render "components/error_banner", item: project %>
+
+    <%= form_with model: project do |form| %>
+
+      <%= render "components/form_field",
+        attribute: :name,
+        type: :text_field,
+        item: project,
+        required: true,
+        form: form,
+        icon: "fa-solid fa-user"
+      %>
+
+      <div class="mt-8">
+         <%= form.button project.persisted? ? "Guardar" : "Crear proyecto", class: "btn btn-success" %>
+         <%= link_to "Cancelar",
+             request.referer == request.url ? projects_path : :back,
+             class: "btn btn-link btn-color-muted btn-active-color-success mx-4"
+         %>
+      </div>
+
+    <% end %>
+  </div>
+</div>
+<div class="mx-1 mt-3 mb-8">
+  <% if request.referer != projects_url %>
+    <%= link_to "← Ir a TODO", projects_path %>
+  <% end -%>
+</div>

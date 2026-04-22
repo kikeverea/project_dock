@@ -1,0 +1,64 @@
+<% type ||= :primary %>
+<% link ||= nil %>
+<% text ||= nil %>
+<% title ||= nil %>
+
+<style>
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  .notification {
+    animation: fade-in 0.4s ease-out forwards;
+    height: 75px;
+  }
+
+  .notification.hide {
+    animation: fade-out 0.2s ease-in forwards;
+  }
+
+  .notification.collapse {
+    transition: height 0.2s ease-in;
+    height: 0;
+  }
+</style>
+
+<div class="notification d-flex flex-row align-items-center gap-4 position-relative min-w-350px p-4 mb-2
+            border border-<%= type %> border-left-4 border-top-0 border-right-0 border-bottom-0
+            bg-light-<%= type %>"
+     data-controller="notification"
+>
+
+  <button class="position-absolute top-0 end-0 btn btn-flush pt-2 pe-4" data-action="notification#removeFromScreen">
+    <i class="fa-solid fa-xmark text-<%= type %>"></i>
+  </button>
+
+  <div class="text-white bg-<%= type %> w-35px h-35px rounded-circle position-relative">
+    <div class="fs-1 position-absolute start-50 top-50 translate-middle pb-2 fw-bold">¡</div>
+  </div>
+  <div>
+    <div class="mb-1"><%= title %></div>
+    <% if link %>
+      <%= link_to link[:text], link[:path], data: { action: "click->notification#removeFromScreen" } %>
+    <% else %>
+      <%= text %>
+    <% end %>
+  </div>
+</div>

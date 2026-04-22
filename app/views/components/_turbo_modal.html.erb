@@ -1,0 +1,24 @@
+<% id ||= "#{channel}-modal" %>
+
+<div id="<%= id %>" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div id="<%= id %>-content" class="modal-content">
+
+      <!-- Modal header -->
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="<%= id %>-label">
+          <%= title %>
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div id="<%= id %>-body" class="modal-body">
+        <div class="container-fluid">
+          <div id="<%= id %>-outlet">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

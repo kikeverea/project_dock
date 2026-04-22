@@ -1,0 +1,49 @@
+<div class="mw-250px" data-controller="emails">
+
+  <template data-emails-target="template">
+    <div class="d-flex gap-4 mb-2">
+      <%= form.hidden_field nil, id: "#{model_name}-_destroy-email-__INDEX__", name: "#{model_name}[emails_attributes][__INDEX__][_destroy]", value: "false" %>
+
+      <%= form.text_field nil,
+                          class: "form-control w-300px",
+                          name: "#{model_name}[emails_attributes][__INDEX__][email]",
+                          id: "#{model_name}-email-__INDEX__",
+                          placeholder: "Email"
+      %>
+
+      <button
+        type="button"
+        class="btn btn-flush btn-color-danger"
+        data-action="click->emails#removeEmail"
+        data-target-id="<%= model_name %>-_destroy-email-__INDEX__"
+      >
+        <i class="fa-solid fa-trash fs-8"></i>
+      </button>
+    </div>
+  </template>
+
+  <div data-emails-target="emailsContainer">
+    <%= form.fields_for :emails do |phone_form| %>
+      <div class="d-flex gap-4 mb-2">
+        <%= phone_form.hidden_field :_destroy %>
+        <%= phone_form.text_field :email, class: "form-control w-300px", placeholder: "Email" %>
+
+        <button
+          type="button"
+          class="btn btn-flush btn-color-danger"
+          data-action="click->emails#removeEmail"
+        >
+          <i class="fa-solid fa-trash fs-8"></i>
+        </button>
+      </div>
+    <% end %>
+  </div>
+
+  <button
+    type="button"
+    class="btn btn-link btn-color-primary py-0"
+    data-action="emails#addEmailRow"
+  >
+    + Añadir correo electrónico
+  </button>
+</div>

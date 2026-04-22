@@ -1,0 +1,17 @@
+<div class="card">
+  <div class="card-body">
+    <% attributes.reject(&:password_digest?).each do |attribute| -%>
+      <%%= render "components/labeled_value",
+           label: "<%= attribute.human_name %>",
+           value: @<%= singular_table_name %>.<%= attribute.name %>,
+           copyable: true,
+           size: 100
+      %>
+    <% end -%>
+  </div>
+</div>
+
+<div class="mx-1 mt-3 mb-8">
+  <%%= link_to "← Ir a TODO", <%= plural_table_name %>_path %> |
+  <%%= link_to "Editar", edit_<%= singular_table_name %>_path(@<%= singular_table_name %>) %>
+</div>

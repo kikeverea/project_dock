@@ -1,0 +1,64 @@
+<% content_for :title, "Lista de usuarios" %>
+
+<% if can? :create, User %>
+	<%= link_to new_user_path, class: "btn btn-success w-[200px] mb-4" do %>
+		<i class="fa fa-plus"></i> Nuevo Usuario
+	<% end %>
+<% end %>
+
+<div id="user-index">
+	<div class="card card-body">
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+						<th class="min-w-[125px]">
+							Usuario
+						</th>
+						<th class="min-w-[125px]">
+							Rol
+						</th>
+						<th class="min-w-[125px]">
+							Registrado
+						</th>
+						<th class="text-end w-[125px]" aria-label="Acciones"></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<% @users.each do |user| %>
+						<tr class="h-[60px]">
+							<td><%= render "user_item", user: user, link: user %></td>
+							<td><%= user.role_text %></td>
+							<td><%= user.created_at.strftime("%d-%m-%Y") %></td>
+							<td class="text-end pe-4">
+								<button
+									type="button"
+									class="btn btn-light btn-active-light-primary dropdown-toggle dropdown-toggle-split ms-4"
+									data-controller="dropdown"
+									data-action="click->dropdown#toggle blur->dropdown#handleBlur"
+									aria-haspopup="true"
+									aria-expanded="false"
+								>
+									Acciones
+								</button>
+								<div class="dropdown-menu" style="border: 1px solid #ECECEC">
+									<%= link_to "Editar", edit_user_path(id: user.id), class: 'dropdown-item' %>
+									<%= button_to "Eliminar",
+										user,
+										method: :delete,
+										class:'dropdown-item',
+										data: { controller: 'delete-button', delete_button_item_name_value: user.full_name }
+									%>
+								</div>
+							</td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+
+			<%= render "components/paginator", items: @users %>
+
+		</div>
+	</div>
+</div>

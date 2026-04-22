@@ -1,0 +1,10 @@
+<% controller ||= nil %>
+
+<% if item.errors[name].any? || controller %>
+  <div
+    class="invalid-feedback <%= controller ? "hidden" : "block" %>"
+    <%= "data-#{controller}-target=#{name.to_s.camelize(:lower)}Error" if controller %>
+  >
+    <%= item.errors[name].first %>
+  </div>
+<% end %>

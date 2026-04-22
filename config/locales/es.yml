@@ -1,0 +1,58 @@
+es:
+  date:
+    formats:
+      day_month: "%d %B"
+      long_month: "%B"
+      month_year: "%B %Y"
+      human: "%d de %B de %Y"
+    month_names: [ ~, Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre ]
+  time:
+    formats:
+      day_month: "%d %B"
+      long_month: "%B"
+      month_year: "%B %Y"
+      human: "%d de %B de %Y"
+    month_names: [ ~, Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre ]
+  errors:
+    messages:
+      not_saved: "No se ha podido realizar la acción"
+  activerecord:
+    enums:
+      interaction:
+        status:
+          pending: "Esperando respuesta"
+          seen: "Visto"
+          replied: "Respondido"
+      user:
+        role:
+          admin: "Admin CRM"
+          administration: "Administración"
+          technician: "Técnico"
+      task:
+        status:
+          pending: "Pendiente"
+          completed: "Completada"
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              not_found: "El email no se encuentra registrado"
+      messages:
+        record_invalid: "El registro es inválido. %{errors}"
+        blank: "campo obligatorio"
+        taken: "ya está en uso"
+        too_short: "mínimo %{count} caracteres"
+        too_long: "máximo %{count} caracteres"
+        not_a_number: "no es un número"
+        invalid: "no es válido"
+        confirmation: "no coincide con la confirmación"
+        required: "campo obligatorio"
+        even: "debe ser un número par"
+        odd: "debe ser un número impar"
+        greater_than: "debe ser mayor que %{count}"
+        less_than: "debe ser menor que %{count}"
+  devise:
+    sessions:
+      user:
+        signed_in: "Sesión iniciada"

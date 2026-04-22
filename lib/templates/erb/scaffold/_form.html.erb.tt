@@ -1,0 +1,33 @@
+<div class="card">
+  <div class="card-body">
+
+    <%%= render "components/error_banner", item: <%= singular_table_name %> %>
+
+    <%%= form_with model: <%= model_resource_name %> do |form| %>
+
+      <% attributes.each do |attribute| -%>
+        <%%= render "components/form_field",
+                  label: "TODO",
+                  attribute: :<%= attribute.column_name %>,
+                  type: :text_field,
+                  required: true,
+                  item: <%= singular_table_name %>,
+                  form: form %>
+      <% end -%>
+
+      <div class="mt-8">
+         <%%= form.button <%= singular_table_name %>.persisted? ? "Guardar" : "Crear TODO", class: "btn btn-success" %>
+         <%%= link_to "Cancelar",
+             request.referer == request.url ? <%= plural_table_name %>_path : :back,
+             class: "btn btn-link btn-color-muted btn-active-color-success mx-4"
+         %>
+      </div>
+
+    <%% end %>
+  </div>
+</div>
+<div class="mx-1 mt-3 mb-8">
+  <%% if request.referer != <%= plural_table_name %>_url %>
+    <%%= link_to "← Ir a TODO", <%= plural_table_name %>_path %>
+  <%% end -%>
+</div>

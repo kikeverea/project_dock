@@ -1,0 +1,70 @@
+<style>
+  .image-input-empty {
+      background-image: url("<%= asset_path('avatar.svg') %>")
+  }
+
+  .dr-zone.dz-clickable * {
+      cursor: default;
+  }
+
+  .dr-zone.dz-preview .dz-image {
+    border-radius: 20px;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    position: relative;
+    display: block;
+    z-index: 10;
+  }
+
+  .dr-zone.dz-preview.dz-image-preview .dz-details {
+    -webkit-transition: opacity 0.2s linear;
+  }
+
+  .dr-zone.dz-preview.dz-complete .dz-progress {
+    opacity: 0;
+    -webkit-transition: opacity 0.4s ease-in;
+  }
+
+  .dr-zone.dz-preview.dz-processing .dz-progress {
+      opacity: 1;
+      -webkit-transition: all 0.2s linear;
+  }
+
+  .dr-zone.dz-preview .dz-details {
+      z-index: 20;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      font-size: 13px;
+      min-width: 100%;
+      max-width: 100%;
+      padding: 2em 1em;
+      text-align: center;
+      color: rgba(0, 0, 0, .9);
+      line-height: 150%;
+  }
+
+</style>
+
+<% action ||= ""%>
+
+<div
+  class="image-input-empty dr-zone position-relative w-150px h-150px"
+  data-controller="dropzone"
+  data-dropzone-url-value="<%= upload_tmp_file_path %>"
+>
+  <button
+    type="button"
+    class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+    style="position: absolute; top: -8px; right: -8px;"
+    title="Subir imagen"
+    data-bs-toggle="tooltip"
+    data-bs-dismiss="click"
+    data-action="click->dropzone#openFileBrowser <%= action %>"
+  >
+    <i class="fa-solid fa-file-arrow-up fs-6 opacity-75"></i>
+  </button>
+  <%= form.hidden_field attribute, value: value, data: { dropzone_target: "value" }%>
+</div>

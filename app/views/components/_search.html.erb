@@ -1,0 +1,17 @@
+<% id ||= "search-field" %>
+<% placeholder ||= "Buscar" %>
+<% style ||= "border" %>
+
+<div class="position-relative">
+  <div class="d-flex align-items-center position-absolute top-0 bottom-0 ms-6">
+    <i class="fa-solid fa-magnifying-glass fs-3"></i>
+  </div>
+  <!--suppress HtmlFormInputWithoutLabel-->
+  <input
+    type="text"
+    id="<%= id %>"
+    class="form-control <%= "border-0" if style != "solid" %> w-250px ps-15"
+    placeholder="<%= placeholder %>"
+    data-action="<%= controller_action %>"
+  >
+</div>

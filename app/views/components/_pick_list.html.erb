@@ -1,0 +1,102 @@
+<% label_col ||= "col-md-2 col-form-label" %>
+<% input_col ||= "col-md-10" %>
+<% value ||= [] %>
+<% model_name = model.model_name %>
+<% name_es = model.model_name %>
+<% name_plural_es ||= "#{name_es}s" %>
+<% name_attr ||= :name %>
+<% id ||= "pick-list" %>
+<% icon ||= nil %>
+
+<div class="mb-3 row">
+  <div class="<%= label_col %>">
+    <% if icon %>
+      <i class="fa-solid fa-<%= icon %> me-2 text-primary opacity-75"></i>
+    <% end %>
+    <%= form.label :name, name_plural_es.titleize, class: "required" %>
+  </div>
+  <div class="<%= input_col %>">
+    <div id="<%= id %>" data-controller="pick-list" class="container-fluid">
+
+      <%= form.hidden_field model_name.plural, name: model_name.plural, data: { pick_list_target: "value" }%>
+
+      <div class="row">
+
+        <!-- Selected items -->
+        <div class="col-12 col-xl-5 px-0 mb-3">
+          <div class="card card-body <%= item.errors[model_name.plural].any? ? "border-danger" : "border-gray-300" %> h-250px h-xl-350px overflow-scroll px-4 pt-1">
+            <div data-pick-list-target="selectedItemsContainer">
+
+              <% list_items.each do |list_item| %>
+
+                <div
+                  id="<%= list_item.id %>"
+                  class="px-6 py-4 my-3 border rounded border-gray-300 cursor-pointer d-none align-items-center"
+                  data-name="<%= list_item[name_attr] %>"
+                  data-action="click->pick-list#moveToOpposite"
+                  data-selected="<%= value.include? list_item.id %>"
+                >
+                  <%= partial.call(list_item) %>
+                </div>
+              <% end %>
+              <div
+                data-pick-list-target="noSelectedItemsMessage"
+                class="empty-message w-100 pt-2"
+                style="pointer-events: none;"
+              >
+                <em class="text-muted pt-2">No hay <%= name_plural_es %> seleccionados</em>
+              </div>
+            </div>
+          </div>
+          <%= render "components/error_message", item: item, name: model_name.plural %>
+        </div>
+
+        <div class="col-xl-1 d-none d-xl-flex px-2 justify-content-center align-items-center">
+          <i class="fa-solid fa-arrow-left fs-3x text-primary opacity-75"></i>
+        </div>
+
+        <!-- Available items -->
+        <div class="col-12 col-xl-6 px-0">
+          <div class="card card-body border-gray-300 h-250px h-xl-350px overflow-scroll pt-2 px-4">
+
+            <!-- Search -->
+            <div class="position-relative my-4 ps-8">
+              <div class="d-flex align-items-center position-absolute top-0 bottom-0 ms-6">
+                <i class="fa-solid fa-magnifying-glass fs-3"></i>
+              </div>
+              <input
+                type="text"
+                id="selected-fields-search"
+                class="form-control form-control-solid w-250px ps-15"
+                placeholder="Buscar <%= name_plural_es.titleize %>"
+                data-action="input->pick-list#searchAvailable"
+              >
+            </div>
+
+            <div class="ps-8" data-pick-list-target="availableItemsContainer">
+              <% list_items.each do |list_item| %>
+                <div
+                  id="<%= list_item.id %>"
+                  class="d-flex align-items-center px-6 py-4 my-3 border rounded border-gray-300 cursor-pointer bg-hover-light"
+                  data-name="<%= list_item[name_attr] %>"
+                  data-action="click->pick-list#moveToOpposite"
+                >
+                  <%= partial.call(list_item) %>
+                </div>
+              <% end %>
+
+              <div
+                data-pick-list-target="noAvailableItemsMessage"
+                class="empty-message text-center w-100 h-100 pt-4 justify-content-center align-items-center"
+                style="pointer-events: none;"
+              >
+                <em class="text-muted">No hay <%= name_plural_es %> seleccionados</em>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

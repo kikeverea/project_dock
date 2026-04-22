@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+  <% unless Rails.env.test? %>
+    <meta charset="utf-8" />
+    <title><%= APP_CONFIG && APP_CONFIG["default_meta_title"] %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="<%= asset_path('favicon.ico') %>">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.9.55/css/materialdesignicons.min.css" integrity="sha512-vIgFb4o1CL8iMGoIF7cYiEVFrel13k/BkTGvs0hGfVnlbV6XjAA0M0oEHdWqGdAVRTDID3vIZPOHmKdrMAUChA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+
+    <!-- Dropzone CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+
+    <!-- Quill CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+
+    <!-- Hue Bee CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/huebee@2/dist/huebee.min.css">
+
+    <!-- Stepper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper/dist/css/bs-stepper.min.css">
+
+    <!-- Dropzone JS -->
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+
+    <!-- Draggable JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.11/lib/draggable.bundle.js"></script>
+
+    <!-- Apex Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <!-- Quill JS -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+    <!-- Hue Bee JS -->
+    <script src="https://unpkg.com/huebee@2/dist/huebee.pkgd.min.js"></script>
+
+    <!-- Stepper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bs-stepper/dist/js/bs-stepper.min.js"></script>
+
+    <%= javascript_importmap_tags %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tom-select", "data-turbo-track": "reload" %>
+    <%#= stylesheet_link_tag "select2_override", "data-turbo-track": "reload" %>
+  <% end %>
+</head>
+
+<body class="bg-gray-200">
+
+  <!-- Topbar -->
+  <header
+    id="topbar"
+    class="fixed top-0 left-0 right-0 h-20 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.1)] z-40 flex items-center"
+  >
+    <!-- Logo box -->
+    <div class="w-[80px] md:w-[250px] h-full flex items-center justify-center bg-gray-800 px-4 transition-[width] duration-[250ms] ease-[ease]">
+      <%= link_to Current.user, class: "hidden md:inline" do %>
+        <%= image_tag asset_path("logo-lg.png"), class: "h-[80%]" %>
+      <% end %>
+      <%= link_to Current.user, class: "md:hidden" do %>
+        <%= image_tag asset_path("logo-sm.png"), class: "h-[80%]" %>
+      <% end %>
+    </div>
+
+    <!-- Sidebar toggle -->
+    <button
+      id="sidebar-toggle"
+      type="button"
+      class="py-4 px-3 bg-none border-0 cursor-pointer text-gray-400 text-lg"
+    >
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- Page title -->
+    <div class="flex-1 px-1">
+      <h3 class="m-0 mb-1 text-gray-900">
+        <%= yield :title %>
+      </h3>
+    </div>
+
+    <!-- Notifications container -->
+    <div id="notifications-container" class="relative">
+    </div>
+
+    <!-- User dropdown -->
+    <div class="dropdown d-inline-block px-4">
+      <button
+        type="button"
+        class="btn flex items-center gap-3 pt-3 px-4 bg-none border-0"
+        id="page-header-user-dropdown"
+        data-controller="dropdown"
+        data-action="click->dropdown#toggle blur->dropdown#handleBlur"
+      >
+        <% if current_user.image? %>
+          <%= image_tag current_user.image.url, class: "rounded-full w-10 h-10 object-cover" %>
+        <% else %>
+          <img
+            class="rounded-full w-10 h-10 object-cover"
+            src="https://ui-avatars.com/api/?background=random&rounded=true&name=<%= current_user.name&.delete(" ") %>+<%= current_user.lastname&.delete(" ") %>"
+            alt="<%= current_user.full_name %>"
+          >
+        <% end %>
+        <span class="d-none d-xl-inline-block text-gray-700">
+          <%= current_user.name %>
+        </span>
+        <i class="mdi mdi-chevron-down d-none d-xl-inline-block text-gray-500"></i>
+      </button>
+      <div class="dropdown-menu dropdown-menu-end">
+        <%= link_to current_user, class: "dropdown-item", data: { turbo: false } do %>
+          <i class="ri-user-line align-middle me-1"></i>
+          Perfil
+        <% end %>
+        <div class="dropdown-divider"></div>
+        <%= link_to session_path,
+          class: "dropdown-item text-danger",
+          data: { turbo_method: :delete, turbo_prefetch: false } do
+        %>
+          <i class="ri-shut-down-line align-middle me-1 text-danger"></i> Cerrar Sesión
+        <% end %>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside
+    id="sidebar"
+    class="fixed left-0 top-16 bottom-0 w-[80px] md:w-[250px] bg-gray-800 overflow-y-auto z-50 transition-[width] duration-[250ms] ease-[ease]"
+  >
+    <nav class="p-4">
+      <p class="m-0 px-3 py-8 pb-2 text-sm font-semibold text-gray-400 uppercase tracking-wider opacity-50">
+        Menu
+      </p>
+      <ul class="list-none py-2 m-0">
+        <%= render "components/side_menu", menu: [
+          ["Proyectos", "fa-solid fa-screwdriver-wrench", projects_path],
+          ["Tareas", "fa-solid fa-list-ul", tasks_path],
+          ["Configuración", "fa-solid fa-gear", [
+            ["Usuarios", "fa-solid fa-user-tie", users_path],
+          ]],
+        ]%>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div id="main-content"
+    class="ms-[80px] md:ms-[250px] mt-[64px] min-h-[calc(100vh - 64px)] pb-[56px] transition-[margin-left] duration-[250ms] ease-[ease]"
+  >
+    <div class="p-[24px]">
+
+      <% if notice %>
+        <%= render "components/toast_message", message: notice %>
+      <% end %>
+
+      <% if flash[:errors] %>
+        <div class="alert alert-danger alert-dismissible d-flex p-5 gap-4">
+          <i class="fa-solid fa-circle-exclamation text-danger fs-1"></i>
+          <div class="d-flex flex-column">
+            <span class="ms-2">
+              <% flash[:errors].each do |error| %>
+                <li><%= error %></li>
+              <% end %>
+            </span>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+
+      <%= yield %>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer
+    id="app-footer"
+    class="fixed bottom-0 left-[250px] right-0 bg-white border-t-[1px] border-gray-200 py-4 px-8 text-gray-500 z-30"
+  >
+<!--    Copyright © <%#= Time.current.strftime("%Y") %> Innobing Global Consulting-->
+  </footer>
+
+  <div id="turbo-message-consumer"></div>
+  <div id="turbo-consumer"></div>
+
+  <!-- Sweet Alert 2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Toastr JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+
+  <!-- FS Lightbox -->
+  <script src="https://cdn.jsdelivr.net/npm/fslightbox@3.7.4/index.min.js"></script>
+
+  <%= javascript_include_tag "app.js", "data-turbo-track": "reload" %>
+
+</body>
+
+</html>

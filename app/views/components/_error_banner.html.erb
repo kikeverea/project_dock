@@ -1,0 +1,10 @@
+<% global_error = item.errors[:current_user] %>
+<% has_global_error = global_error.present? %>
+<% error ||= has_global_error ? "Error: #{global_error.first}" : "Campos Inválidos" %>
+
+<% item_errors = item.errors %>
+<% has_item_errors = item_errors.any? %>
+
+<% if has_item_errors %>
+  <%= render "components/alert", content: error, type: :error, show_icon: true %>
+<% end %>

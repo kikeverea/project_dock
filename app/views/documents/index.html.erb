@@ -1,0 +1,18 @@
+<% content_for :title, "Lista de documentos" %>
+
+<%= render "components/ransack",
+   index: "documents/index",
+   items: @documents,
+   index_path: documents_path,
+   ransack_path: ransack_documents_path,
+   search: "Nombre o tag del documento",
+   search_params: :name_or_tags_name_cont,
+   target: "list",
+   filter: {
+     checkboxes: [
+       ["Tag", values: Tag.all.order(:name).map { |tag| tag.name.humanize }, target: :tags_name],
+       ["Carpeta", values: DocumentGroup.all.order(:name).map { |group| group.name }, target: :document_group_name],
+     ],
+     dates: [["Fecha Creación", :created_at ]],
+   }
+%>

@@ -1,0 +1,46 @@
+<% documents = documentable.documents %>
+<% documentable_type = documentable.model_name.name %>
+
+<div id="documents-index">
+  <%= render "components/simple_file_drop",
+       id: "document-upload",
+       upload_path: documents_path(documentable_type: documentable_type, documentable_id: documentable.id),
+       no_file_message: "Arrastra archivos o haz click aqui",
+       full_width: true
+  %>
+
+  <div class="card card-body <%= "pt-2" if documents.any? %>">
+    <% if documents.any? %>
+      <div class="d-flex flex-wrap gap-6">
+        <% documents.each do |document| %>
+          <%= render "components/file_download",
+             file: document,
+             delete_path: document_path(document, documentable_type: documentable_type)
+          %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="w-100 text-center">
+        <em class="text-gray-500">No hay archivos subidos</em>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Tags Modal -->
+<div class="modal fade" id="tags-modal" tabindex="-1" aria-labelledby="tags-modal-label" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div id="tags-modal-content" class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="tags-modal-label">Asignar Tags</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="tags-modal-body" class="modal-body">
+        <div class="container-fluid">
+          <div id="tags-modal-form">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

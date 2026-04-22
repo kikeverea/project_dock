@@ -1,0 +1,53 @@
+<% icon ||= "fa-solid fa-trash" %>
+<% name ||= nil %>
+<% model ||= "" %>
+<% model_gender ||= "" %>
+<% no_padding ||= false %>
+<% muted ||= false %>
+<% classes ||= "btn btn-flush btn-color-#{muted ? "muted" : "danger"} #{"btn-active-color-danger" if muted} #{"px-2" unless no_padding}" %>
+<% icon_size ||= "fs-5" %>
+<% icon_classes ||= "" %>
+<% show_text ||= false %>
+<% as_link ||= false %>
+<% ignore_controller ||= false %>
+<% simple_tooltip ||= false %>
+<% style ||= nil %>
+<% action_name ||= nil %>
+<% reversible_message ||= nil %>
+
+<% data =  {
+  bs_dismiss: "click",
+  controller: ignore_controller ? "" : "delete-button",
+  turbo_method: :delete,
+  delete_button_model_value: model,
+  delete_button_model_gender_value: model_gender,
+  delete_button_item_name_value: name,
+  delete_button_action_name_value: action_name,
+  delete_button_show_tooltip_value: !show_text,
+  delete_button_reversible_message_value: reversible_message }
+%>
+
+<% icon = "<i class='#{icon} #{icon_size} #{icon_classes}'></i> #{"<span>Eliminar</span>".html_safe if show_text}"%>
+
+<% if as_link %>
+  <div>
+    <%= link_to delete_path,
+        class: classes,
+        title: simple_tooltip ? "Eliminar" :" Eliminar #{name || model}",
+        style: style,
+        data: data.merge(turbo_method: :delete) do
+    %>
+      <%= icon.html_safe %>
+    <% end %>
+  </div>
+<% else %>
+  <%= button_to delete_path,
+      method: :delete,
+      class: classes,
+      title: simple_tooltip ? "Eliminar" :" Eliminar #{name || model}",
+      style: style,
+      data: data do
+  %>
+    <%= icon.html_safe %>
+  <% end %>
+<% end %>

@@ -1,0 +1,26 @@
+<%= form_with url: session_path, data: { turbo: false } do |f| %>
+  <div class="field">
+    <%= f.email_field :email,
+      autofocus: true,
+      autocomplete: "email",
+      class: "form-control bg-transparent",
+      placeholder: "Correo electrónico",
+      value: params[:email]
+    %>
+  </div>
+
+  <div class="field mt-3">
+    <%= f.password_field :password,
+      autocomplete: "current-password",
+      class: "form-control bg-transparent",
+      placeholder: "Contraseña",
+      maxlength: 72
+    %>
+  </div>
+
+  <div class="actions mt-3 mb-3">
+    <%= f.submit "Iniciar sesión", class: "btn btn-brand w-100" %>
+  </div>
+<% end %>
+
+<%= link_to "¿Olvidaste tu contraseña?", new_password_path %>

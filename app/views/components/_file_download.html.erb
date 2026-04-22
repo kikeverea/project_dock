@@ -1,0 +1,39 @@
+<% tiny ||= false %>
+<% no_file_message ||= "No hay archivo" %>
+
+<div
+  id="document-<%= file.id %>"
+  class="d-flex flex-column align-items-center gap-4 file-download <%= "tiny" if tiny %> position-relative"
+>
+  <% if file&.file %>
+    <% icon, icon_color = get_document_icon(file) %>
+
+    <!-- Delete button -->
+    <%= render "components/delete_button",
+      icon: "fa-solid fa-circle-xmark opacity-75",
+      icon_size: "#{tiny ? "fs-8" : "fs-4"}",
+      classes: "btn btn-flush btn-active-color-danger position-absolute bottom-50 end-0 mb-4 mx-2 action-btn",
+      delete_path: delete_path,
+      name: file.name,
+      simple_tooltip: true
+    %>
+
+    <!-- Download -->
+    <%= link_to file.file.url,
+      download: file.name,
+      class: "btn btn-flush #{"py-4 px-8 rounded-1" unless tiny} #{icon_color}" do
+    %>
+      <i class="fa-solid fa-<%= icon %> text-<%= icon_color %> <%= tiny ? "fs-2x" : "fs-3x" %>"></i>
+
+      <div class="text-<%= icon_color %> <%= tiny ? "fs-8" : " fs-7 pt-4" %>">
+        <%= file_name(file, tiny) %>
+      </div>
+    <% end %>
+
+  <% else %>
+    <i class="fa-solid fa-file fs-4x"></i>
+    <div class="text-muted">
+      <em><%= no_file_message %></em>
+    </div>
+  <% end %>
+</div>

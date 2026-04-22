@@ -1,0 +1,35 @@
+<% content_attribute ||= :content %>
+<% subject_attribute ||= :subject %>
+<% subject_label ||= "Asunto" %>
+<% protected_view ||= false %>
+
+<% subject_input = content_tag :div, class: "d-flex align-items-center gap-4 mb-4" do %>
+  <%= label_tag :subject, subject_label, class: "col-form-label" %>
+  <div
+    class="position-relative flex-grow-1"
+    data-controller="debounced-input"
+    data-debounced-input-attribute-value="<%= subject_attribute.to_s %>"
+    data-debounced-input-upload-url-value="<%= upload_url %>"
+  >
+    <%= text_field_tag subject_attribute, email[:subject], class: "form-control", data: { debounced_input_target: "field" } %>
+    <i
+      class="fa-solid fs-2 position-absolute end-0 top-50 translate-middle-y pe-4"
+      data-debounced-input-target="icon"
+    ></i>
+  </div>
+<% end %>
+
+<div class="card">
+  <div class="card-body">
+    <%= render "components/text_editor",
+      id: id,
+      name: name,
+      upload_url: upload_url,
+      value: email[:content],
+      attribute: content_attribute,
+      embed: [subject_input],
+      protected_view: protected_view
+    %>
+  </div>
+</div>
+

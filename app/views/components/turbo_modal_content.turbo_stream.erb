@@ -1,0 +1,21 @@
+<% partial ||= nil %>
+<% action ||= "show" %>
+<% partial_locals ||= {} %>
+<% object ||= {} %>
+<% replace ||= nil %>
+
+<% if partial %>
+  <%= turbo_stream.replace "#{channel}-modal-outlet" do %>
+    <%= render partial: partial, locals: partial_locals.merge({ modal: true }) %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.replace "turbo-consumer" do %>
+  <%= render "components/turbo_modal_action", modal_id: "#{channel}-modal", action: action, object: object %>
+<% end %>
+
+<% if replace %>
+  <%= turbo_stream.replace replace[:target] do %>
+    <%= render replace[:partial], **(replace[:locals] || {}) %>
+  <% end %>
+<% end %>

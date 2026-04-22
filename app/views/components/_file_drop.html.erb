@@ -1,0 +1,50 @@
+<% id ||= "dropzone-container" %>
+<% is_public ||= false %>
+<% discarded_message ||= "Has descartado este documento" %>
+<% undo_discard_url ||= nil %>
+<% destroy_url ||= nil %>
+<% discarded ||= false %>
+
+<% if undo_discard_url && discarded %>
+
+  <!-- Manage discard -->
+  <div class="d-flex flex-column align-items-center gap-3 pb-4">
+    <div class="text-center">
+      <%= discarded_message %>
+    </div>
+
+    <%= button_to undo_discard_url, method: :put, class: "btn btn-primary fs-8 py-1 min-w-175px w-75" do %>
+      <i class="fa-solid fa-rotate-left fs-7"></i> Deshacer
+    <% end %>
+
+    <%= button_to destroy_url, method: :delete, class: "btn btn-danger fs-8 py-1 min-w-175px w-75" do %>
+      <i class="fa-solid fa-trash fs-7"></i> Eliminar Propuesta
+    <% end %>
+  </div>
+
+  <%= render "components/single_file_drop",
+    id: id,
+    name: name,
+    source: source,
+    upload_path: upload_path,
+    is_public: is_public,
+    accepted_files: accepted_files,
+    file_type: file_type,
+    no_file_message: "Reemplazar documento"
+  %>
+
+<% elsif file&.file %>
+  <%= render "components/document_download", document: file %>
+<% else %>
+  <%= render "components/single_file_drop",
+    id: id,
+    name: name,
+    source: source,
+    upload_path: upload_path,
+    is_public: is_public,
+    accepted_files: accepted_files,
+    file_type: file_type,
+    no_file_message: no_file_message
+  %>
+<% end %>
+

@@ -1,0 +1,28 @@
+<% id ||= "toast-message" %>
+<% type ||= "success" %>
+<% color ||= if type.to_s == "success"
+                "success"
+              else
+                type.to_s == "warning" ? "warning" : "danger"
+              end
+%>
+<% data ||= nil %>
+<% manual_trigger ||= false %>
+
+<div
+  class="toast align-items-center text-bg-<%= color %> text-white border-0"
+  id="<%= id %>"
+  role="alert"
+  aria-live="assertive"
+  aria-atomic="true"
+  data-controller="toast"
+  data-toast-manual-value="<%= manual_trigger %>"
+  <%= data&.map { |key, value| "data-#{key.to_s.dasherize}=#{value}"}&.join(" ") %>
+>
+  <div class="d-flex">
+    <div class="toast-body" data-toast-target="message">
+      <%= message %>
+    </div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>

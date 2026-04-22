@@ -1,0 +1,15 @@
+<!--
+  Types:
+    success,
+    update,
+    info,
+    break
+    warning,
+    error,
+    deleted
+-->
+<% type ||= "success" %>
+
+<%= turbo_stream.replace "turbo-consumer" do %>
+  <%= render "components/turbo_message", message: message, type: type %>
+<% end %>

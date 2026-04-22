@@ -1,0 +1,36 @@
+<% per_page = (params[:per_page] || 15).to_i %>
+<% total_entries = items.respond_to?(:total_entries) ? items.total_entries : items.count %>
+<% show_pagination_controls = total_entries > per_page %>
+<% query_params ||= {} %>
+
+<div
+  class="flex w-full justify-between items-center ps-4 <%= 'hidden' unless show_pagination_controls %>"
+  data-controller="paginator"
+  data-paginator-ransack-outlet="#ransack-form"
+>
+  <div class="flex items-center gap-4 flex-1">
+    <%= select_tag :per_page,
+      options_for_select([15, 25, 50, 100], per_page),
+      class: "form-select min-w-[75px] max-h-[80px]",
+      data: { action: "change->paginator#setPerPage" }
+    %>
+    <div>
+      <%= records_per_page(params[:page] || 1, per_page, total_entries) %>
+    </div>
+  </div>
+
+  <div>
+    <div class="digg-pagination mt-3 w-full">
+      <%= will_paginate items,
+        renderer: PaginatorRenderer,
+        params: request.query_parameters.merge(query_params),
+        link_options: {
+          "data-turbo-prefetch" => false, "data-turbo-stream" => true
+        },
+        previous_label: raw('<i class="fa fa-chevron-left"></i>'),
+        next_label: raw('<i class="fa fa-chevron-right"></i>'),
+        container: false
+      %>
+    </div>
+  </div>
+</div>

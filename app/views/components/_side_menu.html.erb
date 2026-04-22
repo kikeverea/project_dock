@@ -1,0 +1,56 @@
+<% menu.each do |item| %>
+  <% label, icon, path, args = item %>
+  <% args ||= {} %>
+
+  <% if path.is_a?(Array) %>
+    <li class="mb-[2px]">
+      <details class="sidebar-group">
+        <summary
+          class="
+            flex items-center gap-3 relative
+            py-6 ps-1 md:px-10
+            text-gray-300 text-sm
+            rounded cursor-pointer list-none
+            transition-[background] duration-150
+          "
+        >
+          <i class="<%= icon %> w-4 text-center text-xl ms-1 md:ms-0 md:text-base "></i>
+          <span class="hidden md:inline">
+            <span class="flex-1">
+              <%= label %>
+            </span>
+            <% if args[:append] %>
+              <span><%= args[:append] %></span>
+            <% end %>
+          </span>
+          <i class="fa-solid fa-chevron-right absolute right-2 top-[50%] translate-y-[-50%] sidebar-chevron text-xs transition-transform duration-200"></i>
+        </summary>
+        <ul class="list-none ps-0.5 md:ps-6 m-0">
+          <%= render "components/side_menu", menu: path %>
+        </ul>
+      </details>
+    </li>
+  <% else %>
+    <% if args[:allowed] || true %>
+      <li class="mb-[2px]">
+        <%= link_to path, class: "sidebar-link p-0 md:py-0.5 md:px-1 no-underline" do %>
+          <!-- below md, show tooltip -->
+          <span class="py-0.5 px-1 md:hidden w-full" title="<%= label %>" data-controller="tooltip">
+            <i class="<%= icon %> w-4 text-center text-xl"></i>
+          </span>
+
+          <!-- above md, don't show any tooltip -->
+          <span class="hidden md:inline">
+            <i class="<%= icon %> w-4 text-center text-base"></i>
+          </span>
+          <span class="hidden md:inline">
+            <% if args[:append] %>
+              <span><%= args[:append] %></span>
+            <% end %>
+            <span><%= label %></span>
+          </span>
+        <% end %>
+      </li>
+    <% end %>
+  <% end %>
+<% end %>

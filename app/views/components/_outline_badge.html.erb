@@ -1,0 +1,18 @@
+<% color ||= nil %>
+<% text_color ||= color %>
+<% use_style_for_color ||= false %>
+<% size ||= "sm" %>
+<% classes ||= "" %>
+<% tooltip ||= "" %>
+<% id ||= "badge" %>
+<% font_size = size == "sm" ? "fs-9" : "fs-6" %>
+
+<div
+  id="<%= id %>"
+  class="px-2 border <%= font_size %> <%= classes %> <%= use_style_for_color ? "" : "text-#{text_color} border-#{color}"%>"
+  style="border-radius: 4px; <%= use_style_for_color ? "color: #{text_color}; border-color: #{color} !important;" : "" %>"
+  title="<%= tooltip %>"
+  data-controller="<%= tooltip.present? ? "tooltip" : "" %>"
+>
+  <%= text %>
+</div>
