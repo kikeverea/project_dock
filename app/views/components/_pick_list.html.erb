@@ -31,7 +31,7 @@
 
                 <div
                   id="<%= list_item.id %>"
-                  class="px-6 py-4 my-3 border rounded border-gray-300 cursor-pointer d-none align-items-center"
+                  class="px-6 py-4 my-3 border rounded border-gray-300 cursor-pointer hidden items-center"
                   data-name="<%= list_item[name_attr] %>"
                   data-action="click->pick-list#moveToOpposite"
                   data-selected="<%= value.include? list_item.id %>"
@@ -51,7 +51,7 @@
           <%= render "components/error_message", item: item, name: model_name.plural %>
         </div>
 
-        <div class="col-xl-1 d-none d-xl-flex px-2 justify-content-center align-items-center">
+        <div class="col-xl-1 hidden d-xl-flex px-2 justify-center items-center">
           <i class="fa-solid fa-arrow-left fs-3x text-primary opacity-75"></i>
         </div>
 
@@ -61,7 +61,7 @@
 
             <!-- Search -->
             <div class="position-relative my-4 ps-8">
-              <div class="d-flex align-items-center position-absolute top-0 bottom-0 ms-6">
+              <div class="flex items-center position-absolute top-0 bottom-0 ms-6">
                 <i class="fa-solid fa-magnifying-glass fs-3"></i>
               </div>
               <input
@@ -77,7 +77,7 @@
               <% list_items.each do |list_item| %>
                 <div
                   id="<%= list_item.id %>"
-                  class="d-flex align-items-center px-6 py-4 my-3 border rounded border-gray-300 cursor-pointer bg-hover-light"
+                  class="flex items-center px-6 py-4 my-3 border rounded border-gray-300 cursor-pointer bg-hover-light"
                   data-name="<%= list_item[name_attr] %>"
                   data-action="click->pick-list#moveToOpposite"
                 >
@@ -87,7 +87,7 @@
 
               <div
                 data-pick-list-target="noAvailableItemsMessage"
-                class="empty-message text-center w-100 h-100 pt-4 justify-content-center align-items-center"
+                class="empty-message text-center w-100 h-100 pt-4 justify-center items-center"
                 style="pointer-events: none;"
               >
                 <em class="text-muted">No hay <%= name_plural_es %> seleccionados</em>

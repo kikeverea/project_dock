@@ -16,7 +16,7 @@ export default class extends Controller {
   }
 
   search() {
-    this.indicatorTarget.classList.remove('d-none')
+    this.indicatorTarget.classList.remove('hidden')
     this.sendSearchRequest()
   }
 
@@ -35,7 +35,7 @@ export default class extends Controller {
 
   sendRansack() {
     this.form.requestSubmit()
-    setTimeout(() => this.indicatorTarget.classList.add('d-none'), 100)
+    setTimeout(() => this.indicatorTarget.classList.add('hidden'), 100)
   }
 
   exportExcel() {

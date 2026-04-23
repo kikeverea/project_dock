@@ -6,8 +6,7 @@ export default class extends Controller {
   static values = { delay: Number, manual: Boolean }
 
   connect() {
-    // console.log("'Toast' controller connected")
-
+    console.log("'Toast' controller connected")
     if (!this.manualValue)
       this.show()
   }
@@ -15,7 +14,22 @@ export default class extends Controller {
   show(message = '') {
     if (message) this.messageTarget.textContent = message
 
-    const toast = new bootstrap.Toast(this.element, { animation: true, delay: this.delayValue || 2500 })
-    toast.show()
+    this.element.style.display = 'flex'
+    requestAnimationFrame(() => this.element.classList.add('show'))
+
+    this.hideTimeout = setTimeout(() => this.hide(), this.delayValue || 2500)
+  }
+
+  hide() {
+    clearTimeout(this.hideTimeout)
+    this.element.classList.remove('show')
+    this.element.addEventListener('transitionend',
+      () => { this.element.style.display = 'none'},
+      { once: true }
+    )
+  }
+
+  disconnect() {
+    clearTimeout(this.hideTimeout)
   }
 }

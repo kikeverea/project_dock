@@ -11,7 +11,7 @@ export default class extends Controller {
   showForm(e) {
     const button = e.currentTarget
 
-    button.classList.add('d-none')
-    this.itemTarget.classList.replace('d-none', 'd-flex')
+    button.classList.add('hidden')
+    this.itemTarget.classList.replace('hidden', 'flex')
   }
 }

@@ -6,7 +6,7 @@ export default class extends Controller {
   static targets = [ 'value' ]
 
   connect(acceptedFiles, source) {
-    // console.log("'Dropzone' controller connected")
+    console.log("'Dropzone' controller connected")
 
     this.source = source || 'documents'
     const maxFiles = this.maxFilesValue || 1
@@ -27,6 +27,8 @@ export default class extends Controller {
       acceptedFiles: acceptedFiles || null,
       paramName: "file",
       maxFiles: maxFiles,
+      thumbnailWidth: null,
+      thumbnailHeight: null,
       dictInvalidFileType: invalidFileMessage,
       init: function () {
         if (maxFiles === 1) {

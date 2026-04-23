@@ -8,7 +8,7 @@
   </button>
 
   <%= form_with url: url do |form| %>
-    <div class="d-none align-items-center gap-4" data-new-item-target="item">
+    <div class="hidden items-center gap-4" data-new-item-target="item">
       <%= form.text_field model_name.singular, class: "form-control h-35px" %>
       <%= form.submit "Añadir", class: "btn btn-success h-35px" %>
     </div>

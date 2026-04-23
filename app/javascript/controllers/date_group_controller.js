@@ -49,14 +49,14 @@ export default class extends Controller {
   }
 
   showError(target, error) {
-    target.classList.replace('d-none', 'd-block')
+    target.classList.replace('hidden', 'block')
     target.textContent = error
     this.errors++
     this.getSubmit().classList.add('disabled')
   }
 
   hideError(target) {
-    target.classList.replace('d-block', 'd-none')
+    target.classList.replace('block', 'hidden')
 
     if (--this.errors === 0)
       this.getSubmit().classList.remove('disabled')

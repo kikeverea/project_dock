@@ -5,7 +5,7 @@ export default class extends Controller {
   static targets = [ 'template', 'emailsContainer' ]
 
   connect() {
-    // console.log("'Emails' controller connected")
+    console.log("'Emails' controller connected")
 
     this.index = this.emailsContainerTarget.childElementCount
   }
@@ -18,12 +18,13 @@ export default class extends Controller {
   }
 
   removeEmail(e) {
+    console.log('here')
     const deleteButton = e.currentTarget
     const emailRow = deleteButton.parentElement
     const destroyInput = emailRow.querySelector('input[name*=_destroy]')
 
     destroyInput.value = "1"
-    emailRow.classList.add('d-none')
+    emailRow.classList.add('hidden')
     this.index--
   }
 }

@@ -22,7 +22,7 @@ export default class extends Controller {
     const destroyInput = phoneNumberRow.querySelector('input[name*=_destroy]')
 
     destroyInput.value = "1"
-    phoneNumberRow.classList.add('d-none')
+    phoneNumberRow.classList.add('hidden')
     this.index--
   }
 }

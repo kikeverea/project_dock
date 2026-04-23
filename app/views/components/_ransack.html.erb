@@ -13,7 +13,7 @@
 <% ransack_path ||= polymorphic_path([:ransack, model], type: type) %>
 
 <% if new_item %>
-  <div class="d-flex align-items-center justify-content-between">
+  <div class="flex items-center justify-between">
     <% label, path = new_item %>
 
     <%= link_to path, class: "btn btn-success w-[200px] mb-4" do %>
@@ -47,10 +47,10 @@
       <%= form.hidden_field key, value: value %>
     <% end %>
 
-    <div class="row align-items-center">
+    <div class="row items-center">
       <div class="col col-md-6">
         <div class="position-relative <%= search_bar_width_classes %>">
-          <div class="d-flex align-items-center position-absolute top-0 bottom-0 ms-5">
+          <div class="flex items-center position-absolute top-0 bottom-0 ms-5">
             <i class="fa-solid fa-magnifying-glass fs-5"></i>
           </div>
           <%= form.text_field search_params,
@@ -58,9 +58,9 @@
             placeholder: search,
             data: { action: "input->ransack#search", ransack_target: "searchInput" }
           %>
-          <div class="position-absolute d-flex align-items-center z-index-2 top-0 end-0 h-40px me-4">
+          <div class="position-absolute flex items-center z-index-2 top-0 end-0 h-40px me-4">
 						<span
-              class="spinner-border spinner-border-sm text-primary d-none"
+              class="spinner-border spinner-border-sm text-primary hidden"
               data-ransack-target="indicator"
             ></span>
           </div>
@@ -68,7 +68,7 @@
       </div>
       <% if filter %>
         <div class="col col-md-6 mt-4 mt-sm-0">
-          <div class="d-flex justify-content-md-end align-items-center">
+          <div class="flex justify-content-md-end items-center">
             <%= render "components/table_filter",
               index_path: index_path,
               ransack_path: ransack_path,

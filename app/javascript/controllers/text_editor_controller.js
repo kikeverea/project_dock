@@ -101,8 +101,8 @@ export default class extends Controller {
   enableEdit(e) {
     const button = e.currentTarget
 
-    button.classList.add('d-none')
-    this.editModeWarningTarget.classList.remove('d-none')
+    button.classList.add('hidden')
+    this.editModeWarningTarget.classList.remove('hidden')
 
     this.blockSave = false
   }

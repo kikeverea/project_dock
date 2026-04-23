@@ -47,8 +47,8 @@ export default class extends Controller {
     const spinner = checkbox.parentElement.querySelector('.spinner-border')
     const checked = checkbox.checked
 
-    spinner.classList.remove('d-none')
-    checkbox.classList.add('d-none')
+    spinner.classList.remove('hidden')
+    checkbox.classList.add('hidden')
 
     const baseUrl = `${checkbox.dataset.url}`
     const queryParams = this.queryParams({ userId: checked ? this.currentUser : null })

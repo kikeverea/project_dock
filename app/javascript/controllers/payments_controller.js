@@ -25,9 +25,9 @@ export default class extends Controller {
 
   showButtons(show) {
     if (show)
-      this.markPaidButtonsTarget.classList.replace('d-none', 'd-flex')
+      this.markPaidButtonsTarget.classList.replace('hidden', 'flex')
     else
-      this.markPaidButtonsTarget.classList.replace('d-flex', 'd-none')
+      this.markPaidButtonsTarget.classList.replace('flex', 'hidden')
   }
 
   markPaymentsPaid(_e) {

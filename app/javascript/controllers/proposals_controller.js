@@ -9,8 +9,8 @@ export default class extends Controller {
   }
 
   showNewProposal() {
-    this.newProposalTarget.classList.remove('d-none')
-    this.addProposalTarget.classList.add('d-none')
+    this.newProposalTarget.classList.remove('hidden')
+    this.addProposalTarget.classList.add('hidden')
   }
 
 }

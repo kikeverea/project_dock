@@ -128,13 +128,13 @@ export default class extends Controller {
 
   showElement (item, show, selected) {
     if (show) {
-      item.classList.remove('d-none')
-      item.classList.add('d-flex')
+      item.classList.remove('hidden')
+      item.classList.add('flex')
       item.dataset.selected = selected
     }
     else {
-      item.classList.add('d-none')
-      item.classList.remove('d-flex')
+      item.classList.add('hidden')
+      item.classList.remove('flex')
       item.dataset.selected = !selected
     }
   }

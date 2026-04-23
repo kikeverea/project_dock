@@ -93,8 +93,8 @@ export default class extends DropzoneController {
       }
     }, 0)
 
-    this.uploadMessage.classList.add('d-none')
-    this.removeFileButton.classList.remove('d-none')
+    this.uploadMessage.classList.add('hidden')
+    this.removeFileButton.classList.remove('hidden')
     this.setUploadDisabled(false)
 
     const errorIcon = document.querySelector('.dz-error-mark')
@@ -110,7 +110,7 @@ export default class extends DropzoneController {
     spinner.classList.add('spinner-border', 'text-primary')
 
     spinnerContainer.replaceChildren(spinner)
-    this.uploadButton.querySelector('.spinner-border').classList.remove('d-none')
+    this.uploadButton.querySelector('.spinner-border').classList.remove('hidden')
     this.setUploadDisabled(true)
   }
 
@@ -177,7 +177,7 @@ export default class extends DropzoneController {
     this.showErrorIcon(false)
 
     this.nameInput.value = ''
-    this.uploadMessage.classList.remove('d-none')
-    this.removeFileButton.classList.add('d-none')
+    this.uploadMessage.classList.remove('hidden')
+    this.removeFileButton.classList.add('hidden')
   }
 }

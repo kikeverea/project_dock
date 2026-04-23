@@ -23,7 +23,7 @@
 <% disabled ||= false %>
 <% multiple ||= false %>
 <% options ||= nil %>
-<% classes ||= "align-items-center" %>
+<% classes ||= "items-center" %>
 <% field_classes ||= "" %>
 <% label_classes ||= "" %>
 <% label_style ||= "" %>
@@ -34,22 +34,22 @@
 
 <div
   id="<%= control_id %>"
-  class="flex flex-wrap gap-4 items-center <%= classes %> mb-3"
+  class="block md:flex mb-7 md:mb-3 gap-4 items-center <%= classes %>"
   <%= container_data&.entries&.reduce("") { |data, (name, value)| "#{data} data-#{name.to_s.dasherize}=#{value}" } %>
 >
-  <div class="<%= label_container_class %> d-flex <%= "pe-0" if value_icon %>">
+  <div class="<%= label_container_class %> flex items-center <%= "pe-0" if value_icon %>">
     <% unless hide_label %>
       <% if icon %>
         <i class="<%= icon %> me-2 text-blue-500 opacity-75 <%= icon_size %>"></i>
       <% end %>
-      <%= form.label attribute, label, class: "#{label_classes} #{"required" if required} flex-1", style: label_style %>
+      <%= form.label attribute, label, class: "#{label_classes} #{"required" if required}", style: label_style %>
       <% if value_icon %>
         <%= value_icon %>
       <% end %>
     <% end %>
   </div>
   <div class="<%= field_container_class %>">
-    <div class="<%= "d-flex align-items-center gap-4" if add_new || prepend_value %>">
+    <div class="<%= "flex items-center gap-4" if add_new || prepend_value %>">
       <%= prepend_value %>
       <% case type %>
       <% when :text_field %>
@@ -218,7 +218,8 @@
            form: form,
            attribute: attribute,
            accepted_files: accepted_files,
-           uploaded_file: { name: file.identifier, url: file.url } if file
+           full_width: true,
+           uploaded_file: file ? { name: file.identifier, url: file.url } : nil
         %>
       <% when :partial %>
         <%= render(partial, { form: form, item: item, items: items }.merge(partial_args)) %>

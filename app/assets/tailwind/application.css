@@ -45,6 +45,27 @@
 }
 
 @layer components {
+
+  .bg-primary {
+    @apply bg-blue-600 hover:bg-blue-700;
+  }
+
+  .bg-success {
+    @apply bg-green-500 hover:bg-green-600;
+  }
+
+  .bg-warning {
+    @apply bg-amber-500 hover:bg-amber-600;
+  }
+
+  .bg-danger {
+    @apply bg-red-700 hover:bg-red-800;
+  }
+
+  .bg-info {
+    @apply bg-indigo-500 hover:bg-indigo-600;
+  }
+
   /* Buttons */
   .btn {
     @apply inline-block px-5 py-2.5 text-sm md:text-base font-label font-semibold rounded cursor-pointer text-center hover:no-underline rounded-lg;
@@ -55,23 +76,23 @@
   }
 
   .btn-primary {
-    @apply bg-blue-600 text-white hover:bg-blue-700;
+    @apply bg-blue-600 hover:bg-blue-700 text-white;
   }
 
   .btn-success {
-    @apply bg-green-500 hover:bg-green-600;
+    @apply bg-green-500 hover:bg-green-600 text-white;
   }
 
   .btn-warning {
-    @apply bg-amber-500 hover:bg-amber-600;
+    @apply bg-amber-500 hover:bg-amber-600 text-white;
   }
 
   .btn-danger {
-    @apply bg-red-700 hover:bg-red-800;
+    @apply bg-red-700 hover:bg-red-800 text-white;
   }
 
   .btn-info {
-    @apply bg-indigo-500 hover:bg-indigo-600;
+    @apply bg-indigo-500 hover:bg-indigo-600 text-white;
   }
 
   .btn-color-primary {
@@ -95,7 +116,7 @@
   }
 
   .btn-link {
-    @apply text-blue-600 hover:text-blue-700;
+    @apply text-blue-600 visited:text-blue-600 hover:text-blue-700 font-normal;
   }
 
   .btn-flush {
@@ -161,7 +182,7 @@
     @apply px-10 py-6 text-base font-semibold text-gray-400 uppercase tracking-wider;
   }
 
-  .table thead th:first-child {
+  .table thead th {
     @apply text-start;
   }
 
@@ -182,13 +203,23 @@
   }
 
   .table tbody td {
+    @apply text-start;
+  }
+
+  .table tbody td:last-child {
+    @apply text-end;
+  }
+
+  .table tbody td {
     @apply px-10 py-8 text-gray-700 align-middle;
   }
 
   /* Card */
-
   .card {
-    @apply relative flex flex-col min-w-0 p-4 break-words bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden;
+    @apply
+      relative flex flex-col
+      min-w-0 p-4 border border-gray-200 rounded-lg shadow-sm
+      break-words bg-white;
   }
 
   .card-body {
@@ -225,7 +256,6 @@
   }
 
   /* Dropdwon */
-
   .dropdown {
     @apply relative inline-block;
   }
@@ -250,28 +280,12 @@
     @apply my-2 border-t border-gray-50;
   }
 
-  .d-inline-block {
-    @apply inline-block;
-  }
-
-  .d-none {
-    @apply hidden;
-  }
-
-  .d-xl-inline-block {
-    @apply xl:inline-block;
-  }
-
   .text-danger {
     @apply text-red-600;
   }
 
   .text-muted * {
     @apply text-gray-500;
-  }
-
-  .me-1 {
-    @apply mr-1;
   }
 
   /* Forms */
@@ -397,13 +411,19 @@
 
 /* Toast */
   .toast {
-    position: fixed !important;
-    bottom: 68px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1080;
-    padding: 0 16px;
-    font-size: 14px;
+    @apply
+      fixed left-1/2 bottom-[54px] z-[1080] hidden
+      min-w-[300px] py-4 px-8 border-0 rounded-lg ms-[40px] lg:ms-[125px]
+      text-white text-lg
+      -translate-x-1/2 translate-y-2 opacity-0 transition-[opacity,transform] duration-200 ease-[ease];
+  }
+
+  .toast * {
+    @apply text-white
+  }
+
+  .toast.show {
+    @apply block translate-y-0 opacity-100;
   }
 
   /* Quill editor */
@@ -455,14 +475,23 @@
   }
 
   .dropzone .dz-preview {
+    display: block;
     margin-top: 1rem;
   }
 
-  .dropzone .dz-image img {
-    border-radius: 0.25rem;
-    width: 100px;
+  .dz-preview.dz-image-preview > .dz-image {
+    display: block;
+    width: 100%;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .dz-preview.dz-image-preview > .dz-image img {
+    display: block;
+    width: 100%;
     height: auto;
-    object-fit: cover;
+    max-height: 150px;
+    object-fit: contain;
   }
 
   .dz-details {
@@ -636,6 +665,61 @@
       checked:[&:after]:content-["✓"] checked:[&:after]:text-white checked:[&:after]:text-xs
       checked:[&:after]:flex checked:[&:after]:items-center checked:[&:after]:justify-center
       cursor-pointer;
+  }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1055;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+  }
+
+  .modal.show {
+    display: block;
+  }
+
+  .modal-dialog {
+    position: relative;
+    width: auto;
+    margin: 1.75rem 1.75rem;
+    max-width: 500px;
+    pointer-events: none;
+  }
+
+  .modal-dialog.modal-sm { max-width: 300px; }
+  .modal-dialog.modal-lg { max-width: 800px; }
+  .modal-dialog.modal-xl { max-width: 1140px; }
+
+  .modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.5rem;
+    outline: 0;
+  }
+
+  .modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    background-color: rgba(0, 0, 0, 0.45);
   }
 
   /* Tom Select */

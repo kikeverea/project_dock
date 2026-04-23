@@ -24,9 +24,9 @@ export default class extends Controller {
 
   showActionButtons(show) {
     if (show)
-      this.actionButtonsTarget.classList.replace('d-none', 'd-flex')
+      this.actionButtonsTarget.classList.replace('hidden', 'flex')
     else
-      this.actionButtonsTarget.classList.replace('d-flex', 'd-none')
+      this.actionButtonsTarget.classList.replace('flex', 'hidden')
   }
 
   async deleteDocuments() {

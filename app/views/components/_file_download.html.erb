@@ -3,7 +3,7 @@
 
 <div
   id="document-<%= file.id %>"
-  class="d-flex flex-column align-items-center gap-4 file-download <%= "tiny" if tiny %> position-relative"
+  class="flex flex-column items-center gap-4 file-download <%= "tiny" if tiny %> position-relative"
 >
   <% if file&.file %>
     <% icon, icon_color = get_document_icon(file) %>

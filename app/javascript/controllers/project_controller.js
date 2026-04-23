@@ -13,8 +13,8 @@ export default class extends Controller {
     const select = e.currentTarget
 
     if (select.value === 'paused')
-      this.maintenanceCancellationMotiveTarget.classList.remove('d-none')
+      this.maintenanceCancellationMotiveTarget.classList.remove('hidden')
     else
-      this.maintenanceCancellationMotiveTarget.classList.add('d-none')
+      this.maintenanceCancellationMotiveTarget.classList.add('hidden')
   }
 }

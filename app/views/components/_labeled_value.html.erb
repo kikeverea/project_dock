@@ -25,10 +25,10 @@
 <% partial_locals ||= {} %>
 <% empty_message ||= nil %>
 
-<div class="row <%= classes %> <%= values.count > 1 || table ? "align-items-start" : "align-items-center" %>">
+<div class="row <%= classes %> <%= values.count > 1 || table ? "align-items-start" : "items-center" %>">
 
   <!-- Label -->
-  <div class="<%= label_container_class %> <%= "d-flex align-items-center" if icon %>">
+  <div class="<%= label_container_class %> <%= "flex items-center" if icon %>">
     <% if icon %>
       <i class="<%= icon %> me-2 text-primary opacity-75 <%= icon_size %>"></i>
     <% end %>
@@ -69,7 +69,7 @@
                 <td>
                   <% if copyable && copy_column %>
                     <i class="fa-solid fa-copy ms-2 copy-icon fs-6"></i>
-                    <span class="d-none ps-2 text-muted" data-copyable-value-target="copiedMessage">Copiado!</span>
+                    <span class="hidden ps-2 text-muted" data-copyable-value-target="copiedMessage">Copiado!</span>
                   <% end %>
                 </td>
               </tr>
@@ -98,7 +98,7 @@
               </span>
               <% if copyable %>
                 <i class="fa-solid fa-copy ms-2 copy-icon fs-6"></i>
-                <span class="d-none ps-2 text-muted" data-copyable-value-target="copiedMessage">Copiado!</span>
+                <span class="hidden ps-2 text-muted" data-copyable-value-target="copiedMessage">Copiado!</span>
               <% end %>
             <% end %>
           </div>

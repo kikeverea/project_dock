@@ -41,15 +41,15 @@ export default class extends Controller {
       }
 
       if (matches)
-        item.classList.remove('d-none')
+        item.classList.remove('hidden')
       else
-        item.classList.add('d-none')
+        item.classList.add('hidden')
     }
   }
 
   showAll() {
     for (const item of this.itemTargets) {
-      item.classList.remove('d-none')
+      item.classList.remove('hidden')
     }
   }
 }

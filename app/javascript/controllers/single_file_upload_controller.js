@@ -6,7 +6,7 @@ export default class extends DropzoneController {
 
   connect() {
     super.connect(this.acceptedFilesValue)
-    // console.log("'Upload Files' controller connected")
+    console.log("'Upload Files' controller connected")
 
     this.uploadMessage = document.querySelector('.dz-message.needsclick')
 
@@ -33,7 +33,7 @@ export default class extends DropzoneController {
 
     this.dropzone.displayExistingFile(this.mockFile, url)
 
-    this.uploadMessage.classList.add('d-none')
+    this.uploadMessage.classList.add('hidden')
     this.dropzone.options.maxFiles = 1
   }
 
@@ -50,8 +50,8 @@ export default class extends DropzoneController {
         this.transferFile(file)
     }, 0)
 
-    this.uploadMessage.classList.add('d-none')
-    this.removeButtonTarget.classList.remove('d-none')
+    this.uploadMessage.classList.add('hidden')
+    this.removeButtonTarget.classList.remove('hidden')
 
     const errorIcon = document.querySelector('.dz-error-mark')
 
@@ -71,8 +71,8 @@ export default class extends DropzoneController {
 
   removeFile(_e) {
     this.dropzone.removeAllFiles(true)
-    this.uploadMessage.classList.remove('d-none')
-    this.removeButtonTarget.classList.add('d-none')
+    this.uploadMessage.classList.remove('hidden')
+    this.removeButtonTarget.classList.add('hidden')
 
     if (this.mockFile)
       this.dropzone.removeFile(this.mockFile)

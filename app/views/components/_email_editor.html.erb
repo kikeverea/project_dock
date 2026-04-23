@@ -3,7 +3,7 @@
 <% subject_label ||= "Asunto" %>
 <% protected_view ||= false %>
 
-<% subject_input = content_tag :div, class: "d-flex align-items-center gap-4 mb-4" do %>
+<% subject_input = content_tag :div, class: "flex items-center gap-4 mb-4" do %>
   <%= label_tag :subject, subject_label, class: "col-form-label" %>
   <div
     class="position-relative flex-grow-1"

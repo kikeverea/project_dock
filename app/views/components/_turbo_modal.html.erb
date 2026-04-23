@@ -5,15 +5,19 @@
     <div id="<%= id %>-content" class="modal-content">
 
       <!-- Modal header -->
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="<%= id %>-label">
+      <div
+        class="flex items-center justify-between py-5 px-6 border-b border-gray-200"
+      >
+        <h1 class="text-gray-700 m-0 text-lg font-semibold leading-6" id="<%= id %>-label">
           <%= title %>
         </h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn btn-flush btn-color-muted" data-bs-dismiss="modal" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
 
       <!-- Modal body -->
-      <div id="<%= id %>-body" class="modal-body">
+      <div id="<%= id %>-body" class="relative flex-1 p-8">
         <div class="container-fluid">
           <div id="<%= id %>-outlet">
           </div>

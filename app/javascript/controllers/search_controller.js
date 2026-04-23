@@ -39,15 +39,15 @@ export default class extends Controller {
         value.toLowerCase().includes(search.toLowerCase()))
 
       if (matchesSearch)
-        item.classList.remove('d-none')
+        item.classList.remove('hidden')
       else
-        item.classList.add('d-none')
+        item.classList.add('hidden')
     }
   }
 
   showAllItems() {
     for (const item of this.searchItemTargets) {
-      item.classList.remove('d-none')
+      item.classList.remove('hidden')
     }
   }
 }

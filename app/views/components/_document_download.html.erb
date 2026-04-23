@@ -64,7 +64,7 @@
 
     <%= link_to document.file.url,
       download: use_original_file_name ? document.file.identifier : document.name,
-      class: "btn btn-flush #{tiny ? "p-4" : "py-4 px-8"} d-inline-block rounded-1 #{color} position-relative" do
+      class: "btn btn-flush #{tiny ? "p-4" : "py-4 px-8"} inline-block rounded-1 #{color} position-relative" do
     %>
       <i class="fa-solid fa-<%= icon || document_icon %> fs-<%= tiny ? "3x" : "4x" %> text-<%= color %> p-0"></i>
       <div class="w-[125px] truncate-2-lines text-<%= color %> <%= tiny ? "pt-2" : "pt-4" %> <%= name_classes %>">

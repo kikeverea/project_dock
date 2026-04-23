@@ -13,16 +13,16 @@ export default class extends Controller {
     const filter = checked ? 'user' : 'all'
     const url = `${checkbox.dataset.url}?show=${filter}`
 
-    spinner.classList.remove('d-none')
-    checkbox.classList.add('d-none')
+    spinner.classList.remove('hidden')
+    checkbox.classList.add('hidden')
 
     fetch(url, {
       headers: {'Accept': 'text/vnd.turbo-stream.html, text/html, application/xhtml+xml'},
     })
     .then(response => response.ok && response.text())
     .then(text => {
-      spinner.classList.add('d-none')
-      checkbox.classList.remove('d-none')
+      spinner.classList.add('hidden')
+      checkbox.classList.remove('hidden')
       Turbo.renderStreamMessage(text)
     })
   }

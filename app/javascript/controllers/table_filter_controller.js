@@ -16,9 +16,9 @@ export default class extends Controller {
       .some(input => input.type === 'checkbox' ? input.checked : !!input.value)
 
     if (hasFilter)
-      this.removeFiltersTarget.classList.remove('d-none')
+      this.removeFiltersTarget.classList.remove('hidden')
     else
-      this.removeFiltersTarget.classList.add('d-none')
+      this.removeFiltersTarget.classList.add('hidden')
   }
 
   showRemoveFilterIndicator(e) {
@@ -27,8 +27,8 @@ export default class extends Controller {
     const closeIcon = button.querySelector('.close-icon')
     const indicator = button.querySelector('.indicator')
 
-    closeIcon.classList.add('d-none')
-    indicator.classList.remove('d-none')
+    closeIcon.classList.add('hidden')
+    indicator.classList.remove('hidden')
   }
 
   startDateChange (e) {

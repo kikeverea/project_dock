@@ -24,7 +24,7 @@ export default class extends DropzoneController {
         this.processQueue()
     }, 0)
 
-    this.uploadMessage.classList.add('d-none')
+    this.uploadMessage.classList.add('hidden')
 
     const errorIcon = document.querySelector('.dz-error-mark')
 
