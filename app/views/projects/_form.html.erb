@@ -11,22 +11,56 @@
         item: project,
         required: true,
         form: form,
-        icon: "fa-solid fa-user"
+        icon: "fa-solid fa-folder"
+      %>
+
+      <%= render "components/form_field",
+        attribute: :client_id,
+        type: :collection_select,
+        item: project,
+        required: true,
+        form: form,
+        icon: "fa-solid fa-building",
+        collection: @clients,
+        id_attr: :id,
+        name_attr: :name,
+        placeholder: "Selecciona un cliente",
+        add_new: new_client_path(format: :turbo_stream)
+      %>
+
+      <%= render "components/form_field",
+        attribute: :start_date,
+        type: :date_field,
+        item: project,
+        form: form,
+        icon: "fa-solid fa-calendar-day"
+      %>
+
+      <%= render "components/form_field",
+        attribute: :due_date,
+        type: :date_field,
+        item: project,
+        form: form,
+        icon: "fa-solid fa-calendar-check"
+      %>
+
+      <%= render "components/form_field",
+        attribute: :allocated_time,
+        type: :number_field,
+        item: project,
+        form: form,
+        icon: "fa-solid fa-clock"
       %>
 
       <div class="mt-8">
-         <%= form.button project.persisted? ? "Guardar" : "Crear proyecto", class: "btn btn-success" %>
-         <%= link_to "Cancelar",
-             request.referer == request.url ? projects_path : :back,
-             class: "btn btn-link btn-color-muted btn-active-color-success mx-4"
-         %>
+        <%= form.button project.persisted? ? "Guardar" : "Crear proyecto", class: "btn btn-success" %>
+        <%= link_to "Cancelar",
+            request.referer == request.url ? projects_path : :back,
+            class: "btn btn-link btn-color-muted btn-active-color-success mx-3"
+        %>
       </div>
-
     <% end %>
   </div>
 </div>
-<div class="mx-1 mt-3 mb-8">
-  <% if request.referer != projects_url %>
-    <%= link_to "← Ir a TODO", projects_path %>
-  <% end -%>
-</div>
+
+<%= render "components/turbo_modal", channel: :client, title: "Cliente" %>

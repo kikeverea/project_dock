@@ -1,25 +1,62 @@
-<!-- lib/templates/erb/scaffold/_form.html.erb.tt -->
-<div class="card">
-  <div class="card-body">
+<% client ||= @client %>
+<% modal ||= false %>
 
-    <%= render "components/error_banner", item: client %>
+<div id="client-modal-outlet">
+  <%= render "components/error_banner", item: client %>
 
-    <%= form_with model: client do |form| %>
+  <%= form_with model: client do |form| %>
 
-      
-      <div class="mt-8">
-         <%= form.button client.persisted? ? "Guardar" : "Crear TODO", class: "btn btn-success" %>
-         <%= link_to "Cancelar",
-             request.referer == request.url ? clients_path : :back,
-             class: "btn btn-link btn-color-muted btn-active-color-success mx-4"
-         %>
-      </div>
+    <%= render "components/form_field",
+      label: "Nombre",
+      attribute: :name,
+      type: :text_field,
+      item: client,
+      required: true,
+      form: form,
+      icon: "fa-solid fa-building"
+    %>
 
-    <% end %>
-  </div>
+    <%= render "components/form_field",
+      label: "Logo",
+      attribute: :logo,
+      type: :file_upload,
+      item: client,
+      form: form,
+      icon: "fa-solid fa-building"
+    %>
+
+    <%= render "components/form_field",
+      item: client,
+      attribute: :emails,
+      type: :partial,
+      partial: "components/emails",
+      partial_args: { model_name: "client" },
+      items: client.emails,
+      form: form,
+      classes: "items-start mt-5",
+      icon: "fa-solid fa-envelope"
+    %>
+
+    <%= render "components/form_field",
+      item: client,
+      attribute: :phone_numbers,
+      label: "Teléfonos",
+      type: :partial,
+      partial: "components/phone_numbers",
+      partial_args: { model_name: "client" },
+      items: client.phone_numbers,
+      form: form,
+      classes: "items-start mt-5",
+      icon: "fa-solid fa-phone"
+    %>
+
+    <div class="mt-8 flex <%= "w-full  content-end flex-row-reverse" if modal %>">
+      <%= form.button client.persisted? ? "Guardar" : "Crear cliente", class: "btn btn-success" %>
+      <%= link_to "Cancelar",
+          request.referer == request.url ? clients_path : :back,
+          class: "btn btn-link btn-color-muted btn-active-color-success mx-4"
+      %>
+    </div>
+  <% end %>
 </div>
-<div class="mx-1 mt-3 mb-8">
-  <% if request.referer != clients_url %>
-    <%= link_to "← Ir a TODO", clients_path %>
-  <% end -%>
-</div>
+

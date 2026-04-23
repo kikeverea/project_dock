@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: %i[ show edit update destroy ]
+  before_action :set_clients, only: %i[ new edit create update ]
 
   def index
     @projects = Project.all
@@ -43,6 +44,10 @@ class ProjectsController < ApplicationController
 
   def set_project
     @project = Project.find(params.expect(:id))
+  end
+
+  def set_clients
+    @clients = Client.kept.order(:name)
   end
 
   def project_params

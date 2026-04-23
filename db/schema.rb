@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_18_135042) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_18_100012) do
   create_table "activities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.date "datetime"
+    t.datetime "date"
     t.string "name"
     t.bigint "project_id", null: false
     t.bigint "proposed_by_id"
@@ -25,6 +25,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_135042) do
   create_table "clients", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "discarded_at"
+    t.string "logo"
     t.string "name"
     t.datetime "updated_at", null: false
   end
@@ -51,17 +52,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_135042) do
   end
 
   create_table "interactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "activity_id"
+    t.text "content"
     t.datetime "created_at", null: false
-    t.bigint "interactable_id", null: false
-    t.string "interactable_type", null: false
     t.bigint "parent_interaction_id"
     t.string "status"
+    t.bigint "task_id", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
-    t.index ["activity_id"], name: "index_interactions_on_activity_id"
-    t.index ["interactable_type", "interactable_id"], name: "index_interactions_on_interactable"
     t.index ["parent_interaction_id"], name: "index_interactions_on_parent_interaction_id"
+    t.index ["task_id"], name: "index_interactions_on_task_id"
     t.index ["user_id"], name: "index_interactions_on_user_id"
   end
 
@@ -117,9 +116,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_135042) do
     t.datetime "created_at", null: false
     t.datetime "expires_at"
     t.datetime "latest_status_at"
-    t.string "name"
     t.string "status"
     t.string "task_type"
+    t.string "title"
     t.datetime "updated_at", null: false
     t.index ["activity_id"], name: "index_tasks_on_activity_id"
   end
@@ -131,16 +130,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_135042) do
     t.string "lastname"
     t.string "name"
     t.string "password_digest", default: "", null: false
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
     t.string "role"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "activities", "projects"
   add_foreign_key "activities", "users", column: "proposed_by_id"
   add_foreign_key "documents", "users", column: "uploaded_by_id"
-  add_foreign_key "interactions", "activities"
   add_foreign_key "interactions", "interactions", column: "parent_interaction_id"
+  add_foreign_key "interactions", "tasks"
   add_foreign_key "interactions", "users"
   add_foreign_key "logs", "users"
   add_foreign_key "projects", "clients"

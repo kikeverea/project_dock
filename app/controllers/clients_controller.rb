@@ -10,6 +10,13 @@ class ClientsController < ApplicationController
 
   def new
     @client = Client.new
+
+    respond_to do |format|
+      format.html { render :new }
+      format.turbo_stream do
+        render "components/turbo_modal_content", locals: { channel: :client, partial: "clients/form" }
+      end
+    end
   end
 
   def edit
@@ -19,7 +26,7 @@ class ClientsController < ApplicationController
     @client = Client.new(client_params)
 
     if @client.save
-      redirect_to @client, notice: "Client was successfully created."
+      redirect_to @client, notice: "Cliente creado"
     else
       render :new, status: :unprocessable_content
     end
@@ -27,7 +34,7 @@ class ClientsController < ApplicationController
 
   def update
     if @client.update(client_params)
-      redirect_to @client, notice: "Client was successfully updated."
+      redirect_to @client, notice: "Cliente actualizado"
     else
       render :edit, status: :unprocessable_content
     end
@@ -35,7 +42,7 @@ class ClientsController < ApplicationController
 
   def destroy
     @client.destroy!
-    redirect_to clients_path, status: :see_other, notice: "Client was successfully destroyed."
+    redirect_to clients_path, status: :see_other, notice: "Cliente eliminado"
   end
 
 
@@ -46,6 +53,11 @@ class ClientsController < ApplicationController
   end
 
   def client_params
-    params.fetch(:client, {})
+    params.expect(client:[
+      :name,
+      :logo,
+      emails_attributes: [],
+      phone_numbers_attributes: []]
+    )
   end
 end

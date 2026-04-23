@@ -11,7 +11,7 @@
 
   <div class="card card-body <%= "pt-2" if documents.any? %>">
     <% if documents.any? %>
-      <div class="d-flex flex-wrap gap-6">
+      <div class="flex flex-wrap gap-6">
         <% documents.each do |document| %>
           <%= render "components/file_download",
              file: document,

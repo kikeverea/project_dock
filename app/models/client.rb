@@ -8,6 +8,10 @@ class Client < ApplicationRecord
   has_many :tasks, through: :activities
   has_many :interactions, through: :tasks
 
+  mount_uploader :logo, ImageUploader
+
+  validates :name, presence: true
+
   def self.ransackable_associations(_auth_object = nil)
     []
   end

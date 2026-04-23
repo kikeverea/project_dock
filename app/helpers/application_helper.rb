@@ -9,14 +9,14 @@ module ApplicationHelper
       text: count,
       color: "#FAD839",
       use_style_for_color: true,
-      classes: "d-inline-block opacity-50 fw-bold ms-4 me-1") if count + other_count > 0
+      classes: "inline-block opacity-50 fw-bold ms-4 me-1") if count + other_count > 0
 
     other_badge = render(
       "components/outline_badge",
       text: other_count,
       color: "#FAD839",
       use_style_for_color: true,
-      classes: "d-inline-block opacity-50 fw-bold ms-1"
+      classes: "inline-block opacity-50 fw-bold ms-1"
     ) if other_count > 0
 
     other_badge ? "#{badge} + #{other_badge}".html_safe : badge

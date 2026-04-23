@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   resource :session, only: %i[ new create destroy ]
   resources :passwords, param: :token, only: %i[ new create edit update ]
 
+  get "/upload", to: "clients#index", as: :upload_tmp_file
+
 ### Global
   get "/revoked", to:"revoked#revoked", as: :revoked
   root to: "projects#index"
