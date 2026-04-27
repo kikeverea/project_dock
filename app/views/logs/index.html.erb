@@ -1,4 +1,4 @@
-<!-- lib/templates/erb/scaffold/index.html.erb.tt -->
+<!-- lib/templates/erb/scaffold/_index.html.erb.tt -->
 <% content_for :title, "Lista de registros" %>
 
 <% if can? :create, Log %>
@@ -39,13 +39,13 @@
                   Acciones
                 </button>
                 <ul class="dropdown-menu">
-                  <li><%= link_to "Ver", log, class: 'dropdown-item' %></li>
-                  <li><%= link_to "Editar", edit_log_path(log), class: 'dropdown-item' %></li>
+                  <li><%= link_to "Ver", log, class: "dropdown-item" %></li>
+                  <li><%= link_to "Editar", edit_log_path(log), class: "dropdown-item" %></li>
                   <li>
                     <%= link_to "Eliminar",
                       log,
-                      class:'dropdown-item',
-                      data: { controller: 'delete-button', delete_button_item_name_value: "#{log.loggable_type} ##{log.loggable_id}" }
+                      class:"dropdown-item",
+                      data: { controller: "delete-button", delete_button_item_name_value: "#{log.loggable_type} ##{log.loggable_id}" }
                     %>
                   </li>
                 </ul>

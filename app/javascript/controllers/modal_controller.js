@@ -40,6 +40,7 @@ export default class extends Controller {
   }
 
   hide(modal) {
+    console.log('HIDE!!')
     modal.classList.remove("show")
     modal.removeEventListener("click", this.overlayClickHandler)
     this.backdrop?.remove()

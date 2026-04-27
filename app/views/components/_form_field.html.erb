@@ -1,7 +1,9 @@
 <% item ||= {} %>
+<% name ||= nil %>
+<% attribute ||= name %>
+<% model ||= item.class.name.underscore %>
 <% id ||= item ? "#{item.model_name.singular}-#{attribute.to_s.dasherize}" : "" %>
 <% control_id ||= "#{id}-control" %>
-<% name ||= nil %>
 <% data ||= {} %>
 <% container_data ||= {} %>
 <% action ||= "" %>
@@ -14,8 +16,8 @@
 <% icon ||= nil %>
 <% icon_size ||= "" %>
 <% value_icon ||= nil %>
-<% type ||= "text_field" %>
-<% label ||= "" %>
+<% type ||= :text_field %>
+<% label ||= I18n.t("activerecord.attributes.#{model}.#{attribute}", default: attribute.to_s.humanize) %>
 <% id_attr ||= :id %>
 <% name_attr ||= :name %>
 <% collection ||= nil %>
@@ -23,7 +25,7 @@
 <% disabled ||= false %>
 <% multiple ||= false %>
 <% options ||= nil %>
-<% classes ||= "items-center" %>
+<% classes ||= "items-center gap-4" %>
 <% field_classes ||= "" %>
 <% label_classes ||= "" %>
 <% label_style ||= "" %>
@@ -34,7 +36,7 @@
 
 <div
   id="<%= control_id %>"
-  class="block md:flex mb-7 md:mb-3 gap-4 items-center <%= classes %>"
+  class="block md:flex mb-7 md:mb-3 <%= classes %>"
   <%= container_data&.entries&.reduce("") { |data, (name, value)| "#{data} data-#{name.to_s.dasherize}=#{value}" } %>
 >
   <div class="<%= label_container_class %> flex items-center <%= "pe-0" if value_icon %>">
@@ -141,17 +143,18 @@
 
         <% container_css_selector ||= "" %>
 
-        <div class="flex-grow-1">
+        <div class="flex-1">
           <%= form.collection_select attribute,
             collection, id_attr, name_attr,
-            { include_blank: !multiple, selected: item[attribute] },
+            { include_blank: multiple ? false : placeholder || "Selecciona una opción",
+              selected: item[attribute]
+            },
             { id: id,
               class: "#{field_classes}",
               disabled: disabled,
               multiple: multiple,
               data: {
                 controller: "select2",
-                select_placeholder: placeholder.present? ? placeholder : "Selecciona una opción",
                 hide_search: hide_search,
                 value: value || item[attribute],
                 action: action
@@ -166,10 +169,12 @@
 
         <% container_css_selector ||= "" %>
 
-        <div class="flex-grow-1">
+        <div class="flex-1">
           <%= form.select attribute,
             options,
-            { include_blank: !multiple, selected: item[attribute]},
+            { include_blank: multiple ? false : placeholder || "Selecciona una opción",
+              selected: item[attribute]
+            },
             { id: id,
               class: "#{field_classes}",
               multiple: multiple,
@@ -209,7 +214,7 @@
         %>
       <% when :file_upload %>
 
-        <% file ||= item.send(attribute) %>
+        <% file = local_assigns.key?(:file) ? file : item.send(attribute) %>
         <% accepted_files ||= "image/*" %>
 
         <%= render "components/single_file_drop",
@@ -219,6 +224,7 @@
            attribute: attribute,
            accepted_files: accepted_files,
            full_width: true,
+           name: name,
            uploaded_file: file ? { name: file.identifier, url: file.url } : nil
         %>
       <% when :partial %>

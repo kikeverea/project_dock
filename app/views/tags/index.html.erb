@@ -1,4 +1,4 @@
-<!-- lib/templates/erb/scaffold/index.html.erb.tt -->
+<!-- lib/templates/erb/scaffold/_index.html.erb.tt -->
 <% content_for :title, "Lista de etiquetas" %>
 
 <% if can? :create, Tag %>
@@ -33,13 +33,13 @@
                   Acciones
                 </button>
                 <ul class="dropdown-menu">
-                  <li><%= link_to "Ver", tag, class: 'dropdown-item' %></li>
-                  <li><%= link_to "Editar", edit_tag_path(tag), class: 'dropdown-item' %></li>
+                  <li><%= link_to "Ver", tag, class: "dropdown-item" %></li>
+                  <li><%= link_to "Editar", edit_tag_path(tag), class: "dropdown-item" %></li>
                   <li>
                     <%= link_to "Eliminar",
                       tag,
-                      class:'dropdown-item',
-                      data: { controller: 'delete-button', delete_button_item_name_value: tag.name }
+                      class:"dropdown-item",
+                      data: { controller: "delete-button", delete_button_item_name_value: tag.name }
                     %>
                   </li>
                 </ul>

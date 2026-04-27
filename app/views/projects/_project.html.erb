@@ -1,2 +1,9 @@
-<div id="<%= dom_id project %>">
-</div>
+<%= link_to project, id: "project-#{project.id}", class: "no-underline" do%>
+  <div class="card hover-elevate-up">
+    <div class="card-body">
+      <div class="text-lg font-semibold">
+        <%= project.name %>
+      </div>
+    </div>
+  </div>
+<% end %>

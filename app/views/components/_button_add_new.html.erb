@@ -1,0 +1,16 @@
+<% color ||= "btn-color-primary" %>
+
+<%= link_to path,
+  class: "btn btn-flush #{color} flex items-center justify-end gap-4 group mb-2 w-fit",
+  data: { turbo_stream: true } do
+%>
+  <span class="
+    inline-block
+    origin-right scale-x-0 opacity-0
+    transition duration-200 ease-in-out
+    group-hover:scale-x-100 group-hover:opacity-100"
+  >
+    <%= label %>
+  </span>
+  <i class="fa-solid fa-circle-plus text-3xl md:text-4xl group-hover:-rotate-180 transition duration-200"></i>
+<% end %>

@@ -1,0 +1,22 @@
+<% project ||= @project %>
+
+<%= modal_outlet(:config) do %>
+  <%= render "components/error_banner", item: project %>
+
+  <%= form_with model: project do |form| %>
+    <%= render "components/form_field",
+      label: "Documento alcance",
+      name: "project[project_scope_attributes][file]",
+      file: project.project_scope&.file,
+      type: :file_upload,
+      item: project,
+      form: form,
+      classes: "flex-col items-start gap-0",
+      field_container_class: "w-full"
+    %>
+
+    <%= form.button class: "btn btn-success w-full" do %>
+      <i class="fa-solid fa-gear text-sm me-2"></i> Guardar configuración
+    <% end %>
+  <% end %>
+<% end %>

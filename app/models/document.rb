@@ -15,6 +15,10 @@ class Document < ApplicationRecord
     %w[ name created_at ]
   end
 
+  enum :document_type, {
+    project_scope: "project_scope"
+  }
+
   def file_extension
     File.extname(file.identifier)&.delete('.')
   end

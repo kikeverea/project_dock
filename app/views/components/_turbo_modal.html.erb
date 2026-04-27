@@ -1,7 +1,8 @@
 <% id ||= "#{channel}-modal" %>
+<% size ||= "md" %>
 
-<div id="<%= id %>" class="modal fade" tabindex="-1">
-  <div class="modal-dialog modal-xl">
+<div id="<%= id %>" class="modal modal-<%= size %> fade" tabindex="-1">
+  <div class="modal-dialog">
     <div id="<%= id %>-content" class="modal-content">
 
       <!-- Modal header -->

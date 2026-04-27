@@ -15,6 +15,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_100012) do
     t.datetime "created_at", null: false
     t.datetime "date"
     t.string "name"
+    t.integer "order"
     t.bigint "project_id", null: false
     t.bigint "proposed_by_id"
     t.datetime "updated_at", null: false
@@ -32,6 +33,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_100012) do
 
   create_table "documents", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "document_type"
     t.bigint "documentable_id", null: false
     t.string "documentable_type", null: false
     t.string "file"
@@ -88,11 +90,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_100012) do
     t.integer "allocated_time"
     t.bigint "client_id", null: false
     t.datetime "created_at", null: false
-    t.integer "current_time"
     t.date "due_date"
+    t.string "erd_url"
     t.string "name"
     t.date "start_date"
     t.datetime "updated_at", null: false
+    t.integer "used_time"
     t.index ["client_id"], name: "index_projects_on_client_id"
   end
 
@@ -116,6 +119,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_100012) do
     t.datetime "created_at", null: false
     t.datetime "expires_at"
     t.datetime "latest_status_at"
+    t.integer "order"
     t.string "status"
     t.string "task_type"
     t.string "title"

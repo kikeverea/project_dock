@@ -1,0 +1,29 @@
+<% add_new ||= nil %>
+<% classes ||= "" %>
+<% query_param ||= :target %>
+
+<div class="<%= classes %>" data-controller="tabs">
+  <ul class="nav nav-tabs">
+    <% tabs.each_with_index do |(attr, label), index| %>
+      <% active = (index == 0 && params[query_param].nil?) || params[query_param] == attr.to_s %>
+
+      <li class="nav-item">
+        <a class="nav-link <%= "active" if active %>" data-action="click->tabs#switch" href="#<%= attr %>">
+          <%= label %>
+        </a>
+      </li>
+    <% end %>
+    <% if add_new %>
+      <div class="flex-1 flex justify-end">
+        <%= render "components/button_add_new",
+          path: add_new[:path],
+          label: add_new[:label]
+        %>
+      </div>
+    <% end %>
+  </ul>
+
+  <div class="tab-content">
+    <%= yield %>
+  </div>
+</div>

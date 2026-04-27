@@ -1,0 +1,34 @@
+<% image_url ||= nil %>
+<% icon ||= nil %>
+<% file_attribute ||= false %>
+<% value ||= @project.send(attribute).presence %>
+<% attr_url ||= file_attribute ? value&.send(file_attribute)&.url : value %>
+<% configured = !!attr_url %>
+<% config_url = config_attr_project_path(@project, config_attr: attribute) %>
+
+<div class="relative group" data-controller="context-menu" data-action="contextmenu->context-menu#open">
+  <%= link_to attr_url || config_url,
+    target: (attr_url ? "_blank" : nil),
+    rel: (attr_url ? "noopener" : nil),
+    data: { turbo_stream: !attr_url } do
+  %>
+    <div class="card hover-elevate-up relative">
+      <div class="flex flex-col items-center w-[75px]">
+        <% if image_url %>
+          <%= image_tag image_url, class: "w-[50px] h-[50px]" %>
+        <% end %>
+        <% if icon %>
+          <i class="<%= icon %> text-6xl"></i>
+        <% end %>
+        <div class="font-semibold pt-2"><%= label %></div>
+      </div>
+      <% if configured %>
+        <i class="fa-solid fa-circle-check text-success text-xl absolute top-3 right-2"></i>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div data-context-menu-target="menu" class="dropdown-menu">
+    <%= link_to configured ? "Editar" : "Configurar", config_url, class: "dropdown-item", data: { turbo_stream: true } %>
+  </div>
+</div>

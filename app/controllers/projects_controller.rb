@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: %i[ show edit update destroy ]
+  before_action :set_project, except: %i[ index create ]
   before_action :set_clients, only: %i[ new edit create update ]
 
   def index
@@ -10,17 +10,26 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    @project = Project.new
+    @project = Project.new(client_id: params[:client_id])
+
+    render "components/turbo_modal_content", locals: { channel: :project, partial: "projects/form" }
   end
 
   def edit
+  end
+
+  def config_attr
+    render "components/turbo_modal_content", locals: {
+      channel: :config,
+      partial: "projects/config/#{params[:config_attr]}_form"
+    }
   end
 
   def create
     @project = Project.new(project_params)
 
     if @project.save
-      redirect_to @project, notice: "Project was successfully created."
+      redirect_to request.referrer, notice: "Proyecto creado"
     else
       render :new, status: :unprocessable_content
     end
@@ -28,7 +37,7 @@ class ProjectsController < ApplicationController
 
   def update
     if @project.update(project_params)
-      redirect_to @project, notice: "Project was successfully updated."
+      redirect_to @project, notice: "Proyecto actualizado"
     else
       render :edit, status: :unprocessable_content
     end
@@ -36,7 +45,7 @@ class ProjectsController < ApplicationController
 
   def destroy
     @project.destroy!
-    redirect_to projects_path, status: :see_other, notice: "Project was successfully destroyed."
+    redirect_to projects_path, status: :see_other, notice: "Proyecto eliminado"
   end
 
 
@@ -55,9 +64,16 @@ class ProjectsController < ApplicationController
       :name,
       :client_id,
       :allocated_time,
-      :current_time,
+      :used_time,
+      :project_scope,
+      :erd_url,
       :due_date,
       :start_date,
+      project_scope_attributes: [
+        :id,
+        :file,
+        :_destroy
+      ]
     ])
   end
 end

@@ -2,6 +2,7 @@
 <% no_file_message ||= "Arrastra archivos o haz click aquí" %>
 <% file_type ||= nil %>
 <% form ||= nil %>
+<% name ||= nil %>
 <% attribute ||= nil %>
 <% value ||= nil %>
 <% accepted_files ||= nil %>
@@ -25,9 +26,10 @@
 
     <% if form && attribute %>
       <%= form.file_field attribute,
-        value: value,
+      { value: value,
         class: "hidden",
         data: { single_file_upload_target: "fileInput" }
+      }.merge(name.present? ? { name: name } : {})
       %>
     <% end %>
 

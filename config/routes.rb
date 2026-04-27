@@ -1,10 +1,14 @@
 Rails.application.routes.draw do
-  resources :projects
+  resources :projects do
+    resources :activities do
+      resources :tasks
+    end
+    get :config_attr, on: :member
+  end
   resources :phone_numbers
   resources :emails
   resources :tags
   resources :logs
-  resources :activities
   resources :clients
   resources :tasks
   resources :interactions

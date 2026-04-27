@@ -4,6 +4,7 @@ class CreateActivities < ActiveRecord::Migration[7.1]
       t.references :project, null: false, foreign_key: true
       t.string :name
       t.datetime :date
+      t.integer :order
       t.references :proposed_by, null: true, foreign_key: { to_table: :users }
 
       t.timestamps

@@ -1,4 +1,4 @@
-<!-- lib/templates/erb/scaffold/index.html.erb.tt -->
+<!-- lib/templates/erb/scaffold/_index.html.erb.tt -->
 <% content_for :title, "Lista de emails" %>
 
 <% if can? :create, Email %>
@@ -33,13 +33,13 @@
                   Acciones
                 </button>
                 <ul class="dropdown-menu">
-                  <li><%= link_to "Ver", email, class: 'dropdown-item' %></li>
-                  <li><%= link_to "Editar", edit_email_path(email), class: 'dropdown-item' %></li>
+                  <li><%= link_to "Ver", email, class: "dropdown-item" %></li>
+                  <li><%= link_to "Editar", edit_email_path(email), class: "dropdown-item" %></li>
                   <li>
                     <%= link_to "Eliminar",
                       email,
-                      class:'dropdown-item',
-                      data: { controller: 'delete-button', delete_button_item_name_value: email.email }
+                      class:"dropdown-item",
+                      data: { controller: "delete-button", delete_button_item_name_value: email.email }
                     %>
                   </li>
                 </ul>

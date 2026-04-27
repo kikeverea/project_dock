@@ -7,7 +7,6 @@ export default class extends Controller {
 
     const data = this.element.dataset
 
-    this.placeholder = data.selectPlaceholder
     this.createUrl = data.createUrl
     this.createParamName = data.createParamName || "name"
     this.tagCreation = data.tagCreation ? data.tagCreation === "true" : true
@@ -59,11 +58,10 @@ export default class extends Controller {
     this.element.disabled = disabled
 
     if (this.select) {
-      if (disabled) {
+      if (disabled)
         this.select.disable()
-      } else {
+      else
         this.select.enable()
-      }
 
       this.changePlaceholder(message || this.placeholder)
     } else {
@@ -117,7 +115,6 @@ export default class extends Controller {
       maxOptions: null,
       hideSelected: false,
       closeAfterSelect: !this.isMultiple,
-      placeholder: this.disabledPlaceholder || this.placeholder || "",
       dropdownParent: this.containerSelector || null,
       create: false,
       allowEmptyOption: true,

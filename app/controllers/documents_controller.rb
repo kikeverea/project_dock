@@ -31,14 +31,7 @@ class DocumentsController < ApplicationController
   def create
     model = params[:documentable_type].constantize
 
-    document = Document.new(
-      file: params[:file],
-      name: params[:name],
-      uploaded_by: current_user,
-      documentable_id: params[:documentable_id],
-      documentable_type: params[:documentable_type]
-    )
-
+    document = Document.new(document_params)
     documentable = document.documentable.becomes(model) # Forces base classes in STI
 
     if document.save

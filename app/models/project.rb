@@ -3,6 +3,9 @@ class Project < ApplicationRecord
 
   belongs_to :client
 
+  has_one :project_scope, -> { where(document_type: :project_scope) }, as: :documentable, class_name: "Document", dependent: :destroy
+  accepts_nested_attributes_for :project_scope, allow_destroy: true
+
   has_many :activities, dependent: :destroy
   has_many :tasks, through: :activities
   has_many :interactions, through: :activities

@@ -1,13 +1,66 @@
 <% content_for :title, @project.name %>
 
-<!-- lib/templates/erb/scaffold/show.html.erb.tt -->
+<div class="flex gap-6 items-center">
 
-<div class="card">
-  <div class="card-body">
+  <!-- Model diagram -->
+  <%= render "projects/config/config_attr",
+    attribute: :erd_url,
+    image_url: asset_path("drawio_logo.svg"),
+    label: "Modelos"
+  %>
+
+  <!-- Project scope -->
+  <%= render "projects/config/config_attr",
+    attribute: :project_scope,
+    file_attribute: :file,
+    icon: "fa-solid fa-file-lines text-primary",
+    label: "Alcance"
+  %>
+
+<!-- Hours -->
+  <%= link_to config_attr_project_path(@project, config_attr: :hours), data: { turbo_stream: true } do %>
+    <div class="card hover-elevate-up rounded-s-full rounded-e-full group">
+      <div class="flex items-center gap-4 relative">
+        <span class="font-semibold"><%= @project.used_time || 0 %> / <%= @project.allocated_time %></span>
+        <%= image_tag asset_path("clockify_logo.png"), class: "
+          w-[50px] h-[50px] rounded-full
+          group-hover:rotate-360 group-hover:opacity-0 transition-all"
+        %>
+        <i class="
+          fa-solid fa-gear text-6xl text-[#05A9F4]
+          opacity-0 absolute right-1 top-0 bottom-0
+          group-hover:rotate-360 group-hover:opacity-100 transition-all"
+        ></i>
       </div>
+    </div>
+  <% end %>
 </div>
 
-<div class="mx-1 mt-3 mb-8">
-  <%= link_to "← Ir a TODO", projects_path %> |
-  <%= link_to "Editar", edit_project_path(@project) %>
+<div class="mt-8" data-controller="tabs">
+
+  <%= render "components/tabs",
+    add_new: { path: new_project_activity_path(@project), label: "Nueva actividad"},
+    tabs: { activities: "Actividades", completed: "Completadas", archived: "Archivadas" } do
+  %>
+    <div class="tab-pane <%= "show active" if params[:target].nil? || params[:target] == "activities" %>" id="activities">
+      <% activities = @project.activities %>
+      <% if activities.any? %>
+        <div class="flex flex-wrap gap-6">
+          <%= render collection: @project.activities, partial: "activities/activity" %>
+        </div>
+      <% else %>
+        <em class="text-muted">No hay actividades</em>
+      <% end %>
+    </div>
+    <div class="tab-pane <%= "show active" if params[:target] == "completed" %>" id="completed">
+      Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+    </div>
+    <div class="tab-pane <%= "show active" if params[:target] == "archived" %>" id="archived">
+      Third pane
+    </div>
+  <% end %>
 </div>
+
+<%= render "components/turbo_modal", channel: :config, size: "sm", title: "Configuración proyecto" %>
+<%= render "components/turbo_modal", channel: :activity, size: "md", title: "Actividad" %>
+<%= render "components/turbo_modal", channel: :task, size: "md", title: "Tarea" %>
