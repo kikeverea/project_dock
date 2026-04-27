@@ -40,13 +40,13 @@
                   Acciones
                 </button>
                 <ul class="dropdown-menu">
-                  <li><%= link_to "Ver", task, class: 'dropdown-item' %></li>
-                  <li><%= link_to "Editar", edit_task_path(task), class: 'dropdown-item' %></li>
+                  <li><%= link_to "Ver", task, class: "dropdown-item" %></li>
+                  <li><%= link_to "Editar", edit_task_path(task), class: "dropdown-item" %></li>
                   <li>
                     <%= link_to "Eliminar",
                       task,
-                      class:'dropdown-item',
-                      data: { controller: 'delete-button', delete_button_item_name_value: task.name }
+                      class:"dropdown-item",
+                      data: { controller: "delete-button", delete_button_item_name_value: task.name }
                     %>
                   </li>
                 </ul>

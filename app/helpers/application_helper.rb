@@ -1,6 +1,10 @@
 module ApplicationHelper
-
   def comment
+  end
+
+  def modal_outlet(channel, &block)
+    content = capture(&block)
+    content_tag(:div, content, id: "#{channel}-modal-outlet")
   end
 
   def opportunities_count(count, other_count = 0)

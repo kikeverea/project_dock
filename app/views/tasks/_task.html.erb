@@ -1,2 +1,17 @@
-<div id="<%= dom_id task %>">
+<div id="task-<%= task.id %>" class="flex justify-between items-center py-1">
+  <span class="flex-1 <%= task.completed? && "line-through text-success" %>"><%= task.title %></span>
+  <div class="form-check">
+    <%= button_to [@project, task.activity, task],
+      method: :put,
+      params: {
+        task: { status: task.completed? ? :pending : :completed }
+      },
+      class: "form-check-input relative h-[20px] w-[20px] rounded-full border border-2 cursor-pointer
+      #{task.completed? ? "bg-success border-green-500 opacity-75" : "border-gray-300"}" do
+    %>
+      <% if task.completed? %>
+        <i class="fa-solid fa-check text-white border-green-600 absolute top-[50%] left-[50%] -translate-[50%]"></i>
+      <% end %>
+    <% end %>
+  </div>
 </div>
