@@ -5,18 +5,65 @@ es:
       long_month: "%B"
       month_year: "%B %Y"
       human: "%d de %B de %Y"
-    month_names: [ ~, Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre ]
+    month_names:
+      - ~
+      - Enero
+      - Febrero
+      - Marzo
+      - Abril
+      - Mayo
+      - Junio
+      - Julio
+      - Agosto
+      - Septiembre
+      - Octubre
+      - Noviembre
+      - Diciembre
+
   time:
     formats:
       day_month: "%d %B"
       long_month: "%B"
       month_year: "%B %Y"
       human: "%d de %B de %Y"
-    month_names: [ ~, Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre ]
+
   errors:
     messages:
       not_saved: "No se ha podido realizar la acción"
+
   activerecord:
+    models:
+      project: "Proyecto"
+      interaction: "Interacción"
+      user: "Usuario"
+      task: "Tarea"
+
+    attributes:
+      project:
+        name: "Nombre"
+        client_id: "Cliente"
+        client: "Cliente"
+        start_date: "Fecha inicio"
+        due_date: "Fecha fin"
+        erd_url: "Diagrama modelos"
+        allocated_time: "Tiempo asignado"
+        used_time: "Tiempo utilizado"
+      activity:
+        name: "Nombre"
+        date: "Fecha"
+        proposed_by: "Propuesto por"
+        proposed_by_id: "Propuesto por"
+      task:
+        title: "Título"
+        status: "Estado"
+        order: "Orden"
+        latest_status_at: "Último estado"
+      client:
+        name: "Nombre"
+        logo: "Logo"
+        emails: "Emails"
+        phone_numbers: "Teléfonos"
+
     enums:
       interaction:
         status:
@@ -32,6 +79,7 @@ es:
         status:
           pending: "Pendiente"
           completed: "Completada"
+
     errors:
       models:
         user:
@@ -52,6 +100,7 @@ es:
         odd: "debe ser un número impar"
         greater_than: "debe ser mayor que %{count}"
         less_than: "debe ser menor que %{count}"
+
   devise:
     sessions:
       user:

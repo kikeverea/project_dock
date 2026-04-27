@@ -1,17 +1,23 @@
 <% content_for :title, @client.name %>
 
-<div class="card">
-  <div class="card-body">
+<div class="flex gap-4 w-full items-end">
+  <div class="flex flex-col gap-3 items-center md:flex-row md:gap-6 md:items-end">
     <% if @client.logo? %>
-      <%= image_tag @client.logo.url, class: "w-100 h-100" %>
+      <%= image_tag @client.logo.url, class: "max-h-[150px]" %>
     <% else %>
-      <%= image_tag asset_path("avatar.svg"), class: "w-50 h-50 rounded-full"
-      %>
+      <%= image_tag asset_path("avatar.svg"), class: "w-50 h-50 rounded-full" %>
+      <h1 class="text-center md:text-left"><%= @client.name %></h1>
     <% end %>
   </div>
 </div>
 
-<div class="mx-1 mt-3 mb-8">
-  <%= link_to "← Ir a TODO", clients_path %> |
-  <%= link_to "Editar", edit_client_path(@client) %>
+<div class="flex items-end justify-between mx-1">
+  <%= link_to "← Atrás", clients_path %>
+  <%= render "components/button_add_new", path: new_project_path(client_id: @client), label: "Añadir projecto" %>
 </div>
+
+<div class="py-4">
+  <%= render "projects/index", projects: @client.projects.order(:name) %>
+</div>
+
+<%= render "components/turbo_modal", channel: :project, title: "Proyecto" %>

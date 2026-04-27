@@ -36,13 +36,13 @@
                   Acciones
                 </button>
                 <ul class="dropdown-menu">
-                  <li><%= link_to "Ver", client, class: 'dropdown-item' %></li>
-                  <li><%= link_to "Editar", edit_client_path(client), class: 'dropdown-item' %></li>
+                  <li><%= link_to "Ver", client, class: "dropdown-item" %></li>
+                  <li><%= link_to "Editar", edit_client_path(client), class: "dropdown-item" %></li>
                   <li>
                     <%= link_to "Eliminar",
                       client,
-                      class:'dropdown-item',
-                      data: { controller: 'delete-button', delete_button_item_name_value: client.name }
+                      class:"dropdown-item",
+                      data: { controller: "delete-button", delete_button_item_name_value: client.name }
                     %>
                   </li>
                 </ul>

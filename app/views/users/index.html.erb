@@ -43,12 +43,12 @@
 									Acciones
 								</button>
 								<div class="dropdown-menu" style="border: 1px solid #ECECEC">
-									<%= link_to "Editar", edit_user_path(id: user.id), class: 'dropdown-item' %>
+									<%= link_to "Editar", edit_user_path(id: user.id), class: "dropdown-item" %>
 									<%= button_to "Eliminar",
 										user,
 										method: :delete,
-										class:'dropdown-item',
-										data: { controller: 'delete-button', delete_button_item_name_value: user.full_name }
+										class:"dropdown-item",
+										data: { controller: "delete-button", delete_button_item_name_value: user.full_name }
 									%>
 								</div>
 							</td>
