@@ -1,5 +1,7 @@
 class Activity < ApplicationRecord
-  before_save :set_date, on: :create
+  before_validation :set_name
+  before_validation :set_date
+  before_validation :set_order
 
   belongs_to :project
   belongs_to :proposed_by, class_name: "User", optional: true
@@ -7,32 +9,37 @@ class Activity < ApplicationRecord
   has_many :tasks, dependent: :destroy
   has_many :interactions, through: :tasks
 
-  validates :project_id, :client_id, presence: true
-  validates :number, uniqueness: true
+  validates :project_id, :name, :date, :order, presence: true
 
   def self.ransackable_associations(_auth_object = nil)
-    %w[ client ]
+    %w[ project ]
   end
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[ number name phase total client_id created_at ]
+    %w[ name date created_at ]
   end
 
-  ransacker :total do |parent|
-    projects = Project.arel_table
-
-    subquery =
-      projects
-        .project(projects[:total].sum)
-        .where(projects[:activity_id].eq(parent.table[:id]))
-
-    Arel.sql("COALESCE((#{subquery.to_sql}), 0)")
+  def date=(date)
+    super(date.presence || Time.current)
   end
 
 
   private
 
+  def set_name
+    return if persisted? || name.present?
+    self.name = "Actividad #{(self.date.presence || Time.current).strftime("%d-%m-%Y")}"
+  end
+
   def set_date
-    date ||= created_at
+    return if persisted? || date.present?
+    self.date = Time.current
+  end
+
+  def set_order
+    return if persisted? || order.present?
+    activities = project.activities
+
+    self.order = activities.empty? ? 0 : activities.count + 1
   end
 end

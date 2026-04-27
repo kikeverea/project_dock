@@ -1,4 +1,5 @@
 class ActivitiesController < ApplicationController
+  before_action :set_project
   before_action :set_activity, only: %i[ show edit update destroy ]
 
   def index
@@ -10,16 +11,19 @@ class ActivitiesController < ApplicationController
 
   def new
     @activity = Activity.new
+
+    refresh_activity_form
   end
 
   def edit
+    refresh_activity_form
   end
 
   def create
     @activity = Activity.new(activity_params)
 
     if @activity.save
-      redirect_to @activity, notice: "Activity was successfully created."
+      redirect_to @project, notice: "Actividad creada"
     else
       render :new, status: :unprocessable_content
     end
@@ -27,7 +31,7 @@ class ActivitiesController < ApplicationController
 
   def update
     if @activity.update(activity_params)
-      redirect_to @activity, notice: "Activity was successfully updated."
+      redirect_to @project, notice: "Actividad actualizada"
     else
       render :edit, status: :unprocessable_content
     end
@@ -35,17 +39,25 @@ class ActivitiesController < ApplicationController
 
   def destroy
     @activity.destroy!
-    redirect_to activities_path, status: :see_other, notice: "Activity was successfully destroyed."
+    redirect_to @project, status: :see_other, notice: "Actividad eliminada"
   end
 
 
   private
 
+  def refresh_activity_form
+    render "components/turbo_modal_content", locals: { channel: :activity, partial: "activities/form" }
+  end
+
   def set_activity
     @activity = Activity.find(params.expect(:id))
   end
 
+  def set_project
+    @project = Project.find(params.expect(:project_id))
+  end
+
   def activity_params
-    params.fetch(:activity, {})
+    params.expect(activity: [:name, :date, :project_id])
   end
 end
