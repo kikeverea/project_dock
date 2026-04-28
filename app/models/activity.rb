@@ -1,4 +1,6 @@
 class Activity < ApplicationRecord
+  include Discard::Model
+
   before_validation :set_name
   before_validation :set_date
   before_validation :set_order
@@ -23,6 +25,19 @@ class Activity < ApplicationRecord
     super(date.presence || Time.current)
   end
 
+  def tasks_completed?(tasks = self.tasks)
+    tasks.all? { |task| task.completed? }
+  end
+
+  def batch_create_tasks(batch)
+    batch.lines.each do |line|
+      next if line.blank?
+
+      self.tasks << Task.new(activity: self, title: line)
+    end
+
+    save
+  end
 
   private
 

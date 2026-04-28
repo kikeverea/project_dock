@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   resources :projects do
     resources :activities do
-      resources :tasks
+      resources :tasks do
+        post :batch, on: :collection
+      end
     end
     get :config_attr, on: :member
   end

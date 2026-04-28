@@ -12,13 +12,16 @@
 
 ActiveRecord::Schema[8.1].define(version: 2026_04_18_100012) do
   create_table "activities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "activities"
     t.datetime "created_at", null: false
     t.datetime "date"
+    t.datetime "discarded_at"
     t.string "name"
     t.integer "order"
     t.bigint "project_id", null: false
     t.bigint "proposed_by_id"
     t.datetime "updated_at", null: false
+    t.index ["discarded_at"], name: "index_activities_on_discarded_at"
     t.index ["project_id"], name: "index_activities_on_project_id"
     t.index ["proposed_by_id"], name: "index_activities_on_proposed_by_id"
   end
@@ -117,14 +120,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_100012) do
   create_table "tasks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "activity_id"
     t.datetime "created_at", null: false
-    t.datetime "expires_at"
+    t.datetime "discarded_at"
     t.datetime "latest_status_at"
     t.integer "order"
     t.string "status"
-    t.string "task_type"
+    t.datetime "tasks"
     t.string "title"
     t.datetime "updated_at", null: false
     t.index ["activity_id"], name: "index_tasks_on_activity_id"
+    t.index ["discarded_at"], name: "index_tasks_on_discarded_at"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

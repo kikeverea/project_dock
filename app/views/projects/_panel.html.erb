@@ -1,0 +1,35 @@
+<% panel ||= params[:panel]&.to_sym || :activities%>
+<% swap = panel == :activities ? :tasks : :activities %>
+<% model_singular = panel == :activities ? "Actividad" : "Tarea" %>
+<% model_plural = panel == :activities ? "Actividades" : "Tareas" %>
+
+<div class="mt-8" data-controller="tabs">
+  <%= render "components/tabs",
+    tabs: {
+      items: model_plural,
+      archived: "Archivadas"
+    },
+    buttons: [icon: "fa-solid fa-repeat", link: project_path(@project, panel: swap)],
+    add_new: ({ path: new_project_activity_path(@project), label: "Nueva #{model_singular}"} if panel == :activities) do
+  %>
+    <div class="tab-pane <%= "show active" if params[:target].nil? || params[:target] == "items" %>" id="items">
+      <% if items.kept.any? %>
+        <div class="flex flex-wrap gap-6">
+          <%= render collection: items.kept, partial: item_partial %>
+        </div>
+      <% else %>
+        <em class="text-muted">No hay <%= model_plural.downcase %> activas</em>
+      <% end %>
+    </div>
+
+    <div class="tab-pane <%= "show active" if params[:target] == "archived" %>" id="archived">
+      <% if items.discarded.any? %>
+        <div class="flex flex-wrap gap-6">
+          <%= render collection: items.discarded, partial: item_partial %>
+        </div>
+      <% else %>
+        <em class="text-muted">No hay <%= model_plural.downcase %> archivadas</em>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -4,24 +4,28 @@
 <%= modal_outlet(:task) do %>
   <%= render "components/error_banner", item: task %>
 
-  <%= form_with model: [@project, @activity, task] do |form| %>
-
-    <%= form.hidden_field :activity_id, value: activity.id %>
-
-    <%= render "components/form_field",
-      attribute: :title,
-      item: task,
-      form: form,
-      icon: "fa-solid fa-user-group"
+  <div>
+    <%= render "components/tabs",
+      tab_style: :pill,
+      classes: "mb-8",
+      tabs: { single: "Individual", batch: "Batch" } do
     %>
+      <div class="tab-pane <%= "show active" if params[:target].nil? || params[:target] == "single" %>" id="single">
+        <%= form_with model: [@project, @activity, task] do |form| %>
+          <%= form.hidden_field :activity_id, value: activity.id %>
 
-    <div class="mt-8 w-full text-end">
-      <%= button_tag "Cancelar",
-        type: :button,
-        class: "btn btn-link btn-color-muted btn-active-color-success mx-4",
-        data: { action: "modal#hide"}
-      %>
-      <%= form.button task.persisted? ? "Guardar" : "Crear tarea", class: "btn btn-success" %>
-    </div>
-  <% end %>
+          <%= render "components/form_field", attribute: :title, item: task, form: form %>
+          <%= render "components/modal_buttons", form: form, item: task, model: "Tarea"  %>
+        <% end %>
+      </div>
+      <div class="tab-pane <%= "show active" if params[:target] == "batch" %>" id="batch">
+        <%= form_with scope: :activity, url: batch_project_activity_tasks_path(@project, @activity) do |form| %>
+          <%= form.hidden_field :activity_id, value: activity.id %>
+
+          <%= render "components/form_field", attribute: :batch, type: :text_area, item: task, form: form %>
+          <%= render "components/modal_buttons", form: form, item: task, model: "Tareas"  %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 <% end %>

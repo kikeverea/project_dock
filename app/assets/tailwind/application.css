@@ -70,7 +70,7 @@
 
   /* Buttons */
   .btn {
-    @apply inline-block px-5 py-2.5 text-sm md:text-base font-label font-semibold rounded cursor-pointer text-center hover:no-underline rounded-lg;
+    @apply inline-block px-5 py-2.5 text-sm md:text-base font-label font-semibold cursor-pointer text-center hover:no-underline rounded-lg;
   }
 
   .btn > i {
@@ -237,7 +237,7 @@
   }
 
   .card-title {
-    @apply flex items-center w-full mb-2 text-lg font-medium leading-tight;
+    @apply flex items-center w-full text-lg font-medium leading-tight;
   }
 
   .card-subtitle {
@@ -394,27 +394,38 @@
 
   /* Tabs */
   .nav-tabs {
-    @apply flex border-b border-gray-300 list-none p-0 m-0 mb-4 w-full;
+    @apply flex list-none p-0 m-0 mb-4 w-full;
   }
 
-  .nav-tabs .nav-item {
-    @apply list-none;
+  .nav-tabs.nav-line {
+    @apply border-b border-gray-300
   }
 
-  .nav-tabs .nav-link {
+  .nav-tabs.nav-line .nav-link {
     @apply
       block mx-8 pt-2.5 h-full
       text-gray-500 no-underline
       cursor-pointer
-      border-b-1 border-transparent -mb-px hover:border-blue-600 transition-colors duration-150 hover:no-underline;
+      border-b border-transparent -mb-px hover:border-blue-600 transition-colors duration-150 hover:no-underline;
+  }
+
+  .nav-tabs.nav-pill .nav-link {
+    @apply
+      inline-block px-5 py-2.5 rounded-lg cursor-pointer
+      text-sm md:text-base font-label font-semibold text-center text-blue-500
+      hover:no-underline hover:text-blue-600 transition-colors duration-150;
   }
 
   .nav-tabs .nav-link:first-child {
     @apply ms-0
   }
 
-  .nav-tabs .nav-link.active {
+  .nav-tabs.nav-line .nav-link.active {
     @apply text-blue-600 border-blue-600;
+  }
+
+  .nav-tabs.nav-pill .nav-link.active {
+    @apply bg-blue-500 hover:bg-blue-600 text-white;
   }
 
   .tab-pane {

@@ -1,4 +1,5 @@
 <% content_for :title, @project.name %>
+<% show_panel = params[:panel]&.to_sym || :activities %>
 
 <div class="flex gap-6 items-center">
 
@@ -17,7 +18,7 @@
     label: "Alcance"
   %>
 
-<!-- Hours -->
+  <!-- Hours -->
   <%= link_to config_attr_project_path(@project, config_attr: :hours), data: { turbo_stream: true } do %>
     <div class="card hover-elevate-up rounded-s-full rounded-e-full group">
       <div class="flex items-center gap-4 relative">
@@ -36,30 +37,11 @@
   <% end %>
 </div>
 
-<div class="mt-8" data-controller="tabs">
-
-  <%= render "components/tabs",
-    add_new: { path: new_project_activity_path(@project), label: "Nueva actividad"},
-    tabs: { activities: "Actividades", completed: "Completadas", archived: "Archivadas" } do
-  %>
-    <div class="tab-pane <%= "show active" if params[:target].nil? || params[:target] == "activities" %>" id="activities">
-      <% activities = @project.activities %>
-      <% if activities.any? %>
-        <div class="flex flex-wrap gap-6">
-          <%= render collection: @project.activities, partial: "activities/activity" %>
-        </div>
-      <% else %>
-        <em class="text-muted">No hay actividades</em>
-      <% end %>
-    </div>
-    <div class="tab-pane <%= "show active" if params[:target] == "completed" %>" id="completed">
-      Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-    </div>
-    <div class="tab-pane <%= "show active" if params[:target] == "archived" %>" id="archived">
-      Third pane
-    </div>
-  <% end %>
-</div>
+<% if show_panel == :activities %>
+  <%= render "projects/panel", panel: show_panel, items: @project.activities, item_partial: "activities/activity" %>
+<% else %>
+  <%= render "projects/panel", panel: show_panel, items: @project.tasks, item_partial: "tasks/task" %>
+<% end %>
 
 <%= render "components/turbo_modal", channel: :config, size: "sm", title: "Configuración proyecto" %>
 <%= render "components/turbo_modal", channel: :activity, size: "md", title: "Actividad" %>

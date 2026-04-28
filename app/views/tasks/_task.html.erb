@@ -1,5 +1,7 @@
-<div id="task-<%= task.id %>" class="flex justify-between items-center py-1">
-  <span class="flex-1 <%= task.completed? && "line-through text-success" %>"><%= task.title %></span>
+<div id="task-<%= task.id %>" class="flex justify-between items-center gap-6">
+
+  <%= link_to task.title, task, class: "flex-1 py-1.5 h-full #{task.completed? && "line-through text-success"} hover:bg-sky-50" %>
+
   <div class="form-check">
     <%= button_to [@project, task.activity, task],
       method: :put,

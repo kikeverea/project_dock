@@ -29,6 +29,18 @@ class TasksController < ApplicationController
     end
   end
 
+  def batch
+    batch_params = params.dig(:activity, :batch)
+
+    if batch_params
+      @activity.batch_create_tasks(batch_params)
+      redirect_to @project, notice: "Tareas creadas"
+    else
+      @activity.errors.add(:batch, "campo obligatorio")
+      refresh_task_form
+    end
+  end
+
   def update
     if @task.update(task_params)
       redirect_to @project, notice: "Tarea actualizada"

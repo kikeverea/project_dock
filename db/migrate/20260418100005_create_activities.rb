@@ -6,8 +6,11 @@ class CreateActivities < ActiveRecord::Migration[7.1]
       t.datetime :date
       t.integer :order
       t.references :proposed_by, null: true, foreign_key: { to_table: :users }
+      t.datetime :activities, :discarded_at
 
       t.timestamps
     end
+
+    add_index :activities, :discarded_at
   end
 end

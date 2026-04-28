@@ -1,9 +1,13 @@
 <% add_new ||= nil %>
 <% classes ||= "" %>
 <% query_param ||= :target %>
+<% tab_style ||= :line %>
+<% buttons ||= [] %>
 
-<div class="<%= classes %>" data-controller="tabs">
-  <ul class="nav nav-tabs">
+<% tab_class = tab_style == :line ? "nav-line" : "nav-pill" %>
+
+<div data-controller="tabs">
+  <ul class="nav nav-tabs <%= classes %> <%= tab_class %>">
     <% tabs.each_with_index do |(attr, label), index| %>
       <% active = (index == 0 && params[query_param].nil?) || params[query_param] == attr.to_s %>
 
@@ -13,6 +17,17 @@
         </a>
       </li>
     <% end %>
+
+    <% if buttons.any? %>
+      <% buttons.each do |button| %>
+        <%= link_to button[:link],
+          class: "inline-block btn btn-link btn-muted btn-active-color-primary ps-0" do
+        %>
+          <i class="<%= button[:icon] %> origin-center hover:rotate-180 transition-transform duration-200 text-lg"></i>
+        <% end %>
+      <% end %>
+    <% end %>
+
     <% if add_new %>
       <div class="flex-1 flex justify-end">
         <%= render "components/button_add_new",

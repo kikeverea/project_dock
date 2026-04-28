@@ -1,4 +1,5 @@
 class Task < ApplicationRecord
+  include Discard::Model
   include Documentable
 
   before_create :set_order

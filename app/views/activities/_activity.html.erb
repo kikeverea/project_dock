@@ -1,5 +1,7 @@
-<div id="activity-<%= activity.id %>" class="card w-[450px]">
-  <div class="card-header">
+<% tasks_completed = activity.tasks_completed? %>
+
+<div id="activity-<%= activity.id %>" class="card w-[600px]">
+  <div class="card-header <%= "bg-green-400 text-white" if tasks_completed %>">
     <div class="card-title justify-between">
       <span><%= activity.name %></span>
       <span>
@@ -12,23 +14,23 @@
           data-controller="dropdown"
           data-action="click->dropdown#toggle blur->dropdown#handleBlur"
         >
-          <i class="fa-solid fa-ellipsis-vertical text-lg text-gray-500"></i>
+          <i class="fa-solid fa-ellipsis-vertical text-lg <%= tasks_completed ? "text-white" : "text-gray-500" %>"></i>
         </button>
-          <ul class="dropdown-menu">
-            <li>
-              <%= link_to "Editar",
-                edit_project_activity_path(@project, activity), class: "dropdown-item",
-                data: { turbo_stream: true }
-              %>
-            </li>
-            <li>
-              <%= link_to "Eliminar",
-                project_activity_path(@project, activity),
-                class: "dropdown-item",
-                data: { controller: "delete-button", delete_button_item_name_value: activity.name }
-              %>
-            </li>
-          </ul>
+        <ul class="dropdown-menu">
+          <li>
+            <%= link_to "Editar",
+              edit_project_activity_path(@project, activity), class: "dropdown-item",
+              data: { turbo_stream: true }
+            %>
+          </li>
+          <li>
+            <%= link_to "Eliminar",
+              project_activity_path(@project, activity),
+              class: "dropdown-item",
+              data: { controller: "delete-button", delete_button_item_name_value: activity.name }
+            %>
+          </li>
+        </ul>
       </span>
     </div>
   </div>
