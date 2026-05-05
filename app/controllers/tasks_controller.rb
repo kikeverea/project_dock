@@ -1,7 +1,6 @@
 class TasksController < ApplicationController
-  before_action :set_project
   before_action :set_activity
-  before_action :set_task, only: %i[ show edit update destroy ]
+  before_action :set_task, except: %i[ index new create batch ]
 
   def index
     @tasks = Task.all
@@ -12,18 +11,18 @@ class TasksController < ApplicationController
 
   def new
     @task = Task.new
-
     refresh_task_form
   end
 
   def edit
+    refresh_task_form(edit: true)
   end
 
   def create
-    @task = Task.new(task_params)
+    @task = @activity.tasks.build(task_params)
 
     if @task.save
-      redirect_to @project, notice: "Tarea creada"
+      refresh_activity(message: "Tarea creada")
     else
       refresh_task_form
     end
@@ -34,7 +33,7 @@ class TasksController < ApplicationController
 
     if batch_params
       @activity.batch_create_tasks(batch_params)
-      redirect_to @project, notice: "Tareas creadas"
+      refresh_activity(message: "Tareas creadas")
     else
       @activity.errors.add(:batch, "campo obligatorio")
       refresh_task_form
@@ -43,7 +42,7 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-      redirect_to @project, notice: "Tarea actualizada"
+      refresh_activity(message: "Tarea actualizada")
     else
       refresh_task_form
     end
@@ -51,26 +50,40 @@ class TasksController < ApplicationController
 
   def destroy
     @task.destroy!
-    redirect_to tasks_path, status: :see_other, notice: "Tarea eliminada"
+    refresh_activity(message: "Tarea eliminada")
   end
 
 
   private
 
-  def refresh_task_form
-    render "components/turbo_modal_content", locals: { channel: :task, partial: "tasks/form" }
+  def refresh_task_form(edit: false)
+    render "components/turbo_modal_content",
+      locals: { channel: :task, partial: "tasks/form", partial_locals: { edit: edit }}
+  end
+
+  def refresh_activity(message: nil)
+    render turbo_stream: [
+      turbo_stream.replace("activity-#{@activity.id}", partial: "activities/activity"),
+      turbo_stream.replace(
+        "turbo-consumer",
+        partial: "components/turbo_modal_action",
+        locals: { channel: :task, action: :hide }
+      ),
+      (turbo_stream.replace(
+        "turbo-message-consumer",
+        partial: "components/turbo_message",
+        locals: { message: message }
+      ) if message.present?),
+    ].compact
   end
 
   def set_task
     @task = Task.find(params.expect(:id))
+    @activity ||= @task.activity
   end
 
   def set_activity
-    @activity = Activity.find(params.expect(:activity_id))
-  end
-
-  def set_project
-    @project = Project.find(params.expect(:project_id))
+    @activity = Activity.find(params[:activity_id]) if params[:activity_id]
   end
 
   def task_params

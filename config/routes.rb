@@ -1,18 +1,30 @@
 Rails.application.routes.draw do
   resources :projects do
-    resources :activities do
-      resources :tasks do
-        post :batch, on: :collection
+    get :config, on: :member, action: :config_attr
+  end
+
+  resources :projects, only: [] do
+    resources :activities, shallow: true do
+      scope :interaction do
+        get "/", to: "activities#generating_interaction", as: :generating_interaction
       end
     end
-    get :config_attr, on: :member
   end
+
+  resources :activities, only: [] do
+    resources :tasks, shallow: true do
+      post :batch, on: :collection
+    end
+  end
+
+  resources :tasks, only: :index do
+    resources :interactions, shallow: true
+  end
+
   resources :phone_numbers
   resources :emails
   resources :tags
-  resources :logs
   resources :clients
-  resources :tasks
   resources :interactions
   resources :documents
   resources :users do

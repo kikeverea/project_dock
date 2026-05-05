@@ -1,10 +1,10 @@
 <% action ||= "show" %>
-<% model ||= controller_name.classify.underscore.dasherize %>
+<% channel ||= controller_name.classify.underscore.dasherize %>
 <% message ||= nil %>
 <% object ||= {} %>
 
 <%= turbo_stream.replace "turbo-consumer" do %>
-  <%= render "components/turbo_modal_action", modal_id: "#{model}-modal", object: object, action: action %>
+  <%= render "components/turbo_modal_action", channel: "#{channel}", object: object, action: action %>
 <% end %>
 
 <% if message %>

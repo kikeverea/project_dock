@@ -5,6 +5,7 @@ class Task < ApplicationRecord
   before_create :set_order
 
   belongs_to :activity
+  has_many :interactions, dependent: :destroy
 
   validates :title, :activity_id, presence: true
 

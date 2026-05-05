@@ -1,4 +1,5 @@
 <% partial ||= nil %>
+<% content ||= nil %>
 <% action ||= "show" %>
 <% partial_locals ||= {} %>
 <% object ||= {} %>
@@ -10,8 +11,16 @@
   <% end %>
 <% end %>
 
+<% if content %>
+  <%= turbo_stream.replace "#{channel}-modal-outlet" do %>
+    <div id="<%= channel %>-modal-outlet">
+      <%= content %>
+    </div>
+  <% end %>
+<% end %>
+
 <%= turbo_stream.replace "turbo-consumer" do %>
-  <%= render "components/turbo_modal_action", modal_id: "#{channel}-modal", action: action, object: object %>
+  <%= render "components/turbo_modal_action", channel: "#{channel}", action: action, object: object %>
 <% end %>
 
 <% if replace %>

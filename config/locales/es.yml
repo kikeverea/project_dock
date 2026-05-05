@@ -53,6 +53,7 @@ es:
         date: "Fecha"
         proposed_by: "Propuesto por"
         proposed_by_id: "Propuesto por"
+        generating_interaction: "Primera interaccion"
       task:
         title: "Título"
         status: "Estado"

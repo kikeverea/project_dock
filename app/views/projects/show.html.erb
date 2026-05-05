@@ -19,7 +19,7 @@
   %>
 
   <!-- Hours -->
-  <%= link_to config_attr_project_path(@project, config_attr: :hours), data: { turbo_stream: true } do %>
+  <%= link_to config_project_path(@project, config_attr: :hours), data: { turbo_stream: true } do %>
     <div class="card hover-elevate-up rounded-s-full rounded-e-full group">
       <div class="flex items-center gap-4 relative">
         <span class="font-semibold"><%= @project.used_time || 0 %> / <%= @project.allocated_time %></span>
@@ -43,6 +43,7 @@
   <%= render "projects/panel", panel: show_panel, items: @project.tasks, item_partial: "tasks/task" %>
 <% end %>
 
+<%= render "components/turbo_modal", channel: :interaction, size: "sm", title: "Primera interacción" %>
 <%= render "components/turbo_modal", channel: :config, size: "sm", title: "Configuración proyecto" %>
 <%= render "components/turbo_modal", channel: :activity, size: "md", title: "Actividad" %>
 <%= render "components/turbo_modal", channel: :task, size: "md", title: "Tarea" %>

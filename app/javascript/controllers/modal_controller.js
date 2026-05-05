@@ -2,11 +2,17 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { modalId: String, action: String, object: Object }
-  static outlets = [ 'select2' ]
 
   connect() {
+    console.log("'Modal' controller connected", 'action:', this.actionValue)
+
     const modal = document.getElementById(this.modalIdValue)
+    console.log('modal', modal)
+
     if (!modal) return
+
+    this.closeHandler = () => this.hide(modal)
+    this.overlayClickHandler = (e) => { if (e.target === modal) this.hide(modal) }
 
     switch (this.actionValue) {
       case 'show':
@@ -23,36 +29,39 @@ export default class extends Controller {
   }
 
   show(modal) {
+    this.createBackdrop()
+
+    modal.classList.add("show")
+    modal.querySelectorAll("[data-dismiss='modal']").forEach(btn => btn.addEventListener("click", this.closeHandler))
+    modal.addEventListener("click", this.overlayClickHandler)
+  }
+
+  createBackdrop() {
     this.backdrop = document.createElement("div")
     this.backdrop.className = "modal-backdrop"
+    this.backdrop.id = `${this.modalIdValue}-backdrop`
+
     document.body.appendChild(this.backdrop)
     document.body.style.overflow = "hidden"
 
-    modal.classList.add("show")
-
-    this.closeHandler = () => this.hide(modal)
-    this.overlayClickHandler = (e) => { if (e.target === modal) this.hide(modal) }
-    modal.querySelectorAll("[data-bs-dismiss='modal']").forEach(btn =>
-      btn.addEventListener("click", this.closeHandler)
-    )
-    modal.addEventListener("click", this.overlayClickHandler)
     this.backdrop.addEventListener("click", this.closeHandler)
   }
 
+  getBackdrop() {
+    return this.backdrop || document.getElementById(`${this.modalIdValue}-backdrop`)
+  }
+
   hide(modal) {
-    console.log('HIDE!!')
     modal.classList.remove("show")
     modal.removeEventListener("click", this.overlayClickHandler)
-    this.backdrop?.remove()
-    this.backdrop = null
+
+    this.hideBackdrop()
     document.body.style.overflow = ""
   }
 
-  select2OutletConnected(outlet) {
-    if ('id' in this.objectValue) {
-      const { id, name } = this.objectValue
-      outlet.addAndSelectItem(id, name || id)
-    }
+  hideBackdrop() {
+    this.getBackdrop().remove()
+    this.backdrop = null
   }
 
   disconnect() {

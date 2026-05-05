@@ -9,7 +9,6 @@ class Activity < ApplicationRecord
   belongs_to :proposed_by, class_name: "User", optional: true
 
   has_many :tasks, dependent: :destroy
-  has_many :interactions, through: :tasks
 
   validates :project_id, :name, :date, :order, presence: true
 
@@ -26,7 +25,7 @@ class Activity < ApplicationRecord
   end
 
   def tasks_completed?(tasks = self.tasks)
-    tasks.all? { |task| task.completed? }
+    tasks.any? && tasks.all? { |task| task.completed? }
   end
 
   def batch_create_tasks(batch)

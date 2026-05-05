@@ -1,4 +1,5 @@
 <% activity ||= @activity %>
+<% content_for :modal_title, "#{activity.persisted? ? "Editar" : "Nueva"} actividad" %>
 
 <%= modal_outlet(:activity) do %>
   <%= render "components/error_banner", item: activity %>
@@ -22,6 +23,16 @@
       form: form,
       icon: "fa-solid fa-calendar-days"
     %>
+
+    <% unless activity.persisted? %>
+      <%= render "components/form_field",
+        attribute: :generating_interaction,
+        type: :text_area,
+        item: activity,
+        form: form,
+        icon: "fa-solid fa-calendar-days"
+      %>
+    <% end %>
 
     <div class="mt-8 w-full text-end">
       <%= link_to "Cancelar",

@@ -4,7 +4,7 @@
 <% value ||= @project.send(attribute).presence %>
 <% attr_url ||= file_attribute ? value&.send(file_attribute)&.url : value %>
 <% configured = !!attr_url %>
-<% config_url = config_attr_project_path(@project, config_attr: attribute) %>
+<% config_url = config_project_path(@project, config_attr: attribute) %>
 
 <div class="relative group" data-controller="context-menu" data-action="contextmenu->context-menu#open">
   <%= link_to attr_url || config_url,

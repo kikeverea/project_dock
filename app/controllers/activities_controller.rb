@@ -1,12 +1,19 @@
 class ActivitiesController < ApplicationController
   before_action :set_project
-  before_action :set_activity, only: %i[ show edit update destroy ]
+  before_action :set_activity, except: %i[ index new create ]
 
   def index
     @activities = Activity.all
   end
 
   def show
+  end
+
+  def generating_interaction
+    render "components/turbo_modal_content", locals: {
+      channel: :interaction,
+      content: @activity.generating_interaction&.html_safe || "",
+    }
   end
 
   def new
@@ -49,12 +56,14 @@ class ActivitiesController < ApplicationController
     render "components/turbo_modal_content", locals: { channel: :activity, partial: "activities/form" }
   end
 
-  def set_activity
-    @activity = Activity.find(params.expect(:id))
+  def set_project
+    @project = Project.find(params[:project_id]) if params[:project_id].present?
   end
 
-  def set_project
-    @project = Project.find(params.expect(:project_id))
+  def set_activity
+    activity_id = params[:id] || params[:activity_id]
+    @activity = Activity.find(activity_id)
+    @project ||= @activity.project
   end
 
   def activity_params

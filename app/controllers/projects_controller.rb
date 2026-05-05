@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
   before_action :set_clients, only: %i[ new edit create update ]
 
   def index
-    @projects = Project.all
+    @projects = Project.includes(activities: { tasks: :interactions }).order(created_at: :desc)
   end
 
   def show
@@ -24,6 +24,7 @@ class ProjectsController < ApplicationController
       partial: "projects/config/#{params[:config_attr]}_form"
     }
   end
+
 
   def create
     @project = Project.new(project_params)

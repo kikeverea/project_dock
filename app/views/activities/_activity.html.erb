@@ -1,12 +1,27 @@
+<% activity ||= @activity %>
+<% show_comments ||= false %>
 <% tasks_completed = activity.tasks_completed? %>
 
-<div id="activity-<%= activity.id %>" class="card w-[600px]">
+<div id="activity-<%= activity.id %>" class="card w-[650px]">
   <div class="card-header <%= "bg-green-400 text-white" if tasks_completed %>">
     <div class="card-title justify-between">
-      <span><%= activity.name %></span>
+
+      <div>
+        <!-- Title -->
+        <%= activity.name %>
+
+        <%= link_to activity_generating_interaction_path(activity),
+          class: "ms-2 #{tasks_completed ? "text-white hover:text-white" : "text-sky-700 hover:text-sky-800"}",
+          data: { turbo_stream: true } do
+        %>
+          <i class="fa-solid fa-comments"></i>
+        <% end %>
+      </div>
+
+      <!-- Date and menu -->
       <span>
         <span class="me-1 text-base">
-          <%= activity.date.strftime("%d-%m-%Y") %>
+          <%= activity.date&.strftime("%d-%m-%Y") || "Sin fecha" %>
         </span>
         <button
           type="button"
@@ -19,13 +34,13 @@
         <ul class="dropdown-menu">
           <li>
             <%= link_to "Editar",
-              edit_project_activity_path(@project, activity), class: "dropdown-item",
+              edit_activity_path(activity), class: "dropdown-item",
               data: { turbo_stream: true }
             %>
           </li>
           <li>
             <%= link_to "Eliminar",
-              project_activity_path(@project, activity),
+              activity,
               class: "dropdown-item",
               data: { controller: "delete-button", delete_button_item_name_value: activity.name }
             %>
@@ -34,13 +49,23 @@
       </span>
     </div>
   </div>
-  <div class="card-body">
+  <div class="card-body pb-0" data-controller="expand">
     <%= render collection: activity.tasks.order(:order), partial: "tasks/task" %>
-    <%= link_to new_project_activity_task_path(@project, activity),
-      class: "btn btn-link ps-0 mt-2",
-      data: { turbo_stream: true } do
-    %>
-      <i class="fa-solid fa-plus me-2"></i> Añadir tarea
-    <% end %>
+
+    <div class="flex justify-between items-center mt-2 ">
+      <%= link_to new_activity_task_path(activity),
+        class: "btn btn-link ps-0",
+        data: { turbo_stream: true } do
+      %>
+        <i class="fa-solid fa-plus me-2"></i> Añadir tarea
+      <% end %>
+    </div>
+
+    <div
+      data-expand-target="content"
+      class="<%= "hidden" unless show_comments %> mt-3 pt-3 border-t border-gray-200 text-sm text-gray-500"
+    >
+      <p>No hay comentarios todavía.</p>
+    </div>
   </div>
 </div>

@@ -1,19 +1,55 @@
-<div id="task-<%= task.id %>" class="flex justify-between items-center gap-6">
+<% interactions = task.interactions %>
+<% has_interactions = interactions.any? %>
 
-  <%= link_to task.title, task, class: "flex-1 py-1.5 h-full #{task.completed? && "line-through text-success"} hover:bg-sky-50" %>
+<div id="task-<%= task.id %>" class="flex justify-between items-center gap-6 hover:bg-sky-50 group relative">
 
-  <div class="form-check">
-    <%= button_to [@project, task.activity, task],
-      method: :put,
-      params: {
-        task: { status: task.completed? ? :pending : :completed }
-      },
-      class: "form-check-input relative h-[20px] w-[20px] rounded-full border border-2 cursor-pointer
-      #{task.completed? ? "bg-success border-green-500 opacity-75" : "border-gray-300"}" do
+  <%= link_to task.title, task, class: "flex-1 py-2 h-full #{task.completed? && "line-through text-success"}" %>
+
+  <div class="hidden group-hover:flex gap-2 justify-end absolute right-15 top-[50%] -translate-y-[50%]">
+    <%= button_to task,
+      method: :delete,
+      class: "btn btn-flush btn-color-muted btn-active-color-danger pb-0.5" do
     %>
-      <% if task.completed? %>
-        <i class="fa-solid fa-check text-white border-green-600 absolute top-[50%] left-[50%] -translate-[50%]"></i>
-      <% end %>
+      <i class="fa-solid fa-trash"></i>
     <% end %>
+
+    <%= link_to edit_task_path(task),
+        data: { turbo_stream: true } do
+    %>
+      <i
+        class="
+          fa-solid fa-pen hover:text-green-600
+          <%= has_interactions ? "text-sky-700" : "text-gray-500" %>"
+        data-expand-target="icon"
+      ></i>
+    <% end %>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <span
+      class="cursor-pointer group-hover:inline <%= "hidden" unless task.interactions.any? %>"
+      data-action="click->expand#toggle"
+    >
+      <i
+        class="
+          fa-solid fa-comment-dots text-xl hover:text-sky-800
+          <%= has_interactions ? "text-sky-700" : "text-gray-500" %>
+        "
+        data-expand-target="icon"
+      ></i>
+    </span>
+
+    <div class="form-check">
+      <%= button_to task,
+        method: :put,
+        params: { task: { status: task.completed? ? :pending : :completed } },
+        class: "form-check-input relative h-[20px] w-[20px] rounded-full border border-2 cursor-pointer
+        #{task.completed? ? "bg-success border-green-500 opacity-75" : "border-gray-300"}" do
+      %>
+        <% if task.completed? %>
+          <i class="fa-solid fa-check text-white border-green-600 absolute top-[50%] left-[50%] -translate-[50%]"></i>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 </div>

@@ -1,0 +1,74 @@
+<% show_user ||= "creator" %>
+<% show_search ||= false %>
+<% limit ||= nil %>
+<% width ||= "w-100" %>
+<% has_interactions = interactions.any? %>
+
+<div id="interactions-timeline">
+  <div class="mb-8">
+    <div class="card">
+      <div class="card-header collapsible collapsed cursor-pointer rotate py-0" data-bs-toggle="collapse" data-bs-target="#new-interaction">
+        <div class="card-title text-gray-700 text-center my-0">Nueva interacción</div>
+        <div class="card-toolbar rotate-180 my-0">
+          <i class="fa-solid fa-chevron-down fs-3"></i>
+        </div>
+      </div>
+
+      <div id="new-interaction" class="collapse">
+        <div class="card-body p-8">
+          <%= render "interactions/form", action: add_interaction_to_trip_path(@trip) %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div data-controller="search">
+
+    <!-- Search Bar -->
+    <% if show_search %>
+      <div class="position-relative mx-8 mt-3 mb-6">
+        <div class="d-flex align-items-center position-absolute top-0 bottom-0 ms-6">
+          <i class="fa-solid fa-magnifying-glass fs-3"></i>
+        </div>
+        <!--suppress HtmlFormInputWithoutLabel-->
+        <input
+          type="text"
+          id="selected-fields-search"
+          class="form-control <%= "border-0" unless show_search == "embedded" %> w-250px ps-15"
+          placeholder="Buscar Interacciones"
+          data-action="input->search#searchItems"
+        >
+      </div>
+    <% end %>
+
+    <div class="d-flex gap-8 <%= "mt-8" if has_interactions %> <%= "mt-6" if !show_search && has_interactions %>">
+
+      <!-- Vertical Bar -->
+      <% if has_interactions %>
+        <div class="bg-primary-subtle rounded position-relative" style="width: 3px; min-width: 3px; flex-shrink: 0;">
+          <div class="bg-primary-subtle rounded-circle position-absolute" style="width: 12px; height: 12px; left: -5px; top: 0;"></div>
+          <div class="bg-primary-subtle rounded-circle position-absolute" style="width: 12px; height: 12px; left: -5px; bottom: 0;"></div>
+        </div>
+      <% end %>
+
+      <!-- Content -->
+      <div class="d-flex flex-column gap-12 <%= "mt-4 mb-14" if has_interactions %> <%= width %>">
+        <% if has_interactions %>
+
+          <% interactions = interactions.order(updated_at: :desc) %>
+          <% interactions = interactions.last(limit) if limit %>
+
+          <% interactions.each do |interaction| %>
+            <%= render "interactions/card", interaction: interaction, show_user: show_user %>
+          <% end %>
+        <% else %>
+          <div class="card card-body">
+            <div class="text-muted d-flex justify-content-center align-items-center">
+              <em>No hay interacciones</em>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

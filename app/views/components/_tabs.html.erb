@@ -9,6 +9,7 @@
 <div data-controller="tabs">
   <ul class="nav nav-tabs <%= classes %> <%= tab_class %>">
     <% tabs.each_with_index do |(attr, label), index| %>
+      <% next if label.blank? %>
       <% active = (index == 0 && params[query_param].nil?) || params[query_param] == attr.to_s %>
 
       <li class="nav-item">

@@ -1,8 +1,12 @@
 class InteractionsController < ApplicationController
   include Toast
 
-  before_action :set_interaction, only: %i[ edit update destroy cancel_edit ]
-  before_action :set_from_user_profile
+  before_action :set_task
+  before_action :set_interaction, except: %i[ index new create ]
+
+  def new
+    refresh_activity(show_comments: true)
+  end
 
   def edit
     respond_to do |format|
@@ -56,10 +60,11 @@ class InteractionsController < ApplicationController
 
   def set_interaction
     @interaction = Interaction.find(params[:id])
+    @task ||= @interaction.task
   end
 
-  def set_from_user_profile
-    @from_user_profile = request.referer == show_user_url(current_user)
+  def set_task
+    @task = Task.find(params[:task_id]) if params[:task_id]
   end
 
   def interaction_params

@@ -1,0 +1,87 @@
+<% edit ||= false %>
+
+<div
+  id="interaction-<%= interaction.id %>"
+  data-search-target="searchItem"
+  data-id="<%= interaction.id %>"
+  data-search-value="<%= interaction
+    .attributes
+    .slice("text")
+    .transform_values { |value| strip_tags(value) }
+    .to_json %>"
+>
+  <div class="d-flex justify-content-between align-items-center px-4 pb-2">
+
+    <div class="fs-6 fw-semibold d-flex align-items-center">
+      <%= interaction.user&.full_name %>
+      <% if edit %>
+        <%= button_to interaction,
+          method: :delete,
+          class: "btn btn-flush btn-active-color-danger d-inline",
+          data: {
+            controller: "delete-button",
+            delete_button_model_value: "interacción",
+            delete_button_model_gender_value: "F"
+          } do
+        %>
+          <i class="fa-solid fa-trash fs-5 fs-7 ms-2"></i>
+        <% end %>
+      <% else %>
+        <%= link_to edit_interaction_path(interaction), class: "btn btn-flush btn-active-color-primary", data: { turbo_stream: true  } do %>
+           <i class="fa-solid fa-pen fs-9 ms-2 mb-1"></i>
+        <% end %>
+      <% end %>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-flush"
+      data-controller="dropdown"
+      data-action="click->dropdown#toggle blur->dropdown#handleBlur"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <%= render "components/badge",
+        color: interaction_status_color(interaction.status),
+        text: Interaction.statuses[interaction.status]
+      %>
+    </button>
+    <ul class="dropdown-menu">
+      <% Interaction.statuses.each do |status_name, status| %>
+        <li class="dropdown-item cursor-pointer">
+          <%= button_to interaction_path(interaction),
+              method: :put,
+              class: "btn btn-flush",
+              params: { interaction: { status: status_name } } do
+          %>
+            <%= render "components/badge",
+              color: interaction_status_color(status_name),
+              text: status
+            %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="position-relative">
+    <div
+      class="w-15px h-15px rounded-circle bg-<%= interaction_status_color(interaction.status) %> position-absolute"
+      style="left: -35px; top: 50%; transform: translateY(-50%);"
+    >
+      <!-- Bullet point -->
+    </div>
+
+    <div class="card card-body p-4 fs-6 h-auto w-100">
+      <% if edit %>
+        <%= render "interactions/form", action: update_timeline_interaction_path(interaction), interaction: interaction %>
+      <% else %>
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="quill-content"><%= interaction.text.html_safe %></span>
+          <span class="fw-semibold min-w-100px text-end"><%= interaction.updated_at.strftime("%d-%m-%Y %H:%M") %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
