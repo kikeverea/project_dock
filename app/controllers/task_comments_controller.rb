@@ -1,17 +1,18 @@
 class InteractionsController < ApplicationController
   include Toast
+  include TurboActivity
 
   before_action :set_task
   before_action :set_interaction, except: %i[ index new create ]
 
   def new
-    refresh_activity(show_comments: true)
+    show_comments
   end
 
   def edit
     respond_to do |format|
       format.turbo_stream { render turbo_stream: turbo_stream.replace("interaction-#{@interaction.id}",
-        partial: "interactions/card",
+        partial: "task_comments/card",
         locals: { interaction: @interaction, edit: true, show_user: @from_user_profile ? "lead" : "creator" }
       )}
       format.html
@@ -21,7 +22,7 @@ class InteractionsController < ApplicationController
   def cancel_edit
     render turbo_stream: turbo_stream.replace(
       "interaction-#{@interaction.id}",
-      partial: "interactions/card",
+      partial: "task_comments/card",
       locals: { interaction: @interaction, show_user: @from_user_profile ? "lead" : "creator" }
     )
   end
@@ -40,7 +41,7 @@ class InteractionsController < ApplicationController
     if @interaction.update(update_params)
       render turbo_stream: turbo_stream.replace(
         "interaction-#{@interaction.id}",
-        partial: "interactions/card",
+        partial: "task_comments/card",
         locals: { interaction: @interaction, show_user: @from_user_profile ? "lead" : "creator" }
       )
     else
@@ -57,6 +58,14 @@ class InteractionsController < ApplicationController
   end
 
   private
+
+  def show_comments
+    render turbo_stream: turbo_stream.replace(
+      "comments",
+      partial: "task_comments/timeline",
+      locals: { interaction: @interaction, show_user: @from_user_profile ? "lead" : "creator" }
+    )
+  end
 
   def set_interaction
     @interaction = Interaction.find(params[:id])

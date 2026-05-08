@@ -49,8 +49,8 @@
 
     <div class="row items-center">
       <div class="col col-md-6">
-        <div class="position-relative <%= search_bar_width_classes %>">
-          <div class="flex items-center position-absolute top-0 bottom-0 ms-5">
+        <div class="relative <%= search_bar_width_classes %>">
+          <div class="flex items-center absolute top-0 bottom-0 ms-5">
             <i class="fa-solid fa-magnifying-glass fs-5"></i>
           </div>
           <%= form.text_field search_params,
@@ -58,7 +58,7 @@
             placeholder: search,
             data: { action: "input->ransack#search", ransack_target: "searchInput" }
           %>
-          <div class="position-absolute flex items-center z-index-2 top-0 end-0 h-40px me-4">
+          <div class="absolute flex items-center z-index-2 top-0 end-0 h-40px me-4">
 						<span
               class="spinner-border spinner-border-sm text-primary hidden"
               data-ransack-target="indicator"

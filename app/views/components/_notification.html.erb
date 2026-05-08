@@ -40,18 +40,18 @@
   }
 </style>
 
-<div class="notification flex flex-row items-center gap-4 position-relative min-w-350px p-4 mb-2
+<div class="notification flex flex-row items-center gap-4 relative min-w-350px p-4 mb-2
             border border-<%= type %> border-left-4 border-top-0 border-right-0 border-bottom-0
             bg-light-<%= type %>"
      data-controller="notification"
 >
 
-  <button class="position-absolute top-0 end-0 btn btn-flush pt-2 pe-4" data-action="notification#removeFromScreen">
+  <button class="absolute top-0 end-0 btn btn-flush pt-2 pe-4" data-action="notification#removeFromScreen">
     <i class="fa-solid fa-xmark text-<%= type %>"></i>
   </button>
 
-  <div class="text-white bg-<%= type %> w-35px h-35px rounded-circle position-relative">
-    <div class="fs-1 position-absolute start-50 top-50 translate-middle pb-2 fw-bold">¡</div>
+  <div class="text-white bg-<%= type %> w-35px h-35px rounded-circle relative">
+    <div class="fs-1 absolute start-50 top-50 translate-middle pb-2 fw-bold">¡</div>
   </div>
   <div>
     <div class="mb-1"><%= title %></div>

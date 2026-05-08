@@ -3,7 +3,7 @@
 
 <div
   id="document-<%= file.id %>"
-  class="flex flex-column items-center gap-4 file-download <%= "tiny" if tiny %> position-relative"
+  class="flex flex-column items-center gap-4 file-download <%= "tiny" if tiny %> relative"
 >
   <% if file&.file %>
     <% icon, icon_color = get_document_icon(file) %>
@@ -12,9 +12,9 @@
     <%= render "components/delete_button",
       icon: "fa-solid fa-circle-xmark opacity-75",
       icon_size: "#{tiny ? "fs-8" : "fs-4"}",
-      classes: "btn btn-flush btn-active-color-danger position-absolute bottom-50 end-0 mb-4 mx-2 action-btn",
+      classes: "btn btn-flush btn-active-color-danger absolute bottom-50 end-0 mb-4 mx-2 action-btn",
       delete_path: delete_path,
-      name: file.name,
+      item_name: file.name,
       simple_tooltip: true
     %>
 
