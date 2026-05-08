@@ -3,7 +3,7 @@ class TasksController < ApplicationController
   before_action :set_task, except: %i[ index new create batch ]
 
   def index
-    @tasks = Task.all
+    @tasks = Task.includes(task_comments: { replies: :parent_comment })
   end
 
   def show

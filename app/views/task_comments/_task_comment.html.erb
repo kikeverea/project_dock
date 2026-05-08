@@ -1,0 +1,80 @@
+<% comment ||= @comment %>
+<% task ||= @task %>
+<% reply_to ||= @reply_to %>
+<% replies = comment.replies.includes(:parent_comment) %>
+<% has_replies ||= replies.any? %>
+
+<div
+  id="comment-<%= comment.id %>"
+  data-search-target="searchItem"
+  data-id="<%= comment.id %>"
+  data-search-value="<%= comment.attributes.slice("content").transform_values { |v| strip_tags(v) }.to_json %>"
+>
+  <div class="flex gap-3">
+
+    <%# Avatar + vertical connecting line to replies %>
+    <div class="flex flex-col items-center">
+      <div class="
+        w-9 h-9 rounded-full mt-2
+        bg-sky-100 text-sky-700 font-bold text-sm
+        flex items-center justify-center shrink-0 select-none"
+      >
+        <%= comment.user.initials %>
+      </div>
+      <% if has_replies %>
+        <div class="w-0.5 bg-gray-200 flex-1 mt-1.5 min-h-4 rounded-full"></div>
+      <% end %>
+    </div>
+
+    <%# Comment %>
+    <div class="flex-1 min-w-0 pb-3">
+      <div class="bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
+        <div class="flex items-baseline gap-2 flex-wrap">
+          <span class="font-semibold text-gray-900">
+            <%= comment.user&.full_name %>
+          </span>
+          <span class="text-sm ms-1 text-gray-500">
+            <%= comment.created_at.strftime("%-d %b %Y · %H:%M") %>
+          </span>
+        </div>
+        <div class="mt-1.5 text-gray-700 quill-content">
+          <%= comment.content.html_safe %>
+        </div>
+      </div>
+
+      <%# Actions %>
+      <div class="flex items-center gap-4 mt-1.5 px-1">
+        <%= link_to new_task_comment_path(task, parent_comment_id: comment.id),
+          class: "text-gray-400 hover:text-sky-600 transition-colors",
+          data: { turbo_stream: true } do %>
+          <i class="fa-solid fa-reply text-[10px]"></i>  <span class="text-sm">Responder</span>
+        <% end %>
+        <%= link_to edit_comment_path(comment),
+          class: "text-sm text-gray-400 hover:text-sky-600 transition-colors",
+          data: { turbo_stream: true } do %>
+          Editar
+        <% end %>
+        <%= render "components/delete_button",
+          delete_path: comment_path(comment),
+          label: "Eliminar",
+          model: "comentario",
+          classes: "text-sm text-gray-400 hover:text-red-500 transition-colors",
+          hide_icon: true
+        %>
+      </div>
+
+      <%# Nested replies %>
+      <% if has_replies %>
+        <div class="mt-3 space-y-1">
+          <% comment.replies.order(:created_at).each do |reply| %>
+            <%= render "task_comments/task_comment", comment: reply, task: task %>
+            <% if reply_to == reply %>
+              <%= render "task_comments/form", task: task %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>

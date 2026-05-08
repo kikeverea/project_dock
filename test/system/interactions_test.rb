@@ -18,13 +18,13 @@ class InteractionsTest < ApplicationSystemTestCase
     fill_in "Content", with: @interaction.content
     fill_in "Status", with: @interaction.status
     fill_in "User", with: @interaction.user_id
-    click_on "Create Interaction"
+    click_on "Create TaskComment"
 
-    assert_text "Interaction was successfully created"
+    assert_text "TaskComment was successfully created"
     click_on "Back"
   end
 
-  test "should update Interaction" do
+  test "should update TaskComment" do
     visit interaction_url(@interaction)
     click_on "Edit this interaction", match: :first
 
@@ -32,16 +32,16 @@ class InteractionsTest < ApplicationSystemTestCase
     fill_in "Content", with: @interaction.content
     fill_in "Status", with: @interaction.status
     fill_in "User", with: @interaction.user_id
-    click_on "Update Interaction"
+    click_on "Update TaskComment"
 
-    assert_text "Interaction was successfully updated"
+    assert_text "TaskComment was successfully updated"
     click_on "Back"
   end
 
-  test "should destroy Interaction" do
+  test "should destroy TaskComment" do
     visit interaction_url(@interaction)
     click_on "Destroy this interaction", match: :first
 
-    assert_text "Interaction was successfully destroyed"
+    assert_text "TaskComment was successfully destroyed"
   end
 end

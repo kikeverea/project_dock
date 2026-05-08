@@ -1,88 +1,87 @@
-class InteractionsController < ApplicationController
+class TaskCommentsController < ApplicationController
   include Toast
-  include TurboActivity
 
   before_action :set_task
-  before_action :set_interaction, except: %i[ index new create ]
+  before_action :set_comment, except: %i[ index new create ]
+  before_action :set_activity
+
+  def index
+    refresh_comments
+  end
 
   def new
-    show_comments
+    @comment = TaskComment.new(parent_comment_id: params[:parent_comment_id])
+    @reply_to = TaskComment.find(params[:parent_comment_id]) if params[:parent_comment_id]
+    refresh_comments(new_comment: @reply_to.nil?)
+  end
+
+  def show
+    refresh_comment
   end
 
   def edit
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace("interaction-#{@interaction.id}",
-        partial: "task_comments/card",
-        locals: { interaction: @interaction, edit: true, show_user: @from_user_profile ? "lead" : "creator" }
-      )}
-      format.html
-    end
+    refresh_comment(edit: true)
   end
 
   def cancel_edit
-    render turbo_stream: turbo_stream.replace(
-      "interaction-#{@interaction.id}",
-      partial: "task_comments/card",
-      locals: { interaction: @interaction, show_user: @from_user_profile ? "lead" : "creator" }
-    )
+    refresh_comments
   end
 
   def create
-    @interaction = Interaction.new(interaction_params)
+    @comment = @task.comments.build(comment_params)
 
-    if @interaction.save
-      redirect_to request.referrer, status: :see_other, notice: "Interaction was successfully created."
+    if @comment.save!
+      refresh_comments
     else
-      toast("La interacción no ha podido ser guardada", :error)
+      refresh_comments(show_form: true)
     end
   end
 
   def update
-    if @interaction.update(update_params)
-      render turbo_stream: turbo_stream.replace(
-        "interaction-#{@interaction.id}",
-        partial: "task_comments/card",
-        locals: { interaction: @interaction, show_user: @from_user_profile ? "lead" : "creator" }
-      )
+    if @comment.update(comment_params)
+      refresh_comments
     else
-      toast("No se ha podido actualizar la interacción", :error)
+      refresh_comments(show_form: true)
     end
   end
 
   def destroy
-    if @interaction.destroy
-      render turbo_stream: turbo_stream.remove("interaction-#{@interaction.id}")
-    else
-      toast("No se ha podido eliminar la interacción", :error)
-    end
+    @comment.destroy!
+    refresh_comments
   end
 
   private
 
-  def show_comments
+  def refresh_comments(new_comment: false)
     render turbo_stream: turbo_stream.replace(
-      "comments",
+      "task-comments",
       partial: "task_comments/timeline",
-      locals: { interaction: @interaction, show_user: @from_user_profile ? "lead" : "creator" }
+      locals: { new_comment: new_comment }
     )
   end
 
-  def set_interaction
-    @interaction = Interaction.find(params[:id])
-    @task ||= @interaction.task
+  def refresh_comment(edit: false)
+    render turbo_stream: turbo_stream.replace(
+      edit ? "comment-#{@comment.id}" : "comment-#{@comment.id}-form",
+      partial: edit ? "task_comments/form" : "task_comments/task_comment",
+      locals: { edit: edit }
+    )
+  end
+
+  def set_comment
+    @comment = TaskComment.find(params[:id])
+    @task ||= @comment.task
   end
 
   def set_task
     @task = Task.find(params[:task_id]) if params[:task_id]
   end
 
-  def interaction_params
-    interaction_params = params.require(:interaction).permit(:user_id, :lead_id, :activity_id, :status, :content)
-    interaction_params[:user] = current_user
-    interaction_params
+  def set_activity
+    @activity = @task&.activity
   end
 
-  def update_params
-    params.require(:interaction).permit(:status, :content)
+  def comment_params
+    params.expect(task_comment: [:user_id, :lead_id, :activity_id, :status, :content, :parent_comment_id]).merge({ user_id: Current.user.id })
   end
 end

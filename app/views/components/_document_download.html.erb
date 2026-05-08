@@ -33,11 +33,11 @@
 <% no_file_message ||= label %>
 <% name_classes ||= "" %>
 
-<div class="<%= "tiny" if tiny %> document-download position-relative <%= "min-w-85px" if delete_path %>">
+<div class="<%= "tiny" if tiny %> document-download relative <%= "min-w-85px" if delete_path %>">
   <% if document&.file %>
 
     <% if interactive %>
-      <div class="position-absolute top-0 end-0 ms-2 mt-2 z-index-2">
+      <div class="absolute top-0 end-0 ms-2 mt-2 z-index-2">
         <!-- Select file-->
         <label class="form-check form-check-sm form-check-custom form-check">
           <%= check_box_tag "select-file-#{document.id}",
@@ -49,7 +49,7 @@
         </label>
       </div>
     <% elsif delete_path %>
-      <div class="position-absolute top-0 end-0 ms-2 mt-2 z-index-2">
+      <div class="absolute top-0 end-0 ms-2 mt-2 z-index-2">
         <%= render "components/delete_button",
           delete_path: delete_path,
           model_name: "Justificante de pago",
@@ -64,7 +64,7 @@
 
     <%= link_to document.file.url,
       download: use_original_file_name ? document.file.identifier : document.name,
-      class: "btn btn-flush #{tiny ? "p-4" : "py-4 px-8"} inline-block rounded-1 #{color} position-relative" do
+      class: "btn btn-flush #{tiny ? "p-4" : "py-4 px-8"} inline-block rounded-1 #{color} relative" do
     %>
       <i class="fa-solid fa-<%= icon || document_icon %> fs-<%= tiny ? "3x" : "4x" %> text-<%= color %> p-0"></i>
       <div class="w-[125px] truncate-2-lines text-<%= color %> <%= tiny ? "pt-2" : "pt-4" %> <%= name_classes %>">

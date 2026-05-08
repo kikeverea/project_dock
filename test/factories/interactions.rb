@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :interaction do
+  factory :task_comment do
     association :client
     association :user, factory: :admin
     text { Faker::Lorem.paragraph }

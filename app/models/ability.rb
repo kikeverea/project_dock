@@ -12,8 +12,8 @@ class Ability
     can :manage, Client, id: user.client_id
     can :manage, Task, client_id: user.client_id
     can :manage, Activity, client_id: user.client_id
-    can [:create, :read], Interaction, client_id: user.client_id
-    can [:update, :destroy], Interaction, user_id: user.id
+    can [:create, :read], TaskComment, client_id: user.client_id
+    can [:update, :destroy], TaskComment, user_id: user.id
 
     cannot :manage, User
     can :update, User, id: user.id

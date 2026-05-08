@@ -2,8 +2,8 @@ class TaskComment < ApplicationRecord
 
   belongs_to :user
   belongs_to :task
-  belongs_to :parent_interaction, optional: true, class_name: "TaskComment"
-  has_many :replies, class_name: "TaskComment", foreign_key: "parent_interaction_id"
+  belongs_to :parent_comment, optional: true, class_name: "TaskComment"
+  has_many :replies, class_name: "TaskComment", foreign_key: "parent_comment_id", dependent: :destroy
 
   validates :user_id, :task_id, :content, presence: true
 

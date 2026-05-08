@@ -1,0 +1,14 @@
+<div
+  id="comments"
+  data-controller="expand"
+  data-expand-auto-expand-value="true"
+  class="hidden mt-3 pt-3 border-t border-gray-200 text-sm text-gray-500"
+>
+  <% if comments.any? %>
+    <% comments.each do |comment| %>
+      <%= comment %>
+    <% end %>
+  <% else %>
+    <p>No hay comentarios todavía.</p>
+  <% end %>
+</div>

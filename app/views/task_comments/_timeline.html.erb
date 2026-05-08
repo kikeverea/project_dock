@@ -1,0 +1,45 @@
+<% task ||= @task %>
+<% new_comment ||= false %>
+<% reply_to ||= @reply_to %>
+<% root_comments ||= task.root_comments.order(created_at: :desc) %>
+<% has_comments = root_comments&.any? %>
+
+<div id="task-comments">
+  <%= render "components/card" do %>
+
+    <%# Header %>
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="font-semibold text-gray-800 flex items-center gap-2 text-lg">
+        <i class="fa-regular fa-comments text-sky-600"></i>
+        Comentarios
+      </h3>
+      <%= link_to new_task_comment_path(task),
+        class: "text-sm text-sky-600 hover:text-sky-700 flex items-center gap-1.5 font-medium transition-colors",
+        data: { turbo_stream: true } do %>
+        <i class="fa-solid fa-plus text-[10px]"></i>
+        Añadir comentario
+      <% end %>
+    </div>
+
+    <%# Comment form %>
+    <% if new_comment %>
+      <%= render "task_comments/form", task: task %>
+    <% end %>
+
+    <% if has_comments %>
+      <div class="space-y-1">
+        <% root_comments.each do |comment| %>
+          <%= render "task_comments/task_comment", comment: comment, task: task %>
+          <% if reply_to == comment %>
+            <%= render "task_comments/form", task: task %>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-8">
+        <i class="fa-regular fa-comments text-4xl text-gray-300 block mb-2"></i>
+        <p class="text-sm text-gray-400">No hay comentarios todavía</p>
+      </div>
+    <% end %>
+  <% end %>
+</div>

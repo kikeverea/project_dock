@@ -49,7 +49,7 @@ export default class extends Tooltip {
       confirmButtonText: confirmButtonLabel,
       cancelButtonText: cancelButtonLabel,
       customClass: {
-        confirmButton: "bg-red-700 hover:bg-red-800",
+        confirmButton: "btn btn-danger",
         cancelButton: "btn btn-secondary",
       }
     })

@@ -5,7 +5,7 @@ class Task < ApplicationRecord
   before_create :set_order
 
   belongs_to :activity
-  has_many :interactions, dependent: :destroy
+  has_many :comments, class_name: "TaskComment",  dependent: :destroy
 
   validates :title, :activity_id, presence: true
 
@@ -14,6 +14,10 @@ class Task < ApplicationRecord
     completed: "completed",
   },
   default: "pending"
+
+  def root_comments
+    comments.where(parent_comment_id: nil)
+  end
 
 
   private

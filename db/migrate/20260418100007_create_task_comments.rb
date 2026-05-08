@@ -1,4 +1,4 @@
-class CreateInteractions < ActiveRecord::Migration[7.1]
+class CreateTaskComments < ActiveRecord::Migration[7.1]
   def change
     create_table :task_comments do |t|
       t.references :user, null: false, foreign_key: true

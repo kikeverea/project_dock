@@ -57,19 +57,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_100012) do
     t.index ["emailable_type", "emailable_id"], name: "index_emails_on_emailable"
   end
 
-  create_table "interactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.text "content"
-    t.datetime "created_at", null: false
-    t.bigint "parent_interaction_id"
-    t.string "status"
-    t.bigint "task_id", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.index ["parent_interaction_id"], name: "index_interactions_on_parent_interaction_id"
-    t.index ["task_id"], name: "index_interactions_on_task_id"
-    t.index ["user_id"], name: "index_interactions_on_user_id"
-  end
-
   create_table "logs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "action"
     t.datetime "created_at", null: false
@@ -118,6 +105,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_100012) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "task_comments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.bigint "parent_comment_id"
+    t.string "status"
+    t.bigint "task_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["parent_comment_id"], name: "index_task_comments_on_parent_comment_id"
+    t.index ["task_id"], name: "index_task_comments_on_task_id"
+    t.index ["user_id"], name: "index_task_comments_on_user_id"
+  end
+
   create_table "tasks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "activity_id"
     t.datetime "created_at", null: false
@@ -151,11 +151,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_100012) do
   add_foreign_key "activities", "projects"
   add_foreign_key "activities", "users", column: "proposed_by_id"
   add_foreign_key "documents", "users", column: "uploaded_by_id"
-  add_foreign_key "interactions", "interactions", column: "parent_interaction_id"
-  add_foreign_key "interactions", "tasks"
-  add_foreign_key "interactions", "users"
   add_foreign_key "logs", "users"
   add_foreign_key "projects", "clients"
   add_foreign_key "sessions", "users"
+  add_foreign_key "task_comments", "task_comments", column: "parent_comment_id"
+  add_foreign_key "task_comments", "tasks"
+  add_foreign_key "task_comments", "users"
   add_foreign_key "tasks", "activities"
 end

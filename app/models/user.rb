@@ -6,7 +6,7 @@ class User < ApplicationRecord
 
   before_destroy :check_if_last_admin
 
-  has_many :interactions, dependent: :destroy
+  has_many :task_comments, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :projects, dependent: :destroy
 
@@ -43,6 +43,10 @@ class User < ApplicationRecord
 
   def full_name
     "#{self.name} #{self.lastname}"
+  end
+
+  def initials
+    "#{name.first.upcase}#{(lastname&.first.presence || name.second).upcase}"
   end
 
   def send_new_candidate_email(candidate, job_title)

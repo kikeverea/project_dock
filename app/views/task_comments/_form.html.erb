@@ -1,0 +1,45 @@
+<% edit ||= false %>
+<% task ||= @task %>
+<% comment ||= @comment %>
+<% reply_to ||= @reply_to %>
+<% url = comment&.persisted? ? comment_path(comment) : task_comments_path(task) %>
+<% method = comment&.persisted? ? :patch : :post %>
+
+<div id="comment-<%= comment.id %>-form" class="mt-4 mb-5 rounded-xl border border-sky-100 bg-sky-50 overflow-hidden">
+  <% if reply_to %>
+    <div class="px-4 py-2 text-sm text-sky-600 border-b border-sky-100 flex items-center gap-1.5">
+      <i class="fa-solid fa-reply"></i>
+      Respondiendo a <span class="font-semibold ml-1"><%= reply_to.user&.full_name %></span>
+    </div>
+  <% end %>
+  <%= form_with model: comment, url: url, method: method, class: "p-4" do |form| %>
+
+    <%= form.hidden_field :parent_comment_id %>
+
+    <div class="flex gap-3 items-start">
+      <div class="
+        w-8 h-8 rounded-full
+        bg-sky-200 text-sky-800 font-bold flex items-center justify-center shrink-0 select-none"
+      >
+        <%= Current.user.full_name.split.map { |n| n[0].upcase }.first(2).join %>
+      </div>
+      <div class="flex-1">
+        <%= form.text_area :content,
+          class: "form-control resize-none",
+          placeholder: reply_to ? "Escribe tu respuesta..." : "Escribe un comentario...",
+          rows: 3
+        %>
+        <div class="flex justify-end gap-2 mt-2">
+          <%= link_to "Cancelar",
+            edit ? comment_path(comment) : task_comments_path(task),
+            class: "btn btn-sm text-sm",
+            data: { turbo_stream: true }
+          %>
+          <%= form.submit comment&.persisted? ? "Guardar" : "Comentar",
+            class: "btn btn-sm bg-sky-600 hover:bg-sky-700 text-white text-sm"
+          %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

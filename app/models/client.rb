@@ -6,7 +6,7 @@ class Client < ApplicationRecord
   has_many :projects, dependent: :destroy
   has_many :activities, through: :projects
   has_many :tasks, through: :activities
-  has_many :interactions, through: :tasks
+  has_many :task_comments, through: :tasks
 
   mount_uploader :logo, ImageUploader
 

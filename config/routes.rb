@@ -18,14 +18,18 @@ Rails.application.routes.draw do
   end
 
   resources :tasks, only: :index do
-    resources :interactions, shallow: true
+    resources :task_comments,
+      path: "comments",
+      as: "comments",
+      shallow: true do
+      get :cancel_edit, on: :member
+    end
   end
 
   resources :phone_numbers
   resources :emails
   resources :tags
   resources :clients
-  resources :interactions
   resources :documents
   resources :users do
     get :profile, on: :collection

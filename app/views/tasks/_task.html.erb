@@ -1,11 +1,12 @@
-<% interactions = task.interactions %>
-<% has_interactions = interactions.any? %>
+<% comments = task.comments %>
+<% has_comments = comments.any? %>
 
 <div id="task-<%= task.id %>" class="flex justify-between items-center gap-6 hover:bg-sky-50 group relative">
 
   <%= link_to task.title, task, class: "flex-1 py-2 h-full #{task.completed? && "line-through text-success"}" %>
 
   <div class="hidden group-hover:flex gap-2 justify-end absolute right-15 top-[50%] -translate-y-[50%]">
+    <!-- Delete -->
     <%= button_to task,
       method: :delete,
       class: "btn btn-flush btn-color-muted btn-active-color-danger pb-0.5" do
@@ -13,31 +14,23 @@
       <i class="fa-solid fa-trash"></i>
     <% end %>
 
+    <!-- Edit -->
     <%= link_to edit_task_path(task),
         data: { turbo_stream: true } do
     %>
-      <i
-        class="
-          fa-solid fa-pen hover:text-green-600
-          <%= has_interactions ? "text-sky-700" : "text-gray-500" %>"
-        data-expand-target="icon"
+      <i class="fa-solid fa-pen hover:text-green-600 <%= has_comments ? "text-sky-700" : "text-gray-500" %>"
       ></i>
     <% end %>
   </div>
 
+  <!-- Comments -->
   <div class="flex items-center gap-2">
-    <span
-      class="cursor-pointer group-hover:inline <%= "hidden" unless task.interactions.any? %>"
-      data-action="click->expand#toggle"
-    >
-      <i
-        class="
-          fa-solid fa-comment-dots text-xl hover:text-sky-800
-          <%= has_interactions ? "text-sky-700" : "text-gray-500" %>
-        "
-        data-expand-target="icon"
-      ></i>
-    </span>
+    <%= link_to task_comments_path(task),
+      class: "cursor-pointer group-hover:inline #{"hidden" unless task.comments.any?}",
+      data: { turbo_prefetch: false, turbo_stream: true } do
+    %>
+      <i class="fa-solid fa-comment-dots text-xl hover:text-sky-800 <%= has_comments ? "text-sky-700" : "text-gray-500" %>"></i>
+    <% end %>
 
     <div class="form-check">
       <%= button_to task,
