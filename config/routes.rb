@@ -24,13 +24,16 @@ Rails.application.routes.draw do
       shallow: true do
       get :cancel_edit, on: :member
     end
+
+    resources :documents,
+      only: %i[ create destroy ],
+      controller: :task_documents
   end
 
   resources :phone_numbers
   resources :emails
   resources :tags
   resources :clients
-  resources :documents
   resources :users do
     get :profile, on: :collection
   end

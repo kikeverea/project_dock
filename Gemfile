@@ -2,33 +2,30 @@ source "https://rubygems.org"
 
 ruby "4.0.2"
 
+gem "rails", "~> 8.0"
+
 gem "tailwindcss-rails"
 
-gem 'will_paginate'
-gem 'ransack'
-gem 'rack-cors'
-gem 'carrierwave'
-gem 'carrierwave-base64'
-gem 'mailjet'
-gem 'cancancan'
-gem "whenever"
-gem 'dotenv'
+gem "carrierwave"
+gem "mini_magick"
 
-# Exportar a excel
-gem 'caxlsx'
-gem 'caxlsx_rails'
+gem "will_paginate"
+gem "ransack"
+gem "rack-cors"
+gem "mailjet"
+gem "cancancan"
+gem "whenever"
+gem "dotenv"
 
 # Stdlib gems removed from Ruby 4.0 core
 gem "ostruct"
 gem "cgi"
 gem "csv"
 
-gem "rails", "~> 8.0"
-
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
-# Use mysql as the database for Active Record
+# Database for Active Record
 gem "mysql2"
 
 # Use the Puma web server [https://github.com/puma/puma]
@@ -37,14 +34,11 @@ gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
 
-# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+# Hotwire"s SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "turbo-rails"
 
-# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+# Hotwire"s modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
-
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
 
 # Use Redis adapter to run Action Cable in production
 gem "redis", ">= 4.0.1"
@@ -74,4 +68,4 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem 'discard', '~> 1.4'
+gem "discard", "~> 1.4"

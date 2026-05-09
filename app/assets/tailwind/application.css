@@ -220,7 +220,7 @@
   .card {
     @apply
       relative flex flex-col
-      min-w-0 p-4 border border-gray-200 rounded-lg shadow-sm
+      min-w-0 p-4 border border-gray-200 rounded-lg shadow-sm overflow-hidden
       break-words bg-white;
   }
 

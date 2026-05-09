@@ -33,10 +33,18 @@ es:
 
   activerecord:
     models:
-      project: "Proyecto"
-      interaction: "Interacción"
-      user: "Usuario"
-      task: "Tarea"
+      project:
+        one: "Proyecto"
+        other: "Proyectos"
+      interaction:
+        one: "Interacción"
+        other: "Interacciones"
+      user:
+        one: "Usuario"
+        other: "Usuarios"
+      task:
+        one: "Tarea"
+        other: "Tareas"
 
     attributes:
       project:

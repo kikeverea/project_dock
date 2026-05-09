@@ -15,6 +15,10 @@ class Task < ApplicationRecord
   },
   default: "pending"
 
+  def status_text
+    I18n.t("activerecord.enums.task.status.#{status}")
+  end
+
   def root_comments
     comments.where(parent_comment_id: nil)
   end

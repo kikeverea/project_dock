@@ -1,59 +1,27 @@
 class DocumentsController < ApplicationController
-
-  def index
-    @show_archived = params[:show_archived] == "true"
-
-    @query = Document.ransack(params[:q])
-
-    @documents = @query
-      .result
-      .accessible_by(current_ability, :read)
-      .order("created_at DESC")
-      .paginate(page: params[:page] || 1, per_page: params[:per_page] || 15)
-
-    respond_to do |format|
-      format.turbo_stream {
-        render turbo_stream: turbo_stream.replace(
-          "documents-table",
-          partial: "documents/table",
-          locals: {
-            documents: @documents,
-            show_trip: true,
-            show_associated: true,
-            is_admin: true,
-            delete_path: -> document { destroy_document_path(document) }
-          })
-      }
-      format.html
-    end
-  end
+  include Toast
 
   def create
-    model = params[:documentable_type].constantize
-
     document = Document.new(document_params)
-    documentable = document.documentable.becomes(model) # Forces base classes in STI
+    document.documentable = @documentable
 
-    if document.save
+    if document.save!
       render turbo_stream: [
-        turbo_stream.replace("documents-index", partial: "documents/documents", locals: { documentable: documentable }),
-        turbo_stream.replace("turbo-consumer", partial: "components/turbo_message", locals: { message: "Documento subido" }),
+        turbo_stream.replace(partial_id, partial: partial),
+        turbo_stream.replace("turbo-message-consumer", partial: "components/turbo_message", locals: { message: "Documento subido" }),
       ]
     else
-      toast("No se ha podido subir el documento", :error)
+      toast("Error al subir el documento", :error)
     end
   end
 
   def destroy
-    model = params[:documentable_type].constantize
     document = Document.find(params[:id])
-
-    documentable = document.documentable.becomes(model) # Forces base classes in STI
 
     if document.destroy
       render turbo_stream: [
-        turbo_stream.replace("documents-index", partial: "documents/documents", locals: { documentable: documentable }),
-        turbo_stream.replace("turbo-consumer", partial: "components/turbo_message", locals: { message: "Documento eliminado" }),
+        turbo_stream.replace(partial_id, partial: partial),
+        turbo_stream.replace("turbo-message-consumer", partial: "components/turbo_message", locals: { message: "Documento eliminado" }),
       ]
     else
       toast("Error al eliminar el documento", :error)
@@ -64,6 +32,6 @@ class DocumentsController < ApplicationController
   private
 
   def document_params
-    params.permit(:name, :file, :documentable_id, :documentable_type)
+    params.expect(document: [:name, :file])
   end
 end

@@ -25,7 +25,7 @@ export default class extends Controller {
         "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
       },
       acceptedFiles: acceptedFiles || null,
-      paramName: "file",
+      paramName: "document[file]",
       maxFiles: maxFiles,
       thumbnailWidth: null,
       thumbnailHeight: null,

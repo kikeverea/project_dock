@@ -1,0 +1,36 @@
+<div id="task-<%= @task.id %>-documents" class="flex flex-wrap justify-center sm:justify-start gap-4 lg:gap-6 pt-4">
+  <% @task.documents.each do |document| %>
+    <% next unless document.file? %>
+
+    <div data-controller="context-menu" data-action="contextmenu->context-menu#open">
+      <%= link_to document.file.url, class: "shrink-0", target: "_blank", rel: "noopener" do %>
+        <% if document.file.content_type&.start_with?("image/") %>
+          <%= image_tag document.file.thumb.url,
+            alt: document.file_identifier || "Documento",
+            class: "h-60 w-60 object-cover rounded-lg hover-elevate-up"
+          %>
+        <% else %>
+          <% icon, color = get_document_icon(document) %>
+          <div class="h-60 w-60 text-lg
+            flex flex-col items-center justify-center gap-2
+            rounded-lg bg-gray-100 text-gray-600 hover-elevate-up"
+          >
+            <i class="fa-solid fa-<%= icon %> text-7xl text-<%= color %> p-0"></i>
+            <span class="px-4 text-center">
+              <%= document.file_identifier.split(".").first %>
+            </span>
+          </div>
+        <% end %>
+      <% end %>
+
+      <!-- Context menu -->
+      <div data-context-menu-target="menu" class="dropdown-menu">
+        <%= button_to "Eliminar", task_document_path(@task, document),
+          method: :delete,
+          class: "dropdown-item cursor-pointer",
+          data: { turbo_stream: true }
+        %>
+      </div>
+    </div>
+  <% end %>
+</div>

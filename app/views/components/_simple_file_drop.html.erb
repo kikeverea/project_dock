@@ -2,20 +2,21 @@
 <% file_type ||= "" %>
 <% source ||= "" %>
 <% accepted_files ||= nil %>
-<% public ||= false %>
 <% tiny ||= false %>
-<% icon ||= nil %>
+<% icon ||= "upload" %>
 <% document_icon, _color = get_document_icon_by_type(file_type) %>
 <% disable_auto_upload ||= false %>
 <% max_files ||= 15 %>
+<% width ||= tiny ? "w-[70px]" : "w-full flex-1" %>
+<% classes ||= "" %>
+<% prompt ||= "Haz click o arrastra archivos" %>
 
 <div id="<%= id %>">
   <div
-    class="filezone <%= tiny ? "w-70px" : "#{full_width ? "w-100" : "w-150px"} mb-4" %> flex-1 p-2"
+    class="filezone p-2 <%= width %> <%= classes %>"
     id="file-dropzone"
     data-controller="simple-file-upload"
     data-simple-file-upload-url-value="<%= upload_path %>"
-    data-simple-file-upload-is-public-value="<%= public %>"
     data-simple-file-upload-source-value="<%= source %>"
     data-simple-file-upload-disable-auto-upload-value="<%= disable_auto_upload %>"
     data-simple-file-upload-max-files-value="<%= max_files %>"
@@ -27,12 +28,12 @@
       </button>
     </div>
     <div class="dz-error-mark">
-      <i class="fa-solid fa-circle-xmark fs-3x text-danger opacity-75"></i>
+      <i class="fa-solid fa-circle-xmark text-xl text-danger opacity-75"></i>
     </div>
-    <div class="dz-message needsclick">
-      <i class="fa-solid fa-<%= icon || document_icon %> <%= tiny ? "fs-3x" : "fs-2x" %>"></i>
+    <div class="dz-message needsclick flex flex-col items-center justify-center h-full">
+      <i class="fa-solid fa-<%= icon || document_icon %> <%= tiny ? "text-3xl" : "text-3xl" %>"></i>
       <div class="text-muted fs-8 pt-1">
-        <em><%= no_file_message %></em>
+        <em><%= prompt %></em>
       </div>
     </div>
   </div>

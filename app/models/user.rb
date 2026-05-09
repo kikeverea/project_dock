@@ -10,7 +10,7 @@ class User < ApplicationRecord
   has_many :tasks, dependent: :destroy
   has_many :projects, dependent: :destroy
 
-  mount_base64_uploader :image, ImageUploader
+  mount_uploader :image, ImageUploader
 
   validates :email, :name, :lastname, presence: true
   validates :email, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }

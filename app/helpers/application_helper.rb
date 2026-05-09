@@ -7,23 +7,8 @@ module ApplicationHelper
     content_tag(:div, content, id: "#{channel}-modal-outlet")
   end
 
-  def opportunities_count(count, other_count = 0)
-    badge = render(
-      "components/outline_badge",
-      text: count,
-      color: "#FAD839",
-      use_style_for_color: true,
-      classes: "inline-block opacity-50 fw-bold ms-4 me-1") if count + other_count > 0
-
-    other_badge = render(
-      "components/outline_badge",
-      text: other_count,
-      color: "#FAD839",
-      use_style_for_color: true,
-      classes: "inline-block opacity-50 fw-bold ms-1"
-    ) if other_count > 0
-
-    other_badge ? "#{badge} + #{other_badge}".html_safe : badge
+  def breadcrumbs(*crumbs)
+    render("components/breadcrumbs", crumbs: crumbs)
   end
 
   # noinspection RubyNestedTernaryOperatorsInspection
@@ -69,20 +54,6 @@ module ApplicationHelper
     "#{units_ago} #{labels[unit][form]}"
   end
 
-  def to_currency(value)
-    show_decimals = value.to_i != value
-
-    "#{number_to_currency(value, unit: '', separator: ',', delimiter: '.', precision: show_decimals ? 2 : 0)} €"
-  end
-
-  def external_link(path)
-    return "-" if path.blank?
-
-    path.start_with?('http') ?
-      path :
-      "https://#{path}"
-  end
-
   def records_per_page(page, per_page, total)
     page = page.to_i - 1
     per_page = per_page.to_i
@@ -107,43 +78,9 @@ module ApplicationHelper
     brightness > 128 ? 'black' : 'white'
   end
 
-  def parse_expiration_date(date)
-    return "<em class='text-muted'>Sin fecha</em>".html_safe unless date.present?
-
-    date.to_date == Time.current.to_date ?
-      "Hoy" :
-      date.strftime("%d-%m-%Y")
-  end
-
-  def day_counter_color(days, danger: 0, warning: 5, success_color: "success")
-    if danger && days < danger
-      "danger"
-    elsif warning && days <= warning
-      "warning"
-    else
-      success_color
-    end
-  end
-
   def boolean_icon(boolean)
     boolean ?
       "<i class='fa-solid fa-check text-success'></i>".html_safe :
       "<i class='fa-solid fa-xmark text-danger'></i>".html_safe
   end
-
-  def log_action_color(action)
-    case action.to_s.downcase
-    when "created", "uploaded"
-      "primary"
-    when "updated"
-      "success"
-    when "deleted", "upload_deleted"
-      "danger"
-    when "completed"
-      "info"
-    else
-      "gray-600"
-    end
-  end
-
 end

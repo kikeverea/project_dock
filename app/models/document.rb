@@ -23,6 +23,10 @@ class Document < ApplicationRecord
     File.extname(file.identifier)&.delete('.')
   end
 
+  def image?
+    file&.content_type&.start_with?("image/")
+  end
+
 
   private
 

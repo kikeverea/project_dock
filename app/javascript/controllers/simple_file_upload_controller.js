@@ -1,7 +1,7 @@
 import DropzoneController from "./dropzone_controller"
 
 export default class extends DropzoneController {
-  static values = { url: String, source: String, isPublic: Boolean, isClient: Boolean, acceptedFiles: String }
+  static values = { url: String, source: String, isClient: Boolean, acceptedFiles: String }
 
   connect() {
     super.connect(this.acceptedFilesValue, this.sourceValue)
@@ -21,7 +21,7 @@ export default class extends DropzoneController {
       if (file.status === 'error')
         this.showErrorIcon(true)
       else {
-        this.uploadFile()
+        this.processQueue()
       }
     }, 0)
 
@@ -39,37 +39,5 @@ export default class extends DropzoneController {
         this.dropzone.removeFile(file)
       }
     })
-  }
-
-  async uploadFile() {
-
-    if (this.isPublicValue) {
-
-      const title = this.isClientValue
-        ? 'Documento compartido'
-        : 'Documento público'
-
-      const message = this.isClientValue
-        ? 'Este documento será visible sólo para Kik Balanga y no será compartido con terceros'
-        : 'Este documento será visible desde el área de clientes. ¿Deseas continuar?'
-
-      const res = await Swal.fire({
-        titleText: title,
-        text: message,
-        icon: "info",
-        showCancelButton: true,
-        reverseButtons: true,
-        confirmButtonText: 'Enviar',
-        cancelButtonText: 'Cancelar',
-        customClass: {
-          confirmButton: "btn btn-info",
-          cancelButton: "btn btn-secondary",
-        }
-      })
-
-      if (res.isConfirmed)
-        this.processQueue()
-    }
-    else this.processQueue()
   }
 }
