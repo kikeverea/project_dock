@@ -23,8 +23,9 @@
     <% end %>
   </div>
 
-  <!-- Comments -->
   <div class="flex items-center gap-2">
+
+    <!-- Comments -->
     <%= link_to task_comments_path(task),
       class: "cursor-pointer group-hover:inline #{"hidden" unless task.comments.any?}",
       data: { turbo_prefetch: false, turbo_stream: true } do
@@ -32,6 +33,7 @@
       <i class="fa-solid fa-comment-dots text-xl hover:text-sky-800 <%= has_comments ? "text-sky-700" : "text-gray-500" %>"></i>
     <% end %>
 
+    <!-- Toggle completed -->
     <div class="form-check">
       <%= button_to task,
         method: :put,

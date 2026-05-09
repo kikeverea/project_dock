@@ -41,10 +41,14 @@ class TasksController < ApplicationController
   end
 
   def update
-    if @task.update(task_params)
-      refresh_activity(message: "Tarea actualizada")
-    else
-      refresh_task_form
+    respond_to do |format|
+      if @task.update(task_params)
+        format.html { redirect_to @task, notice: "Tarea actualizada" }
+        format.turbo_stream { refresh_activity(message: "Tarea actualizada") }
+      else
+        format.html { redirect_to @task, status: :unprocessable_content }
+        format.turbo_stream { refresh_task_form }
+      end
     end
   end
 

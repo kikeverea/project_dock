@@ -1,6 +1,15 @@
-<% content_for :title, @project.name %>
+<% content_for :title, breadcrumbs(Project, { fallback: projects_path }) %>
 <% show_panel = params[:panel]&.to_sym || :activities %>
 
+<div class="min-w-0 mb-6">
+  <h1 class="text-3xl font-semibold tracking-tight text-gray-900">
+    <%= @project.name %>
+  </h1>
+
+  <div class="mt-1 text-sm text-gray-500">
+    <span>Creado <%= @project.created_at.strftime("%d-%m-%Y") %></span>
+  </div>
+</div>
 <div class="flex gap-6 items-center">
 
   <!-- Model diagram -->

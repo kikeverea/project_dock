@@ -7,6 +7,8 @@ class Task < ApplicationRecord
   belongs_to :activity
   has_many :comments, class_name: "TaskComment",  dependent: :destroy
 
+  delegate :project, to: :activity
+
   validates :title, :activity_id, presence: true
 
   enum :status, {

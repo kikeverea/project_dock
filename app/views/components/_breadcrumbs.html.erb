@@ -1,20 +1,30 @@
+<% args = crumbs.last.is_a?(Hash) ? crumbs.last : {} %>
+<% last_crumb = args[:current] || "Detalle" %>
+<% back = request.referer != request.original_url ?
+  request.referer :
+  args[:fallback] || request.referer
+%>
+<% crumbs = args.empty? ? crumbs : crumbs[0..-2] %>
+
 <div class="flex flex-wrap items-center gap-1">
-  <%= link_to :back,
+  <%= link_to back,
     class: "inline-flex mb-1 h-9 w-9 text-lg items-center justify-center rounded-lg hover:bg-gray-100" do
   %>
     ←
   <% end %>
   <ul class="flex items-center gap-2">
     <% crumbs.each do |crumb| %>
+      <% next if crumb.is_a?(String) %>
       <% path = Rails.application.routes.url_helpers.polymorphic_path(crumb) %>
+      <% label = crumb.class == Class ? crumb.model_name.human(count: 2) : crumb.name %>
 
       <li>
-        <%= link_to crumb.model_name.human(count: 2), path, class: "hover:text-gray-700" %>
+        <%= link_to label, path, class: "hover:text-gray-700" %>
       </li>
       <li>/</li>
     <% end %>
     <li class="text-gray-500">
-      Detalle
+      <%= last_crumb %>
     </li>
   </ul>
 </div>
