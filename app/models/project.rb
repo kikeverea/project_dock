@@ -8,7 +8,6 @@ class Project < ApplicationRecord
 
   has_many :activities, dependent: :destroy
   has_many :tasks, through: :activities
-  has_many :interactions, through: :activities
 
   validates :client_id, :name, presence: true
 
@@ -18,5 +17,13 @@ class Project < ApplicationRecord
 
   def self.ransackable_attributes(_auth_object = nil)
     %w[ name created_at ]
+  end
+
+  def open_activities
+    activities.joins(:tasks).where(tasks: { status: :pending }).distinct
+  end
+
+  def pending_tasks
+    tasks.where(status: :pending)
   end
 end

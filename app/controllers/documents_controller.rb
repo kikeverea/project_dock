@@ -7,7 +7,7 @@ class DocumentsController < ApplicationController
 
     if document.save!
       render turbo_stream: [
-        turbo_stream.replace(partial_id, partial: partial),
+        turbo_stream.replace(partial_id, partial: partial_view),
         turbo_stream.replace("turbo-message-consumer", partial: "components/turbo_message", locals: { message: "Documento subido" }),
       ]
     else
@@ -16,11 +16,9 @@ class DocumentsController < ApplicationController
   end
 
   def destroy
-    document = Document.find(params[:id])
-
-    if document.destroy
+    if @document.destroy
       render turbo_stream: [
-        turbo_stream.replace(partial_id, partial: partial),
+        turbo_stream.replace(partial_id, partial: partial_view),
         turbo_stream.replace("turbo-message-consumer", partial: "components/turbo_message", locals: { message: "Documento eliminado" }),
       ]
     else
@@ -30,6 +28,14 @@ class DocumentsController < ApplicationController
 
 
   private
+
+  def partial_id
+    partial[:id]
+  end
+
+  def partial_view
+    partial[:partial]
+  end
 
   def document_params
     params.expect(document: [:name, :file])

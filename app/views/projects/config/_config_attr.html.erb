@@ -12,20 +12,7 @@
     rel: (attr_url ? "noopener" : nil),
     data: { turbo_stream: !attr_url } do
   %>
-    <div class="card hover-elevate-up relative">
-      <div class="flex flex-col items-center w-[75px]">
-        <% if image_url %>
-          <%= image_tag image_url, class: "w-[50px] h-[50px]" %>
-        <% end %>
-        <% if icon %>
-          <i class="<%= icon %> text-6xl"></i>
-        <% end %>
-        <div class="font-semibold pt-2"><%= label %></div>
-      </div>
-      <% if configured %>
-        <i class="fa-solid fa-circle-check text-success text-xl absolute top-3 right-2"></i>
-      <% end %>
-    </div>
+    <%= render "components/tile", label: label, image_url: image_url, icon: icon, configured: configured %>
   <% end %>
 
   <div data-context-menu-target="menu" class="dropdown-menu">

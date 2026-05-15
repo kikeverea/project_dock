@@ -1,0 +1,44 @@
+<div id="project-documents">
+
+  <div class="mb-4">
+    <%= render "components/simple_file_drop", upload_path: project_documents_path(@project) %>
+  </div>
+
+  <%= render "components/card" do %>
+    <% if @project.documents.any? %>
+      <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
+        <% @project.documents.order(:name).each do |document| %>
+          <%= link_to document.file.url,
+            target: "_blank", rel: "noopener noreferrer",
+            class: "
+              flex flex-col items-center
+              p-2 rounded-lg border border-gray-200
+              text-inherit no-underline overflow-hidden
+              transition-colors duration-150 hover:bg-gray-100 hover:text-inherit hover:no-underline" do
+          %>
+            <% if document.image? %>
+              <%= image_tag document.file.thumb.url,
+                class: "w-full h-[90px] object-cover rounded",
+                onerror: "this.src='#{document.file.url}'",
+                alt: document.name
+              %>
+            <% else %>
+              <% icon, color = get_document_icon(document) %>
+              <div class="h-[90px] flex items-center justify-center">
+                <i class="fa-solid fa-<%= icon %> text-<%= color %> text-5xl"></i>
+              </div>
+            <% end %>
+            <div class="text-[0.7rem] text-center mt-1.5 break-words overflow-hidden line-clamp-2 text-gray-600 w-full">
+              <%= document.name %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="w-full text-center py-4">
+        <em class="text-gray-500">No hay documentos</em>
+      </div>
+    <% end %>
+  <% end %>
+
+</div>

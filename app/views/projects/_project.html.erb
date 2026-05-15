@@ -1,9 +1,22 @@
 <%= link_to project, id: "project-#{project.id}", class: "no-underline" do%>
-  <div class="card hover-elevate-up">
+  <div class="card hover-elevate-up w-[350px]">
     <div class="card-body">
-      <div class="text-lg font-semibold">
+      <div class="text-lg font-semibold mb-4">
         <%= project.name %>
       </div>
+
+      <table class="w-full">
+        <tbody>
+          <tr>
+            <td class="py-1">Actividades abiertas</td>
+            <td class="text-end"><%= project.open_activities.count %></td>
+          </tr>
+          <tr>
+            <td class="py-1">Tareas pendientes</td>
+            <td class="text-end"><%= project.pending_tasks.count %></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 <% end %>

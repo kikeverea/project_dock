@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   end
 
   resources :projects, only: [] do
+    resources :documents, controller: :project_documents, shallow: true
     resources :activities, shallow: true do
       scope :interaction do
         get "/", to: "activities#generating_interaction", as: :generating_interaction

@@ -27,6 +27,10 @@
     label: "Alcance"
   %>
 
+  <%= link_to project_documents_path(@project) do %>
+    <%= render "components/tile", label: "Docs", icon: "fa-solid fa-folder-tree text-yellow-500" %>
+  <% end %>
+
   <!-- Hours -->
   <%= link_to config_project_path(@project, config_attr: :hours), data: { turbo_stream: true } do %>
     <div class="card hover-elevate-up rounded-s-full rounded-e-full group">
