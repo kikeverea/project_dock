@@ -1,23 +1,48 @@
-<% content_for :title, @client.name %>
+<% content_for :title, breadcrumbs(Client, current: @client.name, fallback: projects_path) %>
 
-<div class="flex gap-4 w-full items-end">
-  <div class="flex flex-col gap-3 items-center md:flex-row md:gap-6 md:items-end">
-    <% if @client.logo? %>
-      <%= image_tag @client.logo.url, class: "max-h-[150px]" %>
-    <% else %>
-      <%= image_tag asset_path("avatar.svg"), class: "w-50 h-50 rounded-full" %>
-      <h1 class="text-center md:text-left"><%= @client.name %></h1>
-    <% end %>
+<div class="flex items-end justify-start w-full">
+  <div class="flex-1">
+    <div class="flex flex-col items-center md:items-start gap-4 w-fit">
+      <% if @client.logo? %>
+        <%= image_tag @client.logo.url, class: "max-h-[150px]" %>
+      <% else %>
+        <%= image_tag asset_path("avatar.svg"), class: "w-[160px] h-[160px] md:w-[180px] md:h-[180px] rounded-full" %>
+      <% end %>
+
+      <% unless @client.logo? %>
+        <h1 class="text-center md:text-left inline"><%= @client.name %></h1>
+      <% end %>
+    </div>
+  </div>
+  <%= render "components/button_add_new", path: new_project_path(client_id: @client), label: "Añadir projecto" %>
+  <div class="relative">
+    <button
+      type="button"
+      class="btn dropdown-toggle dropdown-toggle-split"
+      data-controller="dropdown"
+      data-action="click->dropdown#toggle blur->dropdown#handleBlur"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <i class="fa-solid fa-ellipsis-vertical text-3xl text-gray-500"></i>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+      <li>
+        <%= link_to "Editar", edit_client_path(@client), class: "dropdown-item" %>
+      </li>
+      <li>
+        <%= link_to "Eliminar",
+          @client,
+          class:"dropdown-item",
+          data: { controller: "delete-button", delete_button_item_name_value: @client.name }
+        %>
+      </li>
+    </ul>
   </div>
 </div>
 
-<div class="flex items-end justify-between mx-1">
-  <%= link_to "← Atrás", clients_path %>
-  <%= render "components/button_add_new", path: new_project_path(client_id: @client), label: "Añadir projecto" %>
-</div>
-
-<div class="py-4">
-  <%= render "projects/index", projects: @client.projects.order(:name) %>
+<div class="py-8">
+  <%= render "projects/index", projects: @client.projects.order(:name), show: :name %>
 </div>
 
 <%= render "components/turbo_modal", channel: :project, title: "Proyecto" %>

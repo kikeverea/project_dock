@@ -1,0 +1,6 @@
+<% projects ||= @projects %>
+<% show ||= :image %>
+
+<div id="projects" class="flex flex-wrap gap-6">
+  <%= render collection: projects, partial: "projects/project", locals: { show: show } %>
+</div>

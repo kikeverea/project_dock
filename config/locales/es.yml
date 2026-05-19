@@ -36,6 +36,9 @@ es:
       project:
         one: "Proyecto"
         other: "Proyectos"
+      client:
+        one: "Cliente"
+        other: "Clientes"
       interaction:
         one: "Interacción"
         other: "Interacciones"

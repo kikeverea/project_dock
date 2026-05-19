@@ -1,9 +1,15 @@
+<% show ||= :image %>
+
 <%= link_to project, id: "project-#{project.id}", class: "no-underline" do%>
   <div class="card hover-elevate-up w-[350px]">
     <div class="card-body">
-      <div class="text-lg font-semibold mb-4">
-        <%= project.name %>
-      </div>
+      <% if show == :image && project.client.logo?  %>
+        <%= image_tag project.client.logo.url, class: "h-50px mb-4" %>
+      <% else %>
+        <div class="text-lg font-semibold mb-4">
+          <%= project.name %>
+        </div>
+      <% end %>
 
       <table class="w-full">
         <tbody>

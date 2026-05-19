@@ -1,4 +1,2 @@
 <% content_for :title, breadcrumbs(Project, current: "Listado") %>
-<div id="projects" class="flex flex-wrap gap-6">
-  <%= render collection: @projects, partial: "projects/project" %>
-</div>
+<%= render "projects/index" %>
