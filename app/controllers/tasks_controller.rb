@@ -19,7 +19,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = @activity.tasks.build(task_params)
+    @task = @task.tasks.build(task_params)
 
     if @task.save
       refresh_activity(message: "Tarea creada")
@@ -29,13 +29,13 @@ class TasksController < ApplicationController
   end
 
   def batch
-    batch_params = params.dig(:activity, :batch)
+    batch_params = params.dig(:task, :batch)
 
     if batch_params
-      @activity.batch_create_tasks(batch_params)
+      @task.batch_create_tasks(batch_params)
       refresh_activity(message: "Tareas creadas")
     else
-      @activity.errors.add(:batch, "campo obligatorio")
+      @task.errors.add(:batch, "campo obligatorio")
       refresh_task_form
     end
   end
@@ -67,7 +67,7 @@ class TasksController < ApplicationController
 
   def refresh_activity(message: nil)
     render turbo_stream: [
-      turbo_stream.replace("activity-#{@activity.id}", partial: "activities/activity"),
+      turbo_stream.replace("activity-#{@task.id}", partial: "activities/activity"),
       turbo_stream.replace(
         "turbo-consumer",
         partial: "components/turbo_modal_action",
@@ -83,11 +83,10 @@ class TasksController < ApplicationController
 
   def set_task
     @task = Task.find(params.expect(:id))
-    @activity ||= @task.activity
   end
 
   def set_activity
-    @activity = Activity.find(params[:activity_id]) if params[:activity_id]
+    @task = WorkUnit.find(params[:activity_id]) if params[:activity_id]
   end
 
   def task_params

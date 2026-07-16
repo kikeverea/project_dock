@@ -1,0 +1,47 @@
+class WorkUnit < ApplicationRecord
+  include Discard::Model
+
+  before_validation :set_title
+
+  belongs_to :project
+  belongs_to :created_by, class_name: "User"
+
+  has_many :documents, as: :documentable
+  has_many :logs, as: :loggable
+
+  validates :project_id, :title, presence: true
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[ project ]
+  end
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[ title date created_at ]
+  end
+
+  def type_text
+    I18n.t("activerecord.models.#{self.type.downcase}.one")
+  end
+
+  def acknowledged?
+    acknowledged_at.present?
+  end
+
+  def completed?
+    completed_at.present?
+  end
+
+  def status
+    return :completed if completed_at?
+    return :acknowledged if acknowledged_at?
+
+    :new
+  end
+
+  private
+
+  def set_title
+    return if persisted? || title.present?
+    self.title = "#{type_text} #{Time.current.strftime("%d-%m-%Y")}"
+  end
+end

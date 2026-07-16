@@ -11,22 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.1].define(version: 2026_04_18_100012) do
-  create_table "activities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.datetime "activities"
-    t.datetime "created_at", null: false
-    t.datetime "date"
-    t.datetime "discarded_at"
-    t.text "generating_interaction"
-    t.string "name"
-    t.integer "order"
-    t.bigint "project_id", null: false
-    t.bigint "proposed_by_id"
-    t.datetime "updated_at", null: false
-    t.index ["discarded_at"], name: "index_activities_on_discarded_at"
-    t.index ["project_id"], name: "index_activities_on_project_id"
-    t.index ["proposed_by_id"], name: "index_activities_on_proposed_by_id"
-  end
-
   create_table "clients", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "discarded_at"
@@ -105,33 +89,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_100012) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "task_comments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.text "content"
-    t.datetime "created_at", null: false
-    t.bigint "parent_comment_id"
-    t.string "status"
-    t.bigint "task_id", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.index ["parent_comment_id"], name: "index_task_comments_on_parent_comment_id"
-    t.index ["task_id"], name: "index_task_comments_on_task_id"
-    t.index ["user_id"], name: "index_task_comments_on_user_id"
-  end
-
-  create_table "tasks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "activity_id"
-    t.datetime "created_at", null: false
-    t.datetime "discarded_at"
-    t.datetime "latest_status_at"
-    t.integer "order"
-    t.string "status"
-    t.datetime "tasks"
-    t.string "title"
-    t.datetime "updated_at", null: false
-    t.index ["activity_id"], name: "index_tasks_on_activity_id"
-    t.index ["discarded_at"], name: "index_tasks_on_discarded_at"
-  end
-
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
@@ -148,14 +105,36 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_18_100012) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "activities", "projects"
-  add_foreign_key "activities", "users", column: "proposed_by_id"
+  create_table "work_units", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "acknowledged_at"
+    t.bigint "acknowledged_by_id"
+    t.boolean "completable", default: false
+    t.datetime "completed_at"
+    t.bigint "completed_by_id"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.bigint "created_by_id"
+    t.datetime "discarded_at"
+    t.bigint "parent_unit_id"
+    t.bigint "project_id"
+    t.string "title"
+    t.string "type"
+    t.datetime "updated_at", null: false
+    t.index ["acknowledged_by_id"], name: "index_work_units_on_acknowledged_by_id"
+    t.index ["completed_by_id"], name: "index_work_units_on_completed_by_id"
+    t.index ["created_by_id"], name: "index_work_units_on_created_by_id"
+    t.index ["discarded_at"], name: "index_work_units_on_discarded_at"
+    t.index ["parent_unit_id"], name: "index_work_units_on_parent_unit_id"
+    t.index ["project_id"], name: "index_work_units_on_project_id"
+  end
+
   add_foreign_key "documents", "users", column: "uploaded_by_id"
   add_foreign_key "logs", "users"
   add_foreign_key "projects", "clients"
   add_foreign_key "sessions", "users"
-  add_foreign_key "task_comments", "task_comments", column: "parent_comment_id"
-  add_foreign_key "task_comments", "tasks"
-  add_foreign_key "task_comments", "users"
-  add_foreign_key "tasks", "activities"
+  add_foreign_key "work_units", "projects"
+  add_foreign_key "work_units", "users", column: "acknowledged_by_id"
+  add_foreign_key "work_units", "users", column: "completed_by_id"
+  add_foreign_key "work_units", "users", column: "created_by_id"
+  add_foreign_key "work_units", "work_units", column: "parent_unit_id"
 end

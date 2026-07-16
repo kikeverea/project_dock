@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
   before_action :set_clients, only: %i[ new edit create update ]
 
   def index
-    @projects = Project.includes(:client, activities: { tasks: :comments }).order(created_at: :desc)
+    @projects = Project.includes(:client, :activities, :tasks, :comments).order(created_at: :desc)
   end
 
   def show

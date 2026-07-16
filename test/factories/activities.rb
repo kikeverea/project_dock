@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :activity do
+  factory :work_unit do
     association :client
   end
 end

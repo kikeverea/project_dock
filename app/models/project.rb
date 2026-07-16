@@ -6,8 +6,10 @@ class Project < ApplicationRecord
   has_one :project_scope, -> { where(document_type: :project_scope) }, as: :documentable, class_name: "Document", dependent: :destroy
   accepts_nested_attributes_for :project_scope, allow_destroy: true
 
-  has_many :activities, dependent: :destroy
-  has_many :tasks, through: :activities
+  has_many :work_units, dependent: :destroy
+  has_many :tasks, class_name: "Task", foreign_key: :project_id, dependent: :destroy
+  has_many :activities, class_name: "Activity", foreign_key: :project_id, dependent: :destroy
+  has_many :comments, class_name: "Comment", foreign_key: :project_id, dependent: :destroy
 
   validates :client_id, :name, presence: true
 
@@ -20,10 +22,10 @@ class Project < ApplicationRecord
   end
 
   def open_activities
-    activities.joins(:tasks).where(tasks: { status: :pending }).distinct
+    activities.where(completed_at: nil)
   end
 
   def pending_tasks
-    tasks.where(status: :pending)
+    tasks.where(completed_at: nil)
   end
 end

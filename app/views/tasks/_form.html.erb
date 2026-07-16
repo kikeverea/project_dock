@@ -1,7 +1,7 @@
 <% task ||= @task %>
-<% activity ||= @activity %>
+<% activity ||= @work_unit %>
 <% edit ||= false %>
-<% form_model = task.persisted? ? task : [@activity, task] %>
+<% form_model = task.persisted? ? task : [@work_unit, task] %>
 
 <%= modal_outlet(:task) do %>
   <%= render "components/error_banner", item: task %>
@@ -19,7 +19,7 @@
     </div>
     <% unless edit %>
       <div class="tab-pane <%= "show active" if params[:target] == "batch" %>" id="batch">
-        <%= form_with scope: :activity, url: batch_activity_tasks_path(@activity) do |form| %>
+        <%= form_with scope: :work_unit, url: batch_activity_tasks_path(@work_unit) do |form| %>
           <%= form.hidden_field :activity_id, value: activity.id %>
 
           <%= render "components/form_field", attribute: :batch, type: :text_area, item: task, form: form %>

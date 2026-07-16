@@ -4,9 +4,9 @@ class Client < ApplicationRecord
   include Emailable
 
   has_many :projects, dependent: :destroy
+  has_many :tasks, through: :projects
   has_many :activities, through: :projects
-  has_many :tasks, through: :activities
-  has_many :task_comments, through: :tasks
+  has_many :comments, through: :projects
 
   mount_uploader :logo, ImageUploader
 
@@ -21,10 +21,10 @@ class Client < ApplicationRecord
   end
 
   def active?
-    activities.where.not(phase: [:closed_won, :closed_lost]).any?
+    work_units.where.not(phase: [:closed_won, :closed_lost]).any?
   end
 
   def current_activity
-    activities.order(:created_at).last
+    work_units.order(:created_at).last
   end
 end

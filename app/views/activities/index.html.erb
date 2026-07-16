@@ -2,7 +2,7 @@
 
 <% content_for :title, "Lista de actividades" %>
 
-<% if can? :create, Activity %>
+<% if can? :create, WorkUnit %>
   <%= link_to new_activity_path, class: "btn btn-success w-[200px] mb-4" do %>
     <i class="fa fa-plus"></i> Nueva actividad
   <% end %>
@@ -21,8 +21,8 @@
         </tr>
       </thead>
       <tbody>
-        <% if @activities.any? %>
-          <% @activities.each do |activity| %>
+        <% if @work_units.any? %>
+          <% @work_units.each do |activity| %>
             <tr class="h-[60px]">
               <td><%= activity.name %></td>
               <td><%= activity.project&.name %></td>

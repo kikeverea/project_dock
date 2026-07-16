@@ -1,9 +1,9 @@
-<% activity ||= @activity %>
+<% activity ||= @work_unit %>
 <% tasks_completed = activity.tasks_completed? %>
 
 <% title = capture do %>
   <div>
-    <%= activity.name %>
+    <%= activity.title %>
 
     <%= link_to activity_generating_interaction_path(activity),
       class: "ms-2 #{tasks_completed ? "text-white hover:text-white" : "text-sky-700 hover:text-sky-800"}",
@@ -14,26 +14,19 @@
   </div>
 <% end %>
 
-<% date = capture do %>
-  <span class="me-1 text-base">
-    <%= activity.date&.strftime("%d-%m-%Y") || "Sin fecha" %>
-  </span>
-<% end %>
-
 <%= render "components/card",
   id: "activity-#{activity.id}",
   title: title,
   header_classes: tasks_completed ? "bg-green-400 text-white" : "",
-  header_content: date,
   menu: [
     { label: "Editar", link: edit_activity_path(activity), data: { turbo_stream: true }},
-    { label: "Eliminar", link: activity, data: { controller: "delete-button", delete_button_item_name_value: activity.name }}
+    { label: "Eliminar", link: activity, data: { controller: "delete-button", delete_button_item_name_value: activity.title }}
   ],
   menu_icon: "fa-solid fa-ellipsis-vertical text-lg #{tasks_completed ? "text-white" : "text-gray-500"}",
   body_classes: "pb-0",
   width: "w-[650px]" do
 %>
-  <%= render collection: activity.tasks.order(:order), partial: "tasks/task" %>
+  <%= render collection: activity.tasks, partial: "tasks/task" %>
 
   <div class="flex justify-between items-center mt-2 ">
     <%= link_to new_activity_task_path(activity),

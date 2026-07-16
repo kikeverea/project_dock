@@ -1,4 +1,4 @@
-<% content_for :title, @activity.name %>
+<% content_for :title, @work_unit.name %>
 
 <!-- lib/templates/erb/scaffold/show.html.erb.tt -->
 
@@ -9,5 +9,5 @@
 
 <div class="mx-1 mt-3 mb-8">
   <%= link_to "← Ir a TODO", activities_path %> |
-  <%= link_to "Editar", edit_activity_path(@activity) %>
+  <%= link_to "Editar", edit_activity_path(@work_unit) %>
 </div>

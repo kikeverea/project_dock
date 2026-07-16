@@ -1,11 +1,13 @@
 <% content_for :title, breadcrumbs(Project, { fallback: projects_path }) %>
-<% show_panel = params[:panel]&.to_sym || :activities %>
+<% show_panel = params[:panel]&.to_sym || :work_units %>
 
 <div class="min-w-0 mb-6 flex flex-col lg:flex-row gap-4 justify-between items-start">
   <div>
-    <h1 class="text-3xl font-semibold tracking-tight text-gray-900">
-      <%= @project.name %>
-    </h1>
+    <%= link_to @project do %>
+      <h1 class="text-3xl font-semibold tracking-tight text-gray-900">
+        <%= @project.name %>
+      </h1>
+    <% end %>
 
     <div class="mt-1 text-sm text-gray-500">
       <span>Creado <%= @project.created_at.strftime("%d-%m-%Y") %></span>
@@ -39,7 +41,7 @@
   %>
 
   <%= link_to project_documents_path(@project) do %>
-    <%= render "components/tile", label: "Docs", icon: "fa-solid fa-folder-tree text-blue-500" %>
+    <%= render "components/tile", label: "Docs", icon: "fa-solid fa-folder-tree text-yellow-500" %>
   <% end %>
 
   <%= link_to config_project_path(@project, config_attr: :hours), data: { turbo_stream: true } do %>
@@ -60,13 +62,9 @@
   <% end %>
 </div>
 
-<% if show_panel == :activities %>
-  <%= render "projects/panel", panel: show_panel, items: @project.activities, item_partial: "activities/activity" %>
-<% else %>
-  <%= render "projects/panel", panel: show_panel, items: @project.tasks, item_partial: "tasks/task" %>
-<% end %>
+<%= render "projects/panel", panel: show_panel, items: @project.work_units %>
 
 <%= render "components/turbo_modal", channel: :interaction, size: "sm", title: "Primera interacción" %>
 <%= render "components/turbo_modal", channel: :config, size: "sm", title: "Configuración proyecto" %>
-<%= render "components/turbo_modal", channel: :activity, size: "md", title: "Actividad" %>
+<%= render "components/turbo_modal", channel: :work_unit, size: "md", title: "Actividad" %>
 <%= render "components/turbo_modal", channel: :task, size: "md", title: "Tarea" %>

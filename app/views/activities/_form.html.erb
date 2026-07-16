@@ -1,7 +1,7 @@
-<% activity ||= @activity %>
+<% activity ||= @work_unit %>
 <% content_for :modal_title, "#{activity.persisted? ? "Editar" : "Nueva"} actividad" %>
 
-<%= modal_outlet(:activity) do %>
+<%= modal_outlet(:work_unit) do %>
   <%= render "components/error_banner", item: activity %>
 
   <%= form_with model: [@project, activity] do |form| %>
