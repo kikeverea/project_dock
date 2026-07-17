@@ -3,7 +3,7 @@ class ActivitiesController < ApplicationController
   before_action :set_activity, except: %i[ index new create ]
 
   def index
-    @work_units = WorkUnit.all
+    @activitys = Activity.all
   end
 
   def show
@@ -12,12 +12,12 @@ class ActivitiesController < ApplicationController
   def generating_interaction
     render "components/turbo_modal_content", locals: {
       channel: :interaction,
-      content: @work_unit.generating_interaction&.html_safe || "",
+      content: @activity.generating_interaction&.html_safe || "",
     }
   end
 
   def new
-    @work_unit = WorkUnit.new
+    @activity = Activity.new
 
     refresh_activity_form
   end
@@ -27,9 +27,9 @@ class ActivitiesController < ApplicationController
   end
 
   def create
-    @work_unit = WorkUnit.new(activity_params)
+    @activity = Activity.new(activity_params)
 
-    if @work_unit.save
+    if @activity.save!
       redirect_to @project, notice: "Actividad creada"
     else
       render :new, status: :unprocessable_content
@@ -37,7 +37,7 @@ class ActivitiesController < ApplicationController
   end
 
   def update
-    if @work_unit.update(activity_params)
+    if @activity.update(activity_params)
       redirect_to @project, notice: "Actividad actualizada"
     else
       render :edit, status: :unprocessable_content
@@ -45,7 +45,7 @@ class ActivitiesController < ApplicationController
   end
 
   def destroy
-    @work_unit.destroy!
+    @activity.destroy!
     redirect_to @project, status: :see_other, notice: "Actividad eliminada"
   end
 
@@ -53,7 +53,7 @@ class ActivitiesController < ApplicationController
   private
 
   def refresh_activity_form
-    render "components/turbo_modal_content", locals: { channel: :work_unit, partial: "activities/form" }
+    render "components/turbo_modal_content", locals: { channel: :activity, partial: "activities/form" }
   end
 
   def set_project
@@ -62,11 +62,11 @@ class ActivitiesController < ApplicationController
 
   def set_activity
     activity_id = params[:id] || params[:activity_id]
-    @work_unit = WorkUnit.find(activity_id)
-    @project ||= @work_unit.project
+    @activity = Activity.find(activity_id)
+    @project ||= @activity.project
   end
 
   def activity_params
-    params.expect(work_unit: [:name, :date, :project_id])
+    params.expect(activity: [:name, :date, :project_id, :raw_tasks])
   end
 end

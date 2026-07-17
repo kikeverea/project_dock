@@ -2,6 +2,7 @@ class WorkUnit < ApplicationRecord
   include Discard::Model
 
   before_validation :set_title
+  before_validation :set_created_by
 
   belongs_to :project
   belongs_to :created_by, class_name: "User"
@@ -43,5 +44,9 @@ class WorkUnit < ApplicationRecord
   def set_title
     return if persisted? || title.present?
     self.title = "#{type_text} #{Time.current.strftime("%d-%m-%Y")}"
+  end
+
+  def set_created_by
+    self.created_by ||= Current.user
   end
 end

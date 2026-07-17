@@ -166,6 +166,27 @@
     transition: all 0.4s ease;
   }
 
+  .btn.outline-primary {
+    @apply border border-blue-600 text-blue-600 bg-transparent hover:bg-blue-100;
+  }
+
+  .btn.outline-success {
+    @apply border border-green-600 text-green-600 bg-transparent hover:bg-green-100;
+  }
+
+  .btn.outline-warning {
+    @apply border border-yellow-600 text-yellow-600 bg-transparent hover:bg-yellow-100;
+  }
+
+  .btn.outline-danger {
+    @apply border border-red-600 text-red-600 bg-transparent hover:bg-red-100;
+  }
+
+  .btn.outline-muted {
+    @apply border border-gray-500 text-gray-500 bg-transparent hover:bg-gray-100;
+  }
+
+
   /* Table */
   .table-responsive {
     overflow-x: auto;

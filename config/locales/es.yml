@@ -67,7 +67,7 @@ es:
         date: "Fecha"
         proposed_by: "Propuesto por"
         proposed_by_id: "Propuesto por"
-        generating_interaction: "Comentarios"
+        raw_tasks: "Tareas"
       task:
         title: "Título"
         status: "Estado"

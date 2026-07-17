@@ -16,11 +16,9 @@
 
   <!-- Client -->
   <div>
-    <% client = @project.client %>
-    <%= link_to client.name,
-      client,
-      class: "px-4 py-1 border border-blue-400 text-sky-600 rounded-2xl bg-blue-200 cursor-pointer"
-    %>
+    <%= link_to  @project.client, class: "btn outline-primary" do %>
+      Ver cliente <i class="fas fa-arrow-right ms-2"></i>
+    <% end %>
   </div>
 </div>
 <div class="flex gap-6 items-center">
@@ -62,9 +60,24 @@
   <% end %>
 </div>
 
+<div class="fixed bottom-20 end-16 rounded-full w-[65px] h-[65px] bg-green-400 cursor-pointer group">
+  <% transition_class = "opacity-0 group-hover:opacity-100 transition-opacity duration-350" %>
+  <% style_class = "bg-gray-800 text-white text-sm rounded-full px-4 py-1.5 hover:bg-green-400" %>
+
+  <div class="absolute bottom-full end-1/2 translate-x-1/2 mb-4 flex flex-col items-end gap-3 whitespace-nowrap">
+    <%= link_to "Nueva tarea", "#", class: "#{transition_class} #{style_class}", data: { turbo_stream: true }%>
+    <%= link_to "Nueva actividad", new_project_activity_path(@project), class: "#{transition_class} #{style_class}", data: { turbo_stream: true }%>
+    <%= link_to "Nuevo comentario", "#", class: "#{transition_class} #{style_class}", data: { turbo_stream: true }%>
+  </div>
+  <i class="
+    fas fa-plus text-3xl text-white absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2
+    origin-center group-hover:rotate-360 transition-transform duration-450"
+  ></i>
+</div>
+
 <%= render "projects/panel", panel: show_panel, items: @project.work_units %>
 
 <%= render "components/turbo_modal", channel: :interaction, size: "sm", title: "Primera interacción" %>
 <%= render "components/turbo_modal", channel: :config, size: "sm", title: "Configuración proyecto" %>
-<%= render "components/turbo_modal", channel: :work_unit, size: "md", title: "Actividad" %>
+<%= render "components/turbo_modal", channel: :activity, size: "md", title: "Actividad" %>
 <%= render "components/turbo_modal", channel: :task, size: "md", title: "Tarea" %>

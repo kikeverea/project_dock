@@ -25,7 +25,7 @@
 <% disabled ||= false %>
 <% multiple ||= false %>
 <% options ||= nil %>
-<% classes ||= "items-center gap-4" %>
+<% classes ||= "#{[:text_area].include?(type) ? "items-start" : "items-center"} gap-4" %>
 <% field_classes ||= "" %>
 <% label_classes ||= "" %>
 <% label_style ||= "" %>

@@ -1,7 +1,7 @@
-<% activity ||= @work_unit %>
+<% activity ||= @activity %>
 <% content_for :modal_title, "#{activity.persisted? ? "Editar" : "Nueva"} actividad" %>
 
-<%= modal_outlet(:work_unit) do %>
+<%= modal_outlet(:activity) do %>
   <%= render "components/error_banner", item: activity %>
 
   <%= form_with model: [@project, activity] do |form| %>
@@ -9,35 +9,26 @@
     <%= form.hidden_field :project_id, value: @project.id %>
 
     <%= render "components/form_field",
-      attribute: :name,
+      attribute: :title,
       item: activity,
       form: form,
       icon: "fa-solid fa-user-group"
     %>
 
-    <%= render "components/form_field",
-      attribute: :date,
-      type: :date_field,
-      value: activity.date || Time.current,
-      item: activity,
-      form: form,
-      icon: "fa-solid fa-calendar-days"
-    %>
-
     <% unless activity.persisted? %>
       <%= render "components/form_field",
-        attribute: :generating_interaction,
+        attribute: :raw_tasks,
         type: :text_area,
         item: activity,
         form: form,
-        icon: "fa-solid fa-calendar-days"
+        icon: "fa-solid fa-list-ul"
       %>
     <% end %>
 
     <div class="mt-8 w-full text-end">
       <%= link_to "Cancelar",
          request.referer == request.url ? activities_path : :back,
-         class: "btn btn-link btn-color-muted btn-active-color-success mx-4",
+         class: "btn outline-muted mx-4",
          data: { action: "modal#hide"}
       %>
       <%= form.button activity.persisted? ? "Guardar" : "Crear actividad", class: "btn btn-success" %>
