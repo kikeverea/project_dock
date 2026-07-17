@@ -1,4 +1,4 @@
-module TasksHelper
+module ActivityTasksHelper
 
   def task_status_badge(task)
     color = task.pending? ? "bg-gray-100" : "bg-green-500"

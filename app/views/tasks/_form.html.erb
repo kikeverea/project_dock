@@ -1,31 +1,12 @@
 <% task ||= @task %>
-<% activity ||= @work_unit %>
-<% edit ||= false %>
-<% form_model = task.persisted? ? task : [@work_unit, task] %>
 
 <%= modal_outlet(:task) do %>
-  <%= render "components/error_banner", item: task %>
+  <div id="task-form">
+    <%= render "components/error_banner", item: task %>
 
-  <%= render "components/tabs",
-    tab_style: :pill,
-    classes: ("mb-8" unless edit),
-    tabs: edit ? {} : { single: "Individual", batch: "Batch" } do
-  %>
-    <div class="tab-pane <%= "show active" if params[:target].nil? || params[:target] == "single" %>" id="single">
-      <%= form_with model: form_model do |form| %>
-        <%= render "components/form_field", attribute: :title, item: task, form: form %>
-        <%= render "components/modal_buttons", form: form, item: task, model: "Tarea"  %>
-      <% end %>
-    </div>
-    <% unless edit %>
-      <div class="tab-pane <%= "show active" if params[:target] == "batch" %>" id="batch">
-        <%= form_with scope: :work_unit, url: batch_activity_tasks_path(@work_unit) do |form| %>
-          <%= form.hidden_field :activity_id, value: activity.id %>
-
-          <%= render "components/form_field", attribute: :batch, type: :text_area, item: task, form: form %>
-          <%= render "components/modal_buttons", form: form, item: task, model: "Tareas"  %>
-        <% end %>
-      </div>
+    <%= form_with model: [@project, task] do |form| %>
+      <%= render "components/form_field", attribute: :title, item: task, form: form %>
+      <%= render "components/modal_buttons", form: form, item: task, model: "Tarea"  %>
     <% end %>
-  <% end %>
+  </div>
 <% end %>

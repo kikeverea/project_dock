@@ -183,7 +183,7 @@
   }
 
   .btn.outline-muted {
-    @apply border border-gray-500 text-gray-500 bg-transparent hover:bg-gray-100;
+    @apply border border-gray-400 text-gray-400 bg-transparent hover:bg-gray-100;
   }
 
 

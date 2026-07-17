@@ -1,11 +1,13 @@
 class WorkUnit < ApplicationRecord
   include Discard::Model
+  include ScopedWorkUnit
 
   before_validation :set_title
   before_validation :set_created_by
 
   belongs_to :project
   belongs_to :created_by, class_name: "User"
+  belongs_to :completed_by, class_name: "User", optional: true
 
   has_many :documents, as: :documentable
   has_many :logs, as: :loggable

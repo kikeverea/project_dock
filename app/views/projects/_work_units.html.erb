@@ -1,10 +1,11 @@
 <div class="mt-8">
-  <% if items.kept.any? %>
+  <% if units.any? %>
     <div class="flex flex-wrap gap-6">
-      <% items.each do |item| %>
-        <% model_type = item.type.downcase %>
+      <% units.each do |unit| %>
+        <% model_name = unit.type.downcase %>
+
         <% partial =
-           case item.type
+           case unit.type
            when "Activity"
              "activities/activity"
            when "Task"
@@ -12,10 +13,10 @@
            when "Comment"
              "comments/comment"
            else
-             raise "Invalid model type: #{item.type}"
+             raise "Invalid model type: #{unit.type}"
            end
         %>
-        <%= render partial: partial, locals: { model_type.to_sym => item } %>
+        <%= render partial: partial, locals: { model_name.to_sym => unit } %>
       <% end %>
     </div>
   <% else %>

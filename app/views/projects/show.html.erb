@@ -21,7 +21,7 @@
     <% end %>
   </div>
 </div>
-<div class="flex gap-6 items-center">
+<div class="flex gap-6 itzems-center">
 
   <!-- Model diagram -->
   <%= render "projects/config/config_attr",
@@ -60,12 +60,14 @@
   <% end %>
 </div>
 
+<%= render "projects/work_units", panel: show_panel, units: @project.work_units.kept %>
+
 <div class="fixed bottom-20 end-16 rounded-full w-[65px] h-[65px] bg-green-400 cursor-pointer group">
   <% transition_class = "opacity-0 group-hover:opacity-100 transition-opacity duration-350" %>
   <% style_class = "bg-gray-800 text-white text-sm rounded-full px-4 py-1.5 hover:bg-green-400" %>
 
   <div class="absolute bottom-full end-1/2 translate-x-1/2 mb-4 flex flex-col items-end gap-3 whitespace-nowrap">
-    <%= link_to "Nueva tarea", "#", class: "#{transition_class} #{style_class}", data: { turbo_stream: true }%>
+    <%= link_to "Nueva tarea", new_project_task_path(@project), class: "#{transition_class} #{style_class}", data: { turbo_stream: true }%>
     <%= link_to "Nueva actividad", new_project_activity_path(@project), class: "#{transition_class} #{style_class}", data: { turbo_stream: true }%>
     <%= link_to "Nuevo comentario", "#", class: "#{transition_class} #{style_class}", data: { turbo_stream: true }%>
   </div>
@@ -74,8 +76,6 @@
     origin-center group-hover:rotate-360 transition-transform duration-450"
   ></i>
 </div>
-
-<%= render "projects/panel", panel: show_panel, items: @project.work_units %>
 
 <%= render "components/turbo_modal", channel: :interaction, size: "sm", title: "Primera interacción" %>
 <%= render "components/turbo_modal", channel: :config, size: "sm", title: "Configuración proyecto" %>

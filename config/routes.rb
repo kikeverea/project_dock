@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   resources :projects, only: [] do
     resources :documents, controller: :project_documents, shallow: true
+    resources :tasks, controller: :project_tasks
     resources :activities, shallow: true do
       scope :interaction do
         get "/", to: "activities#generating_interaction", as: :generating_interaction
@@ -13,12 +14,12 @@ Rails.application.routes.draw do
   end
 
   resources :activities, only: [] do
-    resources :tasks, shallow: true do
+    resources :tasks, controller: :activity_tasks do
       post :batch, on: :collection
     end
   end
 
-  resources :tasks, only: :index do
+  resources :tasks do
     resources :task_comments,
       path: "comments",
       as: "comments",

@@ -1,7 +1,7 @@
 <div class="mt-8 w-full text-end">
   <%= button_tag "Cancelar",
     type: :button,
-    class: "btn btn-link btn-color-muted btn-active-color-success mx-4",
+    class: "btn outline-muted mx-4",
     data: { dismiss: "modal" }
   %>
   <%= form.button item.persisted? ? "Guardar" : "Crear #{model.downcase}",

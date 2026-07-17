@@ -1,14 +1,15 @@
 <% id ||= "card" %>
 <% width ||= "w-full" %>
+<% height ||= "" %>
 <% classes ||= "" %>
 <% header_classes ||= "" %>
-<% body_classes ||= "" %>
+<% body_classes ||= "text-wrap" %>
 <% title ||= nil %>
 <% header_content ||= nil %>
 <% menu ||= nil %>
 <% menu_icon ||= "fa-solid fa-ellipsis-vertical" %>
 
-<div id="<%= id %>" class="card <%= width %> <%= classes %>">
+<div id="<%= id %>" class="card <%= width %> <%= height %> <%= classes %>">
   <% if title %>
     <div class="card-header <%= header_classes %>">
       <div class="card-title justify-between">

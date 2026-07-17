@@ -3,7 +3,7 @@ class ActivitiesController < ApplicationController
   before_action :set_activity, except: %i[ index new create ]
 
   def index
-    @activitys = Activity.all
+    @activities = Activity.all
   end
 
   def show
