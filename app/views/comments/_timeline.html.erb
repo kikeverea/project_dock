@@ -1,0 +1,48 @@
+<% new_comment ||= false %>
+<% reply_to ||= @reply_to %>
+<% comments ||= @comments %>
+<% has_comments = comments&.any? %>
+
+<div id="<%= comments_id %>">
+  <%= render "components/card" do %>
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="font-semibold text-gray-800 flex items-center gap-2 text-lg">
+        <i class="fa-regular fa-comments text-sky-600"></i>
+        Comentarios
+      </h3>
+      <%= link_to comment_form_path(comment),
+        class: "btn outline-primary text-sm flex items-center gap-1.5",
+        data: { turbo_stream: true } do
+      %>
+        <i class="fa-solid fa-plus text-[12px]"></i>
+        Añadir comentario
+      <% end %>
+    </div>
+
+    <!-- Comment form -->
+    <% if new_comment %>
+      <%= render "comments/form" %>
+    <% end %>
+
+    <% if has_comments %>
+      <div class="space-y-1">
+        <% comments.each do |comment| %>
+          <% next if comment.new_record? %>
+
+          <%= render "comments/comment", comment: comment %>
+
+          <% if reply_to == comment %>
+            <%= render "comments/form" %>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-8">
+        <i class="fa-regular fa-comments text-4xl text-gray-300 block mb-2"></i>
+        <p class="text-sm text-gray-400">No hay comentarios</p>
+      </div>
+    <% end %>
+  <% end %>
+</div>

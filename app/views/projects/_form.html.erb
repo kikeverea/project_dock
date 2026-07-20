@@ -1,65 +1,62 @@
 <% project ||= @project %>
 
-<%= modal_outlet(:project) do %>
-  <%= render "components/error_banner", item: project %>
+<%= render "components/error_banner", item: project %>
 
-  <%= form_with model: project do |form| %>
+<%= form_with model: project do |form| %>
 
-    <%= render "components/form_field",
-      attribute: :name,
-      type: :text_field,
-      item: project,
-      required: true,
-      form: form,
-      icon: "fa-solid fa-folder"
+  <%= render "components/form_field",
+    attribute: :name,
+    type: :text_field,
+    item: project,
+    required: true,
+    form: form, icon: "fa-solid fa-folder"
+  %>
+
+  <%= render "components/form_field",
+    attribute: :client_id,
+    type: :collection_select,
+    item: project,
+    required: true,
+    form: form,
+    icon: "fa-solid fa-building",
+    collection: @clients,
+    id_attr: :id,
+    name_attr: :name,
+    placeholder: "Selecciona un cliente",
+    add_new: (new_client_path(format: :turbo_stream) if project.client_id.blank?)
+  %>
+
+  <%= render "components/form_field",
+    attribute: :start_date,
+    type: :date_field,
+    item: project,
+    form: form,
+    icon: "fa-solid fa-calendar-day"
+  %>
+
+  <%= render "components/form_field",
+    attribute: :due_date,
+    type: :date_field,
+    item: project,
+    form: form,
+    icon: "fa-solid fa-calendar-check"
+  %>
+
+  <%= render "components/form_field",
+    attribute: :allocated_time,
+    type: :number_field,
+    item: project,
+    form: form,
+    icon: "fa-solid fa-clock"
+  %>
+
+  <div class="mt-8">
+    <%= form.button project.persisted? ? "Guardar" : "Crear proyecto", class: "btn btn-success" %>
+    <%= link_to "Cancelar",
+      request.referer == request.url ? projects_path : :back,
+      class: "btn btn-link btn-color-muted btn-active-color-success mx-3"
     %>
-
-    <%= render "components/form_field",
-      attribute: :client_id,
-      type: :collection_select,
-      item: project,
-      required: true,
-      form: form,
-      icon: "fa-solid fa-building",
-      collection: @clients,
-      id_attr: :id,
-      name_attr: :name,
-      placeholder: "Selecciona un cliente",
-      add_new: (new_client_path(format: :turbo_stream) if project.client_id.blank?)
-    %>
-
-    <%= render "components/form_field",
-      attribute: :start_date,
-      type: :date_field,
-      item: project,
-      form: form,
-      icon: "fa-solid fa-calendar-day"
-    %>
-
-    <%= render "components/form_field",
-      attribute: :due_date,
-      type: :date_field,
-      item: project,
-      form: form,
-      icon: "fa-solid fa-calendar-check"
-    %>
-
-    <%= render "components/form_field",
-      attribute: :allocated_time,
-      type: :number_field,
-      item: project,
-      form: form,
-      icon: "fa-solid fa-clock"
-    %>
-
-    <div class="mt-8">
-      <%= form.button project.persisted? ? "Guardar" : "Crear proyecto", class: "btn btn-success" %>
-      <%= link_to "Cancelar",
-          request.referer == request.url ? projects_path : :back,
-          class: "btn btn-link btn-color-muted btn-active-color-success mx-3"
-      %>
-    </div>
-  <% end %>
+  </div>
 <% end %>
 
 <%= render "components/turbo_modal", channel: :client, title: "Cliente" %>

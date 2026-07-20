@@ -1,4 +1,4 @@
-<% activity ||= @work_unit %>
+<% activity ||= @activity %>
 <% tasks_completed = activity.tasks_completed? %>
 
 <% title = capture do %>
@@ -23,7 +23,7 @@
     { label: "Eliminar", link: activity, data: { controller: "delete-button", delete_button_item_name_value: activity.title }}
   ],
   menu_icon: "fa-solid fa-ellipsis-vertical text-lg #{tasks_completed ? "text-white" : "text-gray-500"}",
-  body_classes: "pb-0",
+  body_classes: "pb-0 px-0",
   width: "w-[500px]" do
 %>
   <%= render collection: activity.tasks, partial: "tasks/task" %>

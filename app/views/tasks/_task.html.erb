@@ -1,20 +1,39 @@
 <% task ||= @task %>
+<% activity ||= task.activity %>
+<% project ||= task.project %>
 
-<%= render "components/card",
-  id: "task-#{task.id}",
-  width: "w-[450px] py-0", height: "h-fit",
-  classes: "#{"bg-green-100" if task.completed?}" do
+<% edit_path, delete_path = activity ?
+  [edit_activity_task_path(activity, task), activity_task_path(activity, task)] :
+  [edit_project_task_path(project, task), project_task_path(project, task)]
 %>
-  <div class="flex gap-6 py-2 group <%= task.completed? && "line-through text-success" %>">
-    <div class="flex-1 break-all line-clamp-2">
-      <%= task.title %>
-    </div>
+
+<% has_activity = task.activity.present? %>
+
+<% content = capture do %>
+  <div class="flex gap-6 py-2 px-4 group <%= "hover:bg-blue-50 transition-all duration-100" if has_activity %> <%= task.completed? && "line-through text-success" %>">
+    <%= link_to task, class: "flex-1 #{"hover:text-blue-700" if has_activity} transition-all duration-100" do %>
+      <span class="line-clamp-4">
+        <%= task.title %>
+      </span>
+    <% end %>
 
     <%= render "work_units/action_buttons",
-      edit_path: edit_task_path(task),
-      delete_path: task_path(task),
+      edit_path: edit_path,
+      delete_path: delete_path,
       comments_path: task_comments_path(task),
       unit: task
     %>
   </div>
+<% end %>
+
+<% if has_activity %>
+  <%= content %>
+<% else %>
+  <%= render "components/card",
+    id: "task-#{task.id}",
+    width: "w-[450px] py-0", height: "h-fit",
+    classes: "#{"bg-green-100" if task.completed?}" do
+  %>
+    <%= content %>
+  <% end %>
 <% end %>

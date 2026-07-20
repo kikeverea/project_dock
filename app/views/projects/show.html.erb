@@ -1,5 +1,4 @@
 <% content_for :title, breadcrumbs(Project, { fallback: projects_path }) %>
-<% show_panel = params[:panel]&.to_sym || :work_units %>
 
 <div class="min-w-0 mb-6 flex flex-col lg:flex-row gap-4 justify-between items-start">
   <div>
@@ -60,7 +59,7 @@
   <% end %>
 </div>
 
-<%= render "projects/work_units", panel: show_panel, units: @project.work_units.kept %>
+<%= render "projects/work_units" %>
 
 <div class="fixed bottom-20 end-16 rounded-full w-[65px] h-[65px] bg-green-400 cursor-pointer group">
   <% transition_class = "opacity-0 group-hover:opacity-100 transition-opacity duration-350" %>
@@ -69,7 +68,7 @@
   <div class="absolute bottom-full end-1/2 translate-x-1/2 mb-4 flex flex-col items-end gap-3 whitespace-nowrap">
     <%= link_to "Nueva tarea", new_project_task_path(@project), class: "#{transition_class} #{style_class}", data: { turbo_stream: true }%>
     <%= link_to "Nueva actividad", new_project_activity_path(@project), class: "#{transition_class} #{style_class}", data: { turbo_stream: true }%>
-    <%= link_to "Nuevo comentario", "#", class: "#{transition_class} #{style_class}", data: { turbo_stream: true }%>
+    <%= link_to "Nuevo comentario", new_project_comment_path(@project), class: "#{transition_class} #{style_class}", data: { turbo_stream: true }%>
   </div>
   <i class="
     fas fa-plus text-3xl text-white absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2
@@ -77,7 +76,7 @@
   ></i>
 </div>
 
-<%= render "components/turbo_modal", channel: :interaction, size: "sm", title: "Primera interacción" %>
-<%= render "components/turbo_modal", channel: :config, size: "sm", title: "Configuración proyecto" %>
-<%= render "components/turbo_modal", channel: :activity, size: "md", title: "Actividad" %>
 <%= render "components/turbo_modal", channel: :task, size: "md", title: "Tarea" %>
+<%= render "components/turbo_modal", channel: :comment, size: "lg", title: "Comentario" %>
+<%= render "components/turbo_modal", channel: :activity, size: "md", title: "Actividad" %>
+<%= render "components/turbo_modal", channel: :config, size: "sm", title: "Configuración proyecto" %>

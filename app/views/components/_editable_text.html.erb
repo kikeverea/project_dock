@@ -1,0 +1,34 @@
+<% text_classes ||= "text-gray-900" %>
+<% classes ||= "" %>
+
+<div
+  class="<%= classes %>"
+  data-controller="editable-text"
+  data-editable-text-row-char-count-value="<%= row_char_count %>"
+  data-editable-text-submit-url-value="<%= submit_path %>"
+>
+  <div class="relative">
+    <%= text_area_tag "#{name}",
+      text,
+      rows: [(text&.length.to_i / 120.to_f).ceil, 1],
+      class: "#{text_classes} w-full resize-none overflow-hidden focus:outline-none focus:ring-0 focus:border-transparent",
+      max_length: 255,
+      data: {
+        editable_text_target: "input",
+        action: "keydown.enter->editable-text#submit keydown.esc->editable-text#submit blur->editable-text#submit"
+      }
+    %>
+  </div>
+
+  <div class="mb-2 text-sm hidden" data-editable-text-target="feedback">
+    <span><!-- Placeholder --></span>
+    <i class="fas ms-1"></i>
+  </div>
+
+  <div
+    class="mb-2 text-sm text-blue-700 hidden transition-colors duration-700"
+    data-editable-text-target="editing"
+  >
+    Editando
+  </div>
+</div>

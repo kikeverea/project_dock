@@ -1,21 +1,25 @@
-<div class="mt-8">
+<% units = @project.work_units.kept %>
+
+<div id="work-units" class="mt-8">
   <% if units.any? %>
     <div class="flex flex-wrap gap-6">
       <% units.each do |unit| %>
         <% model_name = unit.type.downcase %>
 
-        <% partial =
-           case unit.type
+        <% case unit.type
            when "Activity"
-             "activities/activity"
+             partial = "activities/activity"
            when "Task"
-             "tasks/task"
+             next if unit.parent_unit_id
+             partial = "tasks/task"
            when "Comment"
-             "comments/comment"
+             next if unit.parent_unit_id
+             partial = "comments/comment"
            else
              raise "Invalid model type: #{unit.type}"
            end
         %>
+
         <%= render partial: partial, locals: { model_name.to_sym => unit } %>
       <% end %>
     </div>

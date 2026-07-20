@@ -1,12 +1,14 @@
 <% task ||= @task %>
 
-<%= modal_outlet(:task) do %>
-  <div id="task-form">
-    <%= render "components/error_banner", item: task %>
+<div id="task-form">
+  <%= render "components/error_banner", item: task %>
 
-    <%= form_with model: [@project, task] do |form| %>
-      <%= render "components/form_field", attribute: :title, item: task, form: form %>
-      <%= render "components/modal_buttons", form: form, item: task, model: "Tarea"  %>
-    <% end %>
-  </div>
-<% end %>
+  <%= form_with model: task do |form| %>
+
+    <%= hidden_field_tag :activity_id, @activity.id if @activity %>
+    <%= hidden_field_tag :project_id, @project.id if @project %>
+
+    <%= render "components/form_field", attribute: :title, item: task, form: form %>
+    <%= render "components/modal_buttons", form: form, item: task, model: "Tarea"  %>
+  <% end %>
+</div>

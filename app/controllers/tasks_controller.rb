@@ -1,4 +1,6 @@
 class TasksController < ApplicationController
+  before_action :set_activity
+  before_action :set_project
   before_action :set_task, except: %i[ index new create ]
 
   def index
@@ -6,7 +8,7 @@ class TasksController < ApplicationController
   end
 
   def new
-    @task = Tasks.new
+    @task = new_task
     show_form
   end
 
@@ -18,18 +20,22 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params)
+    @task = new_task(task_params)
 
-    if @task.save
-      redirect_to request.referrer, notice: "Tarea creada"
+    if @task.save!
+      refresh_task_container
     else
       refresh_form
     end
   end
 
   def update
-    if @task.update!(task_params)
-      refresh_task
+    if @task.update(task_params)
+      respond_to do |format|
+        format.html { redirect_to @task, notice: "Tarea actualizada" }
+        format.turbo_stream { refresh_task_container }
+        format.json { head :ok }
+      end
     else
       refresh_form
     end
@@ -37,11 +43,21 @@ class TasksController < ApplicationController
 
   def destroy
     @task.destroy!
-    render turbo_stream: turbo_stream.remove("task-#{@task.id}")
+    refresh_task_container
   end
 
 
   private
+
+  def new_task(params={})
+    if @activity
+      @activity.tasks.new(params)
+    elsif @project
+      @project.tasks.new(params)
+    else
+      Task.new
+    end
+  end
 
   def show_form
     render "components/turbo_modal_content", locals: { channel: :task, partial: "tasks/form" }
@@ -51,25 +67,37 @@ class TasksController < ApplicationController
     render turbo_stream: turbo_stream.replace("task-form", partial: "tasks/form")
   end
 
-  def refresh_task
+  def refresh_task_container
     render "components/turbo_modal_content", locals: {
       channel: :task,
       partial: "tasks/form",
       action: :hide,
-      replace: { target: "task-#{@task.id}", partial: "tasks/task" }
+      replace: target_container
     }
+  end
+
+  def target_container
+    @activity ?
+      { target: "activity-#{@activity.id}", partial: "activities/activity" } :
+      { target: "work-units", partial: "projects/work_units" }
   end
 
   def set_task
     @task = Task.find(params.expect(:id))
   end
 
+  def set_project
+    @project = Project.find(params[:project_id]) if params[:project_id]
+  end
+
+  def set_activity
+    @activity = Activity.find(params[:activity_id]) if params[:activity_id].present?
+  end
+
   def task_params
     params.expect(task: [
       :title,
-      :status,
       :content,
-      :project_id,
       :acknowledged_at,
       :completed_at,
       :completed_by_id,

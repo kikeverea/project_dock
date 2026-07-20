@@ -1,20 +1,25 @@
-<% edit ||= false %>
-<% task ||= @task %>
 <% comment ||= @comment %>
 <% reply_to ||= @reply_to %>
-<% url = comment&.persisted? ? comment_path(comment) : task_comments_path(task) %>
+<% url = comment&.persisted? ? comment_path(comment) : comments_path %>
 <% method = comment&.persisted? ? :patch : :post %>
+<% id = comment&.persisted? ?
+  "comment-#{comment.id}-form" :
+  "comment-form"
+%>
 
-<div id="comment-<%= comment.id %>-form" class="mt-4 mb-5 rounded-xl border border-sky-100 bg-sky-50 overflow-hidden">
+<div id="<%= id %>" class="mt-4 mb-5 rounded-xl border border-sky-100 bg-sky-50 overflow-hidden">
   <% if reply_to %>
     <div class="px-4 py-2 text-sm text-sky-600 border-b border-sky-100 flex items-center gap-1.5">
       <i class="fa-solid fa-reply"></i>
-      Respondiendo a <span class="font-semibold ml-1"><%= reply_to.user&.full_name %></span>
+      Respondiendo a <span class="font-semibold ml-1"><%= reply_to.created_by&.full_name %></span>
     </div>
   <% end %>
   <%= form_with model: comment, url: url, method: method, class: "p-4" do |form| %>
 
-    <%= form.hidden_field :parent_comment_id %>
+    <%= hidden_field_tag :comment_id, @reply_to.id if @reply_to %>
+    <%= hidden_field_tag :task_id, @task.id if @task %>
+    <%= hidden_field_tag :activity_id, @activity.id if @activity %>
+    <%= hidden_field_tag :project_id, @project.id if @project %>
 
     <div class="flex gap-3 items-start">
       <div class="
@@ -31,7 +36,7 @@
         %>
         <div class="flex justify-end gap-2 mt-2">
           <%= link_to "Cancelar",
-            edit ? comment_path(comment) : task_comments_path(task),
+            cancel_comment_form_path,
             class: "btn btn-sm text-sm",
             data: { turbo_stream: true }
           %>

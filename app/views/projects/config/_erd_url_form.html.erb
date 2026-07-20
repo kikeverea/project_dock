@@ -1,21 +1,19 @@
 <% project ||= @project %>
 
-<%= modal_outlet(:config) do %>
-  <%= render "components/error_banner", item: project %>
+<%= render "components/error_banner", item: project %>
 
-  <%= form_with model: project do |form| %>
-    <%= render "components/form_field",
-      attribute: :erd_url,
-      item: project,
-      form: form,
-      placeholder: "Enlace Google Drive",
-      icon: "fa-brands fa-google-drive",
-      classes: "flex-col items-start gap-0",
-      field_container_class: "w-full"
-    %>
+<%= form_with model: project do |form| %>
+  <%= render "components/form_field",
+    attribute: :erd_url,
+    item: project,
+    form: form,
+    placeholder: "Enlace Google Drive",
+    icon: "fa-brands fa-google-drive",
+    classes: "flex-col items-start gap-0",
+    field_container_class: "w-full"
+  %>
 
-    <%= form.button class: "btn btn-success w-full" do %>
-      <i class="fa-solid fa-gear text-sm me-2"></i> Guardar configuración
-    <% end %>
+  <%= form.button class: "btn btn-success w-full" do %>
+    <i class="fa-solid fa-gear text-sm me-2"></i> Guardar configuración
   <% end %>
 <% end %>

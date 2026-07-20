@@ -3,12 +3,15 @@ class WorkUnit < ApplicationRecord
   include ScopedWorkUnit
 
   before_validation :set_title
+  before_validation :set_project
   before_validation :set_created_by
 
   belongs_to :project
+  belongs_to :parent_unit, class_name: "WorkUnit", optional: true
   belongs_to :created_by, class_name: "User"
   belongs_to :completed_by, class_name: "User", optional: true
 
+  has_many :comments, foreign_key: :parent_unit_id
   has_many :documents, as: :documentable
   has_many :logs, as: :loggable
 
@@ -46,6 +49,10 @@ class WorkUnit < ApplicationRecord
   def set_title
     return if persisted? || title.present?
     self.title = "#{type_text} #{Time.current.strftime("%d-%m-%Y")}"
+  end
+
+  def set_project
+    self.project ||= parent_unit&.project
   end
 
   def set_created_by

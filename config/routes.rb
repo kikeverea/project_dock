@@ -5,31 +5,38 @@ Rails.application.routes.draw do
 
   resources :projects, only: [] do
     resources :documents, controller: :project_documents, shallow: true
-    resources :tasks, controller: :project_tasks
+    resources :tasks, except: :index, controller: :tasks
     resources :activities, shallow: true do
       scope :interaction do
         get "/", to: "activities#generating_interaction", as: :generating_interaction
       end
     end
+    resources :comments, except: :index, controller: :comments do
+      get :reply, to: "comments#new", as: :new_reply
+      get '/cancel_form', to: "comments#cancel_form", on: :collection
+    end
   end
 
   resources :activities, only: [] do
-    resources :tasks, controller: :activity_tasks do
+    resources :tasks, except: :index, controller: :tasks do
       post :batch, on: :collection
+    end
+    resources :comments, except: :index, controller: :comments do
+      get :reply, to: "comments#new", as: :new_reply
+      get '/cancel_form', to: "comments#cancel_form", on: :collection
     end
   end
 
   resources :tasks do
-    resources :task_comments,
-      path: "comments",
-      as: "comments",
-      shallow: true do
-      get :cancel_edit, on: :member
+    resources :comments, except: :index, controller: :comments do
+      get :reply, to: "comments#new", as: :new_reply
+      get '/cancel_form', to: "comments#cancel_form", on: :collection
     end
+    resources :documents, only: %i[ create destroy ], controller: :task_documents
+  end
 
-    resources :documents,
-      only: %i[ create destroy ],
-      controller: :task_documents
+  resources :comments, only: %i[ create update ] do
+    resources :reply, controller: :comments, only: %i[ new create ], on: :member
   end
 
   resources :phone_numbers

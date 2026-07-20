@@ -1,5 +1,4 @@
 <% partial ||= nil %>
-<% content ||= nil %>
 <% action ||= "show" %>
 <% partial_locals ||= {} %>
 <% object ||= {} %>
@@ -7,14 +6,8 @@
 
 <% if partial %>
   <%= turbo_stream.replace "#{channel}-modal-outlet" do %>
-    <%= render partial: partial, locals: partial_locals.merge({ modal: true }) %>
-  <% end %>
-<% end %>
-
-<% if content %>
-  <%= turbo_stream.replace "#{channel}-modal-outlet" do %>
     <div id="<%= channel %>-modal-outlet">
-      <%= content %>
+      <%= render partial: partial, locals: partial_locals.merge({ modal: true }) %>
     </div>
   <% end %>
 <% end %>

@@ -1,37 +1,35 @@
 <% activity ||= @activity %>
 <% content_for :modal_title, "#{activity.persisted? ? "Editar" : "Nueva"} actividad" %>
 
-<%= modal_outlet(:activity) do %>
-  <%= render "components/error_banner", item: activity %>
+<%= render "components/error_banner", item: activity %>
 
-  <%= form_with model: [@project, activity] do |form| %>
+<%= form_with model: [@project, activity] do |form| %>
 
-    <%= form.hidden_field :project_id, value: @project.id %>
+  <%= form.hidden_field :project_id, value: @project.id %>
 
+  <%= render "components/form_field",
+    attribute: :title,
+    item: activity,
+    form: form,
+    icon: "fa-solid fa-user-group"
+  %>
+
+  <% unless activity.persisted? %>
     <%= render "components/form_field",
-      attribute: :title,
+      attribute: :raw_tasks,
+      type: :text_area,
       item: activity,
       form: form,
-      icon: "fa-solid fa-user-group"
+      icon: "fa-solid fa-list-ul"
     %>
-
-    <% unless activity.persisted? %>
-      <%= render "components/form_field",
-        attribute: :raw_tasks,
-        type: :text_area,
-        item: activity,
-        form: form,
-        icon: "fa-solid fa-list-ul"
-      %>
-    <% end %>
-
-    <div class="mt-8 w-full text-end">
-      <%= link_to "Cancelar",
-         request.referer == request.url ? activities_path : :back,
-         class: "btn outline-muted mx-4",
-         data: { action: "modal#hide"}
-      %>
-      <%= form.button activity.persisted? ? "Guardar" : "Crear actividad", class: "btn btn-success" %>
-    </div>
   <% end %>
+
+  <div class="mt-8 w-full text-end">
+    <%= link_to "Cancelar",
+       request.referer == request.url ? activities_path : :back,
+       class: "btn outline-muted mx-4",
+       data: { action: "modal#hide"}
+    %>
+    <%= form.button activity.persisted? ? "Guardar" : "Crear actividad", class: "btn btn-success" %>
+  </div>
 <% end %>

@@ -9,13 +9,6 @@ class ActivitiesController < ApplicationController
   def show
   end
 
-  def generating_interaction
-    render "components/turbo_modal_content", locals: {
-      channel: :interaction,
-      content: @activity.generating_interaction&.html_safe || "",
-    }
-  end
-
   def new
     @activity = Activity.new
 

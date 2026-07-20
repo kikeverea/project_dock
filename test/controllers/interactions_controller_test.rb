@@ -16,11 +16,11 @@ class InteractionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create interaction" do
-    assert_difference("TaskComment.count") do
+    assert_difference("Comment.count") do
       post interactions_url, params: { interaction: { activity_id: @interaction.activity_id, content: @interaction.content, status: @interaction.status, user_id: @interaction.user_id } }
     end
 
-    assert_redirected_to interaction_url(TaskComment.last)
+    assert_redirected_to interaction_url(Comment.last)
   end
 
   test "should show interaction" do
@@ -39,7 +39,7 @@ class InteractionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy interaction" do
-    assert_difference("TaskComment.count", -1) do
+    assert_difference("Comment.count", -1) do
       delete interaction_url(@interaction)
     end
 

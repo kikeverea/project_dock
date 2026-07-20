@@ -5,7 +5,7 @@
 <div class="flex gap-2 justify-end items-center">
   <div class="hidden group-hover:flex gap-2">
     <!-- Delete -->
-    <%= render "components/delete_button", delete_path: delete_path, no_padding: true%>
+    <%= render "components/delete_button", delete_path: delete_path, no_padding: true, muted: true %>
 
     <!-- Edit -->
     <%= link_to edit_path, data: { turbo_stream: true } do %>
@@ -27,10 +27,13 @@
     <div class="form-check">
       <%= button_to unit,
         method: :put,
-        params: { unit.class.model_name.element => {
+        params: {
+          project_id: (@project.id unless @activity),
+          activity_id: (@activity.id if @activity),
+          unit.class.model_name.element => {
           completed_at: completed ? nil : Time.current,
           completed_by_id: completed ? nil : Current.user,
-        } },
+        }},
         class: "
           form-check-input relative h-[20px] w-[20px] rounded-full border border-2 cursor-pointer
           #{completed ? "bg-success border-green-500 opacity-75" : "border-gray-300"}

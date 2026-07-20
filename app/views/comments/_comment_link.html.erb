@@ -1,0 +1,20 @@
+<%= link_to comment do %>
+  <div class="bg-gray-50 rounded-xl border border-gray-100 p-6 hover:bg-blue-50 hover:border-blue-50 relative group">
+    <div class="flex items-baseline gap-2 flex-wrap">
+      <span class="font-semibold text-gray-900">
+        <%= comment.created_by&.full_name %>
+      </span>
+      <span class="text-sm ms-1 text-gray-500">
+        <%= comment.created_at.strftime("%-d %b %Y · %H:%M") %>
+      </span>
+    </div>
+    <div class="mt-1.5 text-gray-700 quill-content">
+      <%= comment.content.html_safe %>
+    </div>
+    <i class="
+      fa-solid fa-arrow-up-right-from-square text-sky-700
+      absolute end-5 top-5
+      opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+    ></i>
+  </div>
+<% end %>
